@@ -3,7 +3,7 @@
 author = "Alexandre A. Renchon"
 
 mintoclevel = 2
-prepath = "Home"
+prepath = "home2"
 
 # RSS stuff
 website_title = "CUP of TEA"

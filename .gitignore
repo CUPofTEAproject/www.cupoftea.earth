@@ -1,0 +1,9 @@
+__site/
+.DS_Store
+node_modules/
+package-lock.json
+input/
+
+# ignore VIM temp files
+*~
+*swp

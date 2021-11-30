@@ -3,6 +3,7 @@ __site/
 node_modules/
 package-lock.json
 input/
+demo/
 
 # ignore VIM temp files
 *~

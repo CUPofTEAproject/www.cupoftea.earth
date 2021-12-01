@@ -1,84 +1,123 @@
 +++
-title = "Code blocks"
-hascode = true
-date = Date(2019, 3, 22)
-rss = "A short description of the page which would serve as **blurb** in a `RSS` feed; you can use basic markdown here but the whole description string must be a single line (not a multiline string). Like this one for instance. Keep in mind that styling is minimal in RSS so for instance don't expect maths or fancy styling to work; images should be ok though: ![](https://upload.wikimedia.org/wikipedia/en/3/32/Rick_and_Morty_opening_credits.jpeg)"
+title = "DAMM model"
 +++
-@def tags = ["syntax", "code"]
 
-# Working with code blocks
+```julia:ex
+#hideall
+using WGLMakie, JSServe, UnicodeFun, SparseArrays, Observables
+io = IOBuffer()
+println(io, "~~~")
+show(io, MIME"text/html"(), Page(exportable=true, offline=true))
 
-\toc
+# load DAMM, 3 params + porosity
+include("DAMM_scaled_porosity.jl");
+L = 40 # resolution
+x = collect(range(1, length=L, stop=1))
+[append!(x, collect(range(i, length=L, stop=i))) for i = 2:40]
+x = reduce(vcat,x)
+y = collect(range(0.0, length=L, stop=0.70))
+y = repeat(y, outer=L)
+x_range = hcat(x, y)
+x = Int.(x_range[:, 1])
+y_ax = collect(range(0.0, length=L, stop=0.70))
+y = collect(range(1, length=L, stop=L))
+y = repeat(y, outer=L)
+y = Int.(y)
+x_ax = collect(range(1, length=L, stop=L))
 
-## Live evaluation of code blocks
+function create_plot(sliders1, sliders2, sliders3, sliders4, sliders5, sliders6)
+	fig = Figure(resolution = (1800, 1000))
+	ax3D = LScene(fig[1:2,1]) # should be Axis3 instead of LScene, but bug
+	surface!(ax3D, x_ax, y_ax, lift((AlphaSx, kMSx, kMO2, Porosity)->
+		Matrix(sparse(x, y, DAMM(x_range, [AlphaSx, kMSx, kMO2, Porosity]))),
+		sliders1.value, sliders2.value, sliders3.value, sliders4.value),
+		colormap = Reverse(:Spectral), transparency = true, alpha = 0.2, shading = false) 
 
-If you would like to show code as well as what the code outputs, you only need to specify where the script corresponding to the code block will be saved.
+	wireframe!(ax3D, x_ax, y_ax, lift((AlphaSx, kMSx, kMO2, Porosity)->
+		Matrix(sparse(x, y, DAMM(x_range, [AlphaSx, kMSx, kMO2, Porosity]))),
+		sliders1.value, sliders2.value, sliders3.value, sliders4.value),
+		   overdraw = true, transparency = true, color = (:black, 0.1));
 
-Indeed, what happens is that the code block gets saved as a script which then gets executed.
-This also allows for that block to not be re-executed every time you change something _else_ on the page.
 
-Here's a simple example (change values in `a` to see the results being live updated):
+	# remove these 3 lines when back to Axis3
+	scene3D = ax3D.scene
+	scale!(scene3D, 3, 150, 7) 
+	center!(scene3D)
 
-```julia:./exdot.jl
-using LinearAlgebra
-a = [1, 2, 3, 3, 4, 5, 2, 2]
-@show dot(a, a)
-println(dot(a, a))
-```
 
-You can now show what this would look like:
+	#ax3D.xlabel = to_latex("T_{soil} (°C)");
+	#ax3D.ylabel = to_latex("\\theta (m^3 m^{-3})");
+	#ax3D.zlabel = to_latex("R_{soil} (\\mumol m^{-2} s^{-1})");
+	#zlims!(0, 25)
+	#ylims!(0, 0.7)
+	#scale!(ax3D, 1, 40, 1) 
+	#center!(ax3D)
 
-\output{./exdot.jl}
+	#p = [1,20,50,0.7]
+	
+	ax2D = Axis(fig[1,2])
+	ts1 = collect(10:1:35)
+	lines!(ax2D, ts1, lift((AlphaSx, kMSx, kMO2, Porosity, sm) -> DAMM(
+	 hcat(ts1, collect(range(sm, length=length(ts1), stop=sm))), [AlphaSx, kMSx, kMO2, Porosity]),
+	 sliders1.value, sliders2.value, sliders3.value, sliders4.value, sliders5.value), color = :blue, linewidth = 8)
+	
+	ax2D2 = Axis(fig[2,2])
+	sm2 = collect(0.0:0.02:0.7)	
+	lines!(ax2D2, sm2, lift((AlphaSx, kMSx, kMO2, Porosity, ts) -> DAMM(
+	 hcat(collect(range(ts, length=length(sm2), stop=ts)), sm2), [AlphaSx, kMSx, kMO2, Porosity]),
+	 sliders1.value, sliders2.value, sliders3.value, sliders4.value, sliders6.value), color = :red, linewidth = 8)
 
-**Notes**:
-* you don't have to specify the `.jl` (see below),
-* you do need to explicitly use print statements or `@show` for things to show, so just leaving a variable at the end like you would in the REPL will show nothing,
-* only Julia code blocks are supported at the moment, there may be a support for scripting languages like `R` or `python` in the future,
-* the way you specify the path is important; see [the docs](https://tlienart.github.io/franklindocs/code/index.html#more_on_paths) for more info. If you don't care about how things are structured in your `/assets/` folder, just use `./scriptname.jl`. If you want things to be grouped, use `./group/scriptname.jl`. For more involved uses, see the docs.
+	# isoline in the 3D figure
+	lines!(ax3D, lift((AlphaSx, kMSx, kMO2, Porosity, sm) ->
+	Point3f0.(ts1, collect(range(sm, length=length(ts1), stop=sm)), DAMM(
+	hcat(ts1, collect(range(sm, length=length(ts1), stop=sm))), [AlphaSx, kMSx, kMO2, Porosity])),
+	sliders1.value, sliders2.value, sliders3.value, sliders4.value, sliders5.value), color = :blue, linewidth = 8)
 
-Lastly, it's important to realise that if you don't change the content of the code, then that code will only be executed _once_ even if you make multiple changes to the text around it.
+	lines!(ax3D, lift((AlphaSx, kMSx, kMO2, Porosity, ts) ->
+	Point3f0.(collect(range(ts, length=length(sm2), stop=ts)), sm2, DAMM(
+	hcat(collect(range(ts, length=length(sm2), stop=ts)), sm2), [AlphaSx, kMSx, kMO2, Porosity])),
+	sliders1.value, sliders2.value, sliders3.value, sliders4.value, sliders6.value), color = :red, linewidth = 8)
 
-Here's another example,
+	
+	ylims!(ax2D, 0.0, 30.0); xlims!(ax2D, 10.0, 35.0);
+	ylims!(ax2D2, 0.0, 30.0); xlims!(ax2D2, 0.0, 0.8);
+	ax2D.xlabel = to_latex("T_{soil} (°C)");
+	ax2D.ylabel = to_latex("R_{soil} (\\mumol m^{-2} s^{-1})");
+	ax2D2.ylabel = to_latex("R_{soil} (\\mumol m^{-2} s^{-1})");
+	ax2D2.xlabel = to_latex("\\theta (m^3 m^{-3})");
+	
+	FZ = 30; ax2D.xlabelsize = FZ; ax2D.ylabelsize = FZ; ax2D2.xlabelsize = FZ; ax2D2.ylabelsize = FZ;
+	ax2D.xticklabelsize = FZ; ax2D.yticklabelsize = FZ; ax2D2.xticklabelsize = FZ; ax2D2.yticklabelsize = FZ;
 
-```julia:./code/ex2
-for i ∈ 1:5, j ∈ 1:5
-    print(" ", rpad("*"^i,5), lpad("*"^(6-i),5), j==5 ? "\n" : " "^4)
+	return fig
 end
+
+sr =   [0.5:0.1:1, # alpha
+	0.0001:0.5:30, # kMsx
+	0.0001:3:100, # kmo2
+	0.5:0.05:0.7, # porosity
+	0.4:0.02:0.7, # soil moisture
+	30:1:35]; # soil temperature
+
+app = App() do session::Session    
+	sliders1 = JSServe.Slider(sr[1])
+	sliders2 = JSServe.Slider(sr[2])
+	sliders3 = JSServe.Slider(sr[3])
+	sliders4 = JSServe.Slider(sr[4])
+	sliders5 = JSServe.Slider(sr[5])
+	sliders6 = JSServe.Slider(sr[6])
+	fig = create_plot(sliders1, sliders2, sliders3, sliders4, sliders5, sliders6)    
+    	slider1 = DOM.div("Temperature sensitivity, alpha: ", sliders1, sliders1.value)
+	slider2 = DOM.div("Moisture limitation, kMsx: ", sliders2, sliders2.value)
+	slider3 = DOM.div("Oxygen limitation, kMO2: ", sliders3, sliders3.value)
+	slider4 = DOM.div("Porosity: ", sliders4, sliders4.value)
+	slider5 = DOM.div("isoline: fixed soil moisture (%): ", sliders5, sliders5.value)
+	slider6 = DOM.div("isoline: fixed soil temperature (C): ", sliders6, sliders6.value)
+    	return JSServe.record_states(session, DOM.div(slider1, slider2, slider3, slider4, slider5, slider6, fig))
+end
+
+show(io, MIME"text/html"(), app)
+println(io, "~~~")
+println(String(take!(io)))
 ```
-
-which gives the (utterly useless):
-
-\output{./code/ex2}
-
-note the absence of `.jl`, it's inferred.
-
-You can also hide lines (that will be executed nonetheless):
-
-```julia:./code/ex3
-using Random
-Random.seed!(1) # hide
-@show randn(2)
-```
-
-\output{./code/ex3}
-
-
-## Including scripts
-
-Another approach is to include the content of a script that has already been executed.
-This can be an alternative to the description above if you'd like to only run the code once because it's particularly slow or because it's not Julia code.
-For this you can use the `\input` command specifying which language it should be tagged as:
-
-
-\input{julia}{/_assets/scripts/script1.jl} <!--_-->
-
-
-these scripts can be run in such a way that their output is also saved to file, see `scripts/generate_results.jl` for instance, and you can then also input the results:
-
-\output{/_assets/scripts/script1.jl} <!--_-->
-
-which is convenient if you're presenting code.
-
-**Note**: paths specification matters, see [the docs](https://tlienart.github.io/franklindocs/code/index.html#more_on_paths) for details.
-
-Using this approach with the `generate_results.jl` file also makes sure that all the code on your website works and that all results match the code which makes maintenance easier.
+\textoutput{ex}

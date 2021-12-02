@@ -9,7 +9,7 @@ prepath = ""
 website_title = "CUP of TEA"
 website_descr = "Community Understanding Platform of Terrestrial Exchanges with the Atmosphere"
 
-ignore = ["node_modules/", "franklin", "franklin.pub"]
+ignore = ["node_modules/", "franklin", "franklin.pub", "MAIN_FN.md"]
 +++
 
 <!--

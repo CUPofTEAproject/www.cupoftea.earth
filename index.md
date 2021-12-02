@@ -1,16 +1,5 @@
 ~~~
-<div class="row">
-  <div class="container">
-    <img class="left" src="/assets/banner.png">
-    <p>
-    
-    </p>
-    <p>
-    
-    </p>
-    <div style="clear: both"></div>      
-  </div>
-</div>
+<img src="/assets/banner.png" width="1000">
 ~~~
 
 ~~~

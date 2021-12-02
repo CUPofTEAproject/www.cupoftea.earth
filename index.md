@@ -1,5 +1,5 @@
 ~~~
-<img src="/assets/banner.png" width="1000">
+<img src="/assets/banner.png" width="100">
 ~~~
 
 ~~~

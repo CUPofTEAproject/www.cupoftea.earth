@@ -2,7 +2,7 @@ using DataFrames, CSV, Dates
 
 function getID()
 	# get the path of folder files
-	folders = readdir(joinpath("Input", "FLUXNET"), join = true);
+	folders = readdir(joinpath("input", "FLUXNET"), join = true);
 	deleteat!(folders,1); # first folder is different
 	n = length(folders);
 	# retrieve a short ID for each site

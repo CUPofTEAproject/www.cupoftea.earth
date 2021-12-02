@@ -1,22 +1,26 @@
+<!--
+Add here global page variables to use throughout your website.
+-->
 +++
-# general stuff
 author = "Alexandre A. Renchon"
-
 mintoclevel = 2
 prepath = ""
 
-# RSS stuff
+# Add here files or directories that should be ignored by Franklin, otherwise
+# these files might be copied and, if markdown, processed by Franklin which
+# you might not want. Indicate directories by ending the name with a `/`.
+# Base files such as LICENSE.md and README.md are ignored by default.
+ignore = ["node_modules/", "input/", "functions/", "demo/"]
+
+# RSS (the website_{title, descr, url} must be defined to get RSS)
+generate_rss = true
 website_title = "CUP of TEA"
 website_descr = "Community Understanding Platform of Terrestrial Exchanges with the Atmosphere"
-
-ignore = ["node_modules/", "franklin", "franklin.pub", "MAIN_FN.md", "input/", "functions/", "demo/"]
+website_url   = "https://cupoftea.earth/"
 +++
 
 <!--
-Add here global latex commands to use throughout your
-pages. It can be math commands but does not need to be.
-For instance:
-* \newcommand{\phrase}{This is a long phrase to copy.}
+Add here global latex commands to use throughout your pages.
 -->
 \newcommand{\R}{\mathbb R}
 \newcommand{\scal}[1]{\langle #1 \rangle}

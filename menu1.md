@@ -10,7 +10,7 @@ println(io, "~~~")
 show(io, MIME"text/html"(), Page(exportable=true, offline=true))
 
 # load DAMM, 3 params + porosity
-include("DAMM_scaled_porosity.jl");
+include(joinpath("functions", "DAMM_scaled_porosity.jl"));
 L = 40 # resolution
 x = collect(range(1, length=L, stop=1))
 [append!(x, collect(range(i, length=L, stop=i))) for i = 2:40]

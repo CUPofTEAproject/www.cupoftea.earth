@@ -14,6 +14,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://cupoftea.earth/404/index.html</loc>
+    <lastmod>2021-12-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://cupoftea.earth/menu3/index/</loc>
     <lastmod>2021-12-03</lastmod>
     <changefreq>monthly</changefreq>

@@ -1,0 +1,4 @@
+Sitemap: https://cupoftea.earth/sitemap.xml
+
+User-agent: *
+Disallow:

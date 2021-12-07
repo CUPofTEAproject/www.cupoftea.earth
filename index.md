@@ -11,8 +11,8 @@
  </tr>
  <tr>
     <td><a href="https://github.com/CUPofTEAproject">Contribute!</a></td>
-    <td>Structured in small scripts</td>
-    <td>Up-to-date with database</td>
+    <td><a href="https://github.com/CUPofTEAproject/www.cupoftea.earth/tree/master/functions">Structured in small scripts</td>
+    <td>Up-to-date with databases</td>
  </tr>
 </table>
 
@@ -23,8 +23,8 @@
     <th style="width:33%"> ModEx</th>
  </tr>
  <tr>
-    <td>Terrestrial, microbial and computational ecologists</td>
-    <td>From microbe and stomate to the globe</td>
+    <td>Ecology, models, remote sensing</td>
+    <td>Microbe and stomate to the globe</td>
     <td>Measurements x modeling</td>
  </tr>
 </table>
@@ -34,7 +34,7 @@ Welcome to the Community Understanding Platform of Terrestrial Exchanges with th
 \
 This project consists of creating online libraries of interactive figures using global databases of land properties and land-atmosphere exchanges. \
 \
-In-situ observations: e.g., FLUXNET, COSORE \
-Satellite remote sensing: e.g., MODIS \
+In-situ observations: e.g., FLUXNET, COSORE, TRY \
+Satellite remote sensing: e.g., MODIS, SIF, GRACE \
 Models: e.g., CMIP6 
 

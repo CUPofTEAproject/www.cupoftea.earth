@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {{if hasmath}} {{insert head_katex.html }}     {{end}}
+  {{if hascode}} {{insert head_highlight.html }}   {{end}}
+  <link rel="stylesheet" href="/css/franklin.css">
+  <link rel="stylesheet" href="/css/basic.css">
+  <link rel="icon" href="/assets/favicon.png">
+  {{isdef title}} <title>{{fill title}}</title>  {{end}}
+
+<style>
+	/* Create three equal columns that floats next to each other */
+	.column {
+	  float: left;
+	  width: 33.33%;
+	  padding: 15px;
+	}
+
+	/* Clear floats after the columns */
+	.row:after {
+	  content: "";
+	  display: table;
+	  clear: both;
+	}
+
+	/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+	@media screen and (max-width:600px) {
+	  .column {
+	    width: 100%;
+	  }
+	}
+</style>
+
+</head>
+
+<body>
+  {{insert header.html}}
+
+<div class="row">
+  <div class="column">
+    <h2>Column</h2>
+    <p>TEST</p>
+  </div>
+  
+  <div class="column">
+    <h2>Column</h2>
+    <p>TEST</p>
+  </div>
+  
+  <div class="column">
+    <h2>Column</h2>
+    <p>TEST</p>
+  </div>
+</div>
+
+</body>
+</html>

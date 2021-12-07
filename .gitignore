@@ -4,6 +4,8 @@ node_modules/
 package-lock.json
 input/
 demo/
+keycup
+keycup.pub
 
 # ignore VIM temp files
 *~

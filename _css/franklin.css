@@ -5,7 +5,7 @@
 :root {
   --block-background: hsl(0, 0%, 94%);
   --output-background: hsl(0, 0%, 98%);
-  --small: 14px;
+  --small: 19px;
   --normal: 19px;
   --text-color: hsv(0, 0%, 20%);
 }
@@ -84,12 +84,13 @@ html {
   padding-left: 12.5%;
   padding-right: 12.5%;
   line-height: 1.35em;
+  text-align: justify;
 }
 
 /* On wide screens, fix content width to a max value. */
 @media (min-width: 940px) {
   .franklin-content {
-    width: 705px;
+    width: 1005px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -117,7 +118,7 @@ h3,
 h4,
 h5,
 h6 {
-  text-align: left;
+  text-align: center;
 }
 
 .franklin-content h1 {

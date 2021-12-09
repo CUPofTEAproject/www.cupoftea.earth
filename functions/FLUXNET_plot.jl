@@ -2,10 +2,21 @@ using WGLMakie, JSServe
 
 #=  
 ;cd ..
-include(joinpath("Functions","LoadFLUXNET.jl"))
-ID = getID()[1];
+include(joinpath("functions", "FLUXNET", "load.jl"))
+ID = getID()[1]
+include(joinpath("functions", "quantilebins.jl"))
 
 =#
+
+# WIP! put these in function, then delete
+# NOTE: needs raw data, no gap-filling
+# e-mail FLUXNET to ask what filter to use to get raw data 
+T = dropmissing(loadFLUXNET(ID[1]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).TS_F_MDS_1
+M = dropmissing(loadFLUXNET(ID[1]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).SWC_F_MDS_1
+R = dropmissing(loadFLUXNET(ID[1]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).RECO_NT_VUT_USTAR50
+n = 10
+qbin(T, M, R, n)
+
 
 function FNplot(slider)
 	fig = Figure()

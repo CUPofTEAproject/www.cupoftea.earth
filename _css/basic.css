@@ -166,7 +166,7 @@ table {
   margin-left: auto;
   margin-right: auto;
   border-collapse: collapse;
-  text-align: center;
+  text-align: left;
   margin-bottom: 1.5em;
 }
 
@@ -175,7 +175,7 @@ tr:first-of-type {
 }
 
 tr:first-of-type > th {
-  text-align: center;
+  text-align: left;
 }
 
 tr,
@@ -183,8 +183,10 @@ th,
 td {
   padding: 10px;
   border: 1px solid lightgray;
+  text-align:left;
 }
 
 table tbody tr td {
   border: 1px solid lightgray;
+  text-align: left;
 }

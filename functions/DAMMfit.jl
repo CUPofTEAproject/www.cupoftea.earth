@@ -1,6 +1,6 @@
 using LsqFit
 
-include("DAMM_scaled_porosity.jl");
+include("DAMM_scaled_porosity_2.jl");
 
 lb = [0.0, 0.0, 0.0] # params can't be negative
 ub = [Inf, Inf, Inf] 

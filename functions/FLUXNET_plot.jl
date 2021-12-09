@@ -1,4 +1,4 @@
-using WGLMakie, JSServe
+using WGLMakie, JSServe, SparseArrays
 
 #=  
 ;cd ..
@@ -14,8 +14,42 @@ include(joinpath("functions", "quantilebins.jl"))
 T = dropmissing(loadFLUXNET(ID[1]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).TS_F_MDS_1
 M = dropmissing(loadFLUXNET(ID[1]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).SWC_F_MDS_1
 R = dropmissing(loadFLUXNET(ID[1]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).RECO_NT_VUT_USTAR50
-n = 10
-qbin(T, M, R, n)
+n = 5
+Tmed, Mmed, Rmed = qbin(T, M, R, n)
+
+Tmed = Float64.(Tmed)
+Mmed = Float64.(Mmed) ./100
+Rmed = Float64.(Rmed)
+
+# Matrix(sparse(Tmed, Mmed, Rmed))
+
+# testing with GLMakie first
+using GLMakie
+fig = Figure()
+ax = Axis3(fig[1, 1])
+# ax = LScene(fig[1, 1])
+data = Point3f0.(Tmed, Mmed, Rmed)
+p = plot!(ax, data, markersize = 15000)
+#p = scatter!(ax, data, markersize = 100)
+#s = surface!(ax, data)
+fig
+
+include(joinpath("functions","DAMMfit.jl"))
+
+poro_val = maximum(Mmed)
+
+params = fitDAMM(hcat(Tmed, Mmed), Rmed)
+
+include(joinpath("functions","3Dplot.jl"))
+
+plot3D(hcat(Tmed, Mmed), Rmed)
+
+
+# to do: plot 3D scatter (as above)
+# fit DAMM to it, plot DAMM surface
+
+
+
 
 
 function FNplot(slider)

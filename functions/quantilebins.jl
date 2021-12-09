@@ -20,3 +20,4 @@ end
 #= test function
 df = DataFrame(R=1:20, T=6:25, M=11:30)
 xmed, ymed, zmed = qbin(df.T, df.M, df.R, 3)
+=#

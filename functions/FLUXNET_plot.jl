@@ -11,9 +11,9 @@ include(joinpath("functions", "quantilebins.jl"))
 # WIP! put these in function, then delete
 # NOTE: needs raw data, no gap-filling
 # e-mail FLUXNET to ask what filter to use to get raw data 
-T = dropmissing(loadFLUXNET(ID[1]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).TS_F_MDS_1
-M = dropmissing(loadFLUXNET(ID[1]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).SWC_F_MDS_1
-R = dropmissing(loadFLUXNET(ID[1]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).RECO_NT_VUT_USTAR50
+T = dropmissing(loadFLUXNET(ID[i]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).TS_F_MDS_1
+M = dropmissing(loadFLUXNET(ID[i]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).SWC_F_MDS_1
+R = dropmissing(loadFLUXNET(ID[i]), [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).RECO_NT_VUT_USTAR50
 n = 5
 Tmed, Mmed, Rmed = qbin(T, M, R, n)
 
@@ -23,20 +23,21 @@ Rmed = Float64.(Rmed)
 
 # Matrix(sparse(Tmed, Mmed, Rmed))
 
-# testing with GLMakie first
+#= testing with GLMakie first
 using GLMakie
 fig = Figure()
 ax = Axis3(fig[1, 1])
 # ax = LScene(fig[1, 1])
 data = Point3f0.(Tmed, Mmed, Rmed)
-p = plot!(ax, data, markersize = 15000)
+p = plot!(ax, data, markersize = 5000)
 #p = scatter!(ax, data, markersize = 100)
 #s = surface!(ax, data)
 fig
+=#
 
 include(joinpath("functions","DAMMfit.jl"))
 
-poro_val = maximum(Mmed)
+poro_val = maximum(M)/100
 
 params = fitDAMM(hcat(Tmed, Mmed), Rmed)
 

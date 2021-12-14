@@ -1,4 +1,5 @@
-using GLMakie, UnicodeFun, SparseArrays
+using SparseArrays
+# using GLMakie, UnicodeFun, SparseArrays
 # using WGLMakie, UnicodeFun, SparseArrays, JSServe
 
 # TO DO: clean script to get matrix to plot on DAMM surface
@@ -11,7 +12,7 @@ Ind_var = hcat(x,y)
 Resp = DAMM(Ind_var, params)
 =#
 
-function DAMMmatrix(r) # resolution
+function DAMMmatrix(r, poro_val, params) # resolution
   x = collect(range(1, length=r, stop=40)) # T axis, °C from 1 to 40
   y = collect(range(0, length=r, stop=poro_val)) # M axis, % from 0 to poro_val
   X = repeat(1:r, inner=r) # X for DAMM matrix 
@@ -23,6 +24,7 @@ function DAMMmatrix(r) # resolution
   return x, y, DAMM_Matrix
 end
 
+#=
 function plot3D(Ind_var, Resp)
 	x, y, DAMM_Matrix = DAMMmatrix(40)
 	fig = Figure()
@@ -43,4 +45,5 @@ function plot3D(Ind_var, Resp)
 	#zlims!(0, 25)
 	fig
 end
+=#
 

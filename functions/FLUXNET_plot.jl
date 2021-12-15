@@ -7,8 +7,7 @@ include(joinpath("functions", "FLUXNET", "load.jl"))
 ID = getID()[1]
 include(joinpath("functions", "quantilebins.jl"))
 
-siteID = ID[4] 
-poro_val = 0.8 # temp
+siteID = ID[7] 
 include(joinpath("functions", "DAMMfit.jl")) 
 include(joinpath("functions", "DAMM_scaled_porosity_2.jl"))
 
@@ -63,7 +62,7 @@ function FNDAMMfit(siteID, r)
   return poro_val, Tmed, Mmed, Rmed, params, x, y, DAMM_Matrix
 end
 
-function FNDAMMplot()
+function FNDAMMplot(slider)
   fig = Figure()
   #=
   slider = Slider(fig[2, 1], range = [1, 3, 4, 5])
@@ -85,16 +84,15 @@ function FNDAMMplot()
   ax3D.ylabel = to_latex("\\theta (m^3 m^{-3})");
   ax3D.zlabel = to_latex("R_{soil} (\\mumol m^{-2} s^{-1})");
   data3D = @lift(Vec3f0.($Tmed, $Mmed, $Rmed))
-  # surface3D = DAMM_Matrix
   p3D = scatter!(ax3D, data3D, markersize = 2500, color = :black)
-  fig
-
-  s3D = surface!(ax3D, x, y, DAMM_Matrix, colormap = Reverse(:Spectral), transparency = true, alpha = 0.2, shading = false)
-  w3D = wireframe!(ax3D, x, y, DAMM_Matrix, overdraw = true, transparency = true, color = (:black, 0.1));
-
+  s3D = surface!(ax3D, x, y, DAMM_Matrix,
+        colormap = Reverse(:Spectral), transparency = true, alpha = 0.2, shading = false)
+  w3D = wireframe!(ax3D, x, y, DAMM_Matrix,
+        overdraw = true, transparency = true, color = (:black, 0.1));
   #xlims!(0, 40)
   #ylims!(0, 0.7)
   #zlims!(0, 25)
+  fig
   return fig, siteID
 end
 
@@ -113,9 +111,10 @@ end
 =#
 
 app = App() do session::Session    
-	slider = JSServe.Slider(1:5)
-	fig = FNplot(slider)[1]
-	site = FNplot(slider)[2]
+	# slider = JSServe.Slider([1, 3, 4, 5]) # not implemented right now, later
+	slider = JSServe.Slider(3:6)
+	fig = FNDAMMplot(slider)[1]
+	site = FNDAMMplot(slider)[2]
 	sl = DOM.div("FLUXNET site: ", slider, slider.value)
 	return JSServe.record_states(session, DOM.div(sl, site, fig))
 end

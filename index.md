@@ -51,4 +51,5 @@ There is a lot of possible inspiration in the literature. For example, [this pub
 \
 Students are encouraged to contribute! Instead of doing a stand-alone study, the work shared here will be visible to the broad community, and it will continuously updated with new databases or ideas.\
 \
-A peer-reviewed manuscript is in progress, and will be submitted in December 2022, along with the first official release (1.0) of the CUP of TEA platform. 
+A peer-reviewed manuscript is in progress, and will be submitted in December 2022, along with the first official release (1.0) of the CUP of TEA platform.
+? 

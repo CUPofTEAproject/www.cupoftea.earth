@@ -1,25 +1,32 @@
-using GLMakie, UnicodeFun, SparseArrays
+using SparseArrays
+# using GLMakie, UnicodeFun, SparseArrays
 # using WGLMakie, UnicodeFun, SparseArrays, JSServe
 
-L = 40 # resolution, and max T
-x_ax = collect(range(1, length=L, stop=L))
+# TO DO: clean script to get matrix to plot on DAMM surface
+#=
+r = 20
+poro_val = 0.3
+include("DAMM_scaled_porosity_2.jl")
+params = [0.3, 64.0, 1.0, 1.0]
+Ind_var = hcat(x,y)
+Resp = DAMM(Ind_var, params)
+=#
 
-xD = collect(range(1, length=L, stop=1))
-[append!(xD, collect(range(i, length=L, stop=i))) for i = 2:L]
-xD = reduce(vcat, xD)
-yD = collect(range(0, length=L, stop=poro_val))
-yD = repeat(yD, outer=L)
-x_range = hcat(xD, yD)
+function DAMMmatrix(r, poro_val, params) # resolution
+  x = collect(range(1, length=r, stop=40)) # T axis, °C from 1 to 40
+  y = collect(range(0, length=r, stop=poro_val)) # M axis, % from 0 to poro_val
+  X = repeat(1:r, inner=r) # X for DAMM matrix 
+  Y = repeat(1:r, outer=r) # Y for DAMM matrix
+  X2 = repeat(x, inner=r) # T values to fit DAMM on   
+  Y2 = repeat(y, outer=r) # M values to fit DAMM on
+  xy = hcat(X2, Y2) # T and M matrix to create DAMM matrix 
+  DAMM_Matrix = Matrix(sparse(X, Y, DAMM(xy, params)))
+  return x, y, DAMM_Matrix
+end
 
-xD = Int.(x_range[:, 1])
-y_ax = collect(range(0, length=L, stop=poro_val))
-yD = collect(range(1, length=L, stop=L))
-yD = repeat(yD, outer=L)
-yD = Int.(yD)
-
-DAMM_Matrix = Matrix(sparse(xD, yD, DAMM(x_range, params)))
-
+#=
 function plot3D(Ind_var, Resp)
+	x, y, DAMM_Matrix = DAMMmatrix(40)
 	fig = Figure()
 	ax3D = Axis3(fig[1,1])
 	ax3D.xlabel = to_latex("T_{soil} (°C)");
@@ -29,15 +36,14 @@ function plot3D(Ind_var, Resp)
 	data3D = Vec3f0.(Ind_var[:, 1], Ind_var[:, 2], Resp)
 	surface3D = DAMM_Matrix
 	
-	p3D = scatter!(ax3D, data3D, markersize = 1000, color = :black)
-	surface!(ax3D, x_ax, y_ax, surface3D, colormap = Reverse(:Spectral), transparency = true, alpha = 0.2, shading = false)
-	wireframe!(ax3D, x_ax, y_ax, surface3D, overdraw = true, transparency = true, color = (:black, 0.1));
+	p3D = scatter!(ax3D, data3D, markersize = 2500, color = :black)
+	surface!(ax3D, x, y, surface3D, colormap = Reverse(:Spectral), transparency = true, alpha = 0.2, shading = false)
+	wireframe!(ax3D, x, y, surface3D, overdraw = true, transparency = true, color = (:black, 0.1));
 
-	xlims!(0, 40)
-	ylims!(0, 0.7)
-	zlims!(0, 25)
+	#xlims!(0, 40)
+	#ylims!(0, 0.7)
+	#zlims!(0, 25)
 	fig
 end
-
-
+=#
 

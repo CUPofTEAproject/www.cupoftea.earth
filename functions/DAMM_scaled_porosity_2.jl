@@ -11,12 +11,12 @@ function DAMM(x, p)
 	θ = x[:, 2] # Soil moisture, m³ m⁻³
      # Parameters 
 	αₛₓ = 1e9*p[1] # Pre-exponential factor, mgC cm⁻³ h⁻¹
-     	# Eaₛₓ = p[2] # Activation energy, kJ mol⁻¹
-	Eaₛₓ = 64.5 # Activation energy, kJ mol⁻¹
-	kMₛₓ = 1e-6*p[2] # Michaelis constant, gC cm⁻³
-    	kMₒ₂ = 1e-4*p[3] # Michaelis constant for O₂, L L⁻¹
+     	Eaₛₓ = p[2] # Activation energy, kJ mol⁻¹
+	# Eaₛₓ = 64.5 # Activation energy, kJ mol⁻¹
+	kMₛₓ = 1e-6*p[3] # Michaelis constant, gC cm⁻³
+    	kMₒ₂ = 1e-4*p[4] # Michaelis constant for O₂, L L⁻¹
 	# porosity = p[5] # 1 - soil buld density / soil particle density
-	porosity = poro_val
+	porosity = p[5]
 	# Sxₜₒₜ = 1e-2*p[5] # Total soil carbon, gC cm⁻³
 	Sxₜₒₜ = 0.02 # Total soil carbon, gC cm⁻³
      # DAMM model

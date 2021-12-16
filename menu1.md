@@ -2,6 +2,8 @@
 title = "DAMM model"
 +++
 
+# [The Dual Arrhenius and Michaelis–Menten model (DAMM, Davidson et al., 2012)] (https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1365-2486.2011.02546.x)
+
 ```julia:ex
 #hideall
 using WGLMakie, JSServe, UnicodeFun, SparseArrays, Observables
@@ -121,3 +123,8 @@ println(io, "~~~")
 println(String(take!(io)))
 ```
 \textoutput{ex}
+
+v0.1\
+\
+DAMM is a semi-mechanistic kinetic model of heterotrophic respiration. 
+Check out our [Julia package] (https://github.com/CUPofTEAproject/DAMMmodel.jl) of this model. 

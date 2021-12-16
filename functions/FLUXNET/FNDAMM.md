@@ -2,7 +2,7 @@
 title = "DAMM Fluxnet"
 +++
 
-# [The Dual Arrhenius and Michaelis–Menten model (DAMM, Davidson et al., 2012)] (https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1365-2486.2011.02546.x)
+# DAMM model fitted to FLUXNET sites
 
 ```julia:ex
 #hideall

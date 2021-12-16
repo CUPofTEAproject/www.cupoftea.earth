@@ -7,7 +7,7 @@ include(joinpath("functions", "FLUXNET", "load.jl"))
 ID = getID()[1]
 include(joinpath("functions", "quantilebins.jl"))
 
-siteID = ID[7] 
+siteID = ID[1]
 include(joinpath("functions", "DAMMfit.jl")) 
 include(joinpath("functions", "DAMM_scaled_porosity_2.jl"))
 

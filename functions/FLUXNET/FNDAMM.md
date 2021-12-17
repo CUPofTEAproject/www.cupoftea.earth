@@ -26,7 +26,7 @@ include(joinpath("functions", "FLUXNET", "FNDAMMplot.jl"))
 
 app = App() do session::Session    
 	# slider = JSServe.Slider([1, 3, 4, 5]) # not implemented right now, later
-	slider = JSServe.Slider(3:5)
+	slider = JSServe.Slider(4:5)
 	fig = FNDAMMplot(slider)[1]
 	site = FNDAMMplot(slider)[2]
 	sl = DOM.div("FLUXNET site: ", slider, slider.value)
@@ -39,4 +39,4 @@ println(String(take!(io)))
 ```
 \textoutput{ex}
 
-v0.1
+v0.1.2

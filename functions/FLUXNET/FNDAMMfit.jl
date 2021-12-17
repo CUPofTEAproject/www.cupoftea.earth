@@ -18,19 +18,19 @@ function FNDAMMfit(siteID, r)
   Rmed = Float64.(qbin(T, M, R, n)[3])
   Rmed_N = Rmed .+ -minimum(Rmed) 
   Rmed_N = Rmed_N .* 10/maximum(Rmed_N) # normalize max R to 10
-  params = fitDAMM(hcat(Tmed, Mmed), Rmed)
-  params_N = fitDAMM(hcat(Tmed_N, Mmed_N), Rmed_N)
+  params = fitDAMM(hcat(Tmed, Mmed), Rmed) # still problem of M > poro_val ... 
+  # params_N = fitDAMM(hcat(Tmed_N, Mmed_N), Rmed_N)
   poro_val = params[5]
   poro_val_N = (poro_val - minimum(Mmed)) * 0.5/maximum(Mmed_N)
 # DAMMmatrix
-  x = collect(range(minimum(Tmed_N), length=r, stop=maximum(Tmed_N))) # T axis, °C from 1 to 40
-  y = collect(range(minimum(Mmed_N), length=r, stop=maximum(Mmed_N))) # M axis, % from 0 to poro_val
+  x = collect(range(minimum(Tmed), length=r, stop=maximum(Tmed))) # T axis, °C from min to max
+  y = collect(range(minimum(Mmed), length=r, stop=maximum(Mmed))) # M axis, % from min to max
   X = repeat(1:r, inner=r) # X for DAMM matrix 
   Y = repeat(1:r, outer=r) # Y for DAMM matrix
   X2 = repeat(x, inner=r) # T values to fit DAMM on   
   Y2 = repeat(y, outer=r) # M values to fit DAMM on
   xy = hcat(X2, Y2) # T and M matrix to create DAMM matrix 
-  DAMM_Matrix = Matrix(sparse(X, Y, DAMM(xy, params_N)))
+  DAMM_Matrix = Matrix(sparse(X, Y, DAMM(xy, params)))
   #return x, y, DAMM_Matrix
-  return poro_val_N, Tmed_N, Mmed_N, Rmed_N, params_N, x, y, DAMM_Matrix
+  return poro_val, Tmed, Mmed, Rmed, params, x, y, DAMM_Matrix
 end

@@ -23,9 +23,9 @@ function FNDAMMplot(slider)
   p3D = scatter!(ax3D, data3D, markersize = 2500, strokewidth = 0, color = Rmed, colormap = Reverse(:Spectral))
   s3D = surface!(ax3D, x, y, DAMM_Matrix, colormap = Reverse(:Spectral), transparency = true, alpha = 0.01, shading = false)
   w3D = wireframe!(ax3D, x, y, DAMM_Matrix, overdraw = true, transparency = true, color = (:black, 0.1));
-  #autolimits!(ax3D)
-  #xlims!(0, 40)
-  #ylims!(0, 0.7)
-  #zlims!(0, 25)
+  xlims!(ax3D, -10, 45)
+  ylims!(ax3D, 0, 0.7)  
+  zlims!(ax3D, 0, 20)
+  fig
   return fig, siteID
 end

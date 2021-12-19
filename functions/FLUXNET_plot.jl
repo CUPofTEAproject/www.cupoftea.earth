@@ -7,8 +7,8 @@ include(joinpath("functions", "FLUXNET", "load.jl"))
 ID = getID()[1]
 include(joinpath("functions", "quantilebins.jl"))
 
-siteID = ID[1]
-include(joinpath("functions", "DAMMfit_2.jl")) 
+siteID = ID[6]
+include(joinpath("functions", "DAMMfit_2.jl"))
 include(joinpath("functions", "DAMM_scaled_porosity_3.jl"))
 
 =#
@@ -53,9 +53,10 @@ function FNDAMMfit(siteID, r)
   Rmed = Float64.(qbin(T, M, R, n)[3])
   Rmed_N = Rmed .+ -minimum(Rmed) 
   Rmed_N = Rmed_N .* 10/maximum(Rmed_N) # normalize max R to 10
+  poro_val = maximum(M) ./100
   params = fitDAMM(hcat(Tmed, Mmed), Rmed)
-  params_N = fitDAMM(hcat(Tmed_N, Mmed_N), Rmed_N)
-  poro_val = params[5]
+  # params_N = fitDAMM(hcat(Tmed_N, Mmed_N), Rmed_N)
+  # poro_val = params[5]
   poro_val_N = (poro_val - minimum(Mmed)) * 0.5/maximum(Mmed_N)
 # DAMMmatrix
   x = collect(range(minimum(Tmed), length=r, stop=maximum(Tmed))) # T axis, °C from 1 to 40
@@ -80,14 +81,14 @@ function FNDAMMplot(slider)
   site_n = slider.value
   siteID = @lift(ID[$site_n])
   outs = @lift(FNDAMMfit($siteID, 50)) 
-  poro_val = @lift($outs[1])
-  Tmed = @lift($outs[2])
+  poro_val_o = @lift($outs[1]) # do we even need to return poro_val?
+  Tmed = @lift($outs[2]) # needed below for data3D
   Mmed = @lift($outs[3])
   Rmed = @lift($outs[4])
-  params = @lift($outs[5])
-  x = @lift($outs[6])
+  params = @lift($outs[5]) # do we need this?
+  x = @lift($outs[6]) # needed below
   y = @lift($outs[7])
-  DAMM_Matrix = @lift($outs[8]) 
+  DAMM_Matrix = @lift($outs[8]) # needed below 
   ax3D.xlabel = to_latex("T_{soil} (°C)");
   ax3D.ylabel = to_latex("\\theta (m^3 m^{-3})");
   ax3D.zlabel = to_latex("R_{soil} (\\mumol m^{-2} s^{-1})");

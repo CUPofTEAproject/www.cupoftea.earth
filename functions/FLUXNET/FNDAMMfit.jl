@@ -18,9 +18,10 @@ function FNDAMMfit(siteID, r)
   Rmed = Float64.(qbin(T, M, R, n)[3])
   Rmed_N = Rmed .+ -minimum(Rmed) 
   Rmed_N = Rmed_N .* 10/maximum(Rmed_N) # normalize max R to 10
+  global poro_val = maximum(M) ./ 100
   params = fitDAMM(hcat(Tmed, Mmed), Rmed) # still problem of M > poro_val ... 
   # params_N = fitDAMM(hcat(Tmed_N, Mmed_N), Rmed_N)
-  poro_val = params[5]
+  # poro_val = params[5]
   poro_val_N = (poro_val - minimum(Mmed)) * 0.5/maximum(Mmed_N)
 # DAMMmatrix
   x = collect(range(minimum(Tmed), length=r, stop=maximum(Tmed))) # T axis, °C from min to max

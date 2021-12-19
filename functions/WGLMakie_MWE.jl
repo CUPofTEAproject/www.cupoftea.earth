@@ -6,7 +6,7 @@ function scatter3D(slider)
   ax3D = Axis3(fig[1, 1])
   s = slider.value
   data = @lift(Vec3f0.(v[$s], v[$s], v[$s]))
-  p3D = scatter!(ax3D, data, markersize = 2500)
+  p3D = scatter!(ax3D, data, markersize = 2500, strokewidth = 2)
   #autolimits!(ax3D)
   xlims!(ax3D, 0, 10)
   fig

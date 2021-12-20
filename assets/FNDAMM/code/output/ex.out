@@ -1,3 +1,0 @@
-ArgumentError: Package LsqFit not found in current path:
-- Run `import Pkg; Pkg.add("LsqFit")` to install the LsqFit package.
-

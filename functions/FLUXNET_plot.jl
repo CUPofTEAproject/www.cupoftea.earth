@@ -7,7 +7,7 @@ include(joinpath("functions", "FLUXNET", "load.jl"))
 ID = getID()[1]
 include(joinpath("functions", "quantilebins.jl"))
 
-siteID = ID[6]
+siteID = ID[1]
 include(joinpath("functions", "DAMMfit_2.jl"))
 include(joinpath("functions", "DAMM_scaled_porosity_3.jl"))
 
@@ -36,7 +36,24 @@ include(joinpath("functions", "DAMM_scaled_porosity_3.jl"))
 # do this with WGLMakie instead of GLMakie, then put on Franklin
 ###################################################
 
-function FNDAMMfit(siteID, r)   
+function getIDe(ID) # works, just need to add it, redo figure, commit etc.
+  IDe = [];
+  for i = 1:length(ID)
+    coln = names(loadFLUXNET(ID[i])) # get column name of dataset
+    if "TS_F_MDS_1" in coln && "SWC_F_MDS_1" in coln && "RECO_NT_VUT_USTAR50" in coln 
+      if isempty(dropmissing(loadFLUXNET(ID[i]), 
+	 [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50])) == false
+           println("data ", i, ", ", ID[i])
+           push!(IDe, ID[i]) 
+      end
+    end
+  end
+  n_IDe = length(IDe)
+  return IDe, n_IDe
+end
+IDe, n_IDe = getIDe(ID)
+
+function FNDAMMfit(siteID, r)
   T = dropmissing(loadFLUXNET(siteID),
 	    [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).TS_F_MDS_1
   M = dropmissing(loadFLUXNET(siteID),
@@ -79,7 +96,7 @@ function FNDAMMplot(slider)
   ax3D = Axis3(fig[1, 1])
   #ax3D = LScene(fig[1, 1])
   site_n = slider.value
-  siteID = @lift(ID[$site_n])
+  siteID = @lift(IDe[$site_n])
   outs = @lift(FNDAMMfit($siteID, 50)) 
   poro_val_o = @lift($outs[1]) # do we even need to return poro_val?
   Tmed = @lift($outs[2]) # needed below for data3D

@@ -38,12 +38,12 @@ include(joinpath("functions", "DAMM_scaled_porosity_3.jl"))
 
 function getIDe(ID) # works, just need to add it, redo figure, commit etc.
   IDe = [];
-  for i = 1:length(ID)
+  for i = 1:4 # length(ID)
     coln = names(loadFLUXNET(ID[i])) # get column name of dataset
-    if "TS_F_MDS_1" in coln && "SWC_F_MDS_1" in coln && "RECO_NT_VUT_USTAR50" in coln 
+    if "TS_F_MDS_1" in coln && "SWC_F_MDS_1" in coln && "NEE_CUT_USTAR50" in coln && "NIGHT" in coln && "NEE_CUT_USTAR50_QC" in coln
       if isempty(dropmissing(loadFLUXNET(ID[i]), 
-	 [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50])) == false
-           println("data ", i, ", ", ID[i])
+	 [:TS_F_MDS_1, :SWC_F_MDS_1, :NEE_CUT_USTAR50, :NIGHT, :NEE_CUT_USTAR50_QC])) == false
+           println("dataset ", i, ", ", ID[i])
            push!(IDe, ID[i]) 
       end
     end
@@ -54,27 +54,31 @@ end
 IDe, n_IDe = getIDe(ID)
 
 function FNDAMMfit(siteID, r)
-  T = dropmissing(loadFLUXNET(siteID),
-	    [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).TS_F_MDS_1
-  M = dropmissing(loadFLUXNET(siteID),
-	    [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).SWC_F_MDS_1
-  R = dropmissing(loadFLUXNET(siteID), 
-	    [:TS_F_MDS_1, :SWC_F_MDS_1, :RECO_NT_VUT_USTAR50]).RECO_NT_VUT_USTAR50
-  n = 5 # 5 bins of T and M quantiles 
-  Tmed = Float64.(qbin(T, M, R, n)[1]) 
-  Tmed_N = Tmed .+ -minimum(Tmed) # move min temp to 0 
-  Tmed_N = Tmed_N .* 10/maximum(Tmed_N) # normalize max T to 10
-  Mmed = Float64.(qbin(T, M, R, n)[2]) ./100 
-  Mmed_N = Mmed .+ -minimum(Mmed)
-  Mmed_N = Mmed_N .* 0.5/maximum(Mmed_N)
-  Rmed = Float64.(qbin(T, M, R, n)[3])
-  Rmed_N = Rmed .+ -minimum(Rmed) 
-  Rmed_N = Rmed_N .* 10/maximum(Rmed_N) # normalize max R to 10
-  poro_val = maximum(M) ./100
+  df = dropmissing(loadFLUXNET(siteID),
+	    [:TS_F_MDS_1, :SWC_F_MDS_1, :NEE_CUT_USTAR50, :NIGHT, :NEE_CUT_USTAR50_QC])
+  filter = df.NIGHT .== 1 .&& df.NEE_CUT_USTAR50_QC .== 0 # nighttime NEE, u* filtered, observation only
+  T = df.TS_F_MDS_1[filter]
+  M = df.SWC_F_MDS_1[filter]
+  R = df.NEE_CUT_USTAR50[filter]
+  n = 5 # 5 bins of T and M quantiles
+
+  Tmed, Mmed, Rmed = qbin(T, M, R, n)
+  Mmed = Med ./ 100
+
+  # Tmed = Float64.(qbin(T, M, R, n)[1]) 
+  #Tmed_N = Tmed .+ -minimum(Tmed) # move min temp to 0 
+  #Tmed_N = Tmed_N .* 10/maximum(Tmed_N) # normalize max T to 10
+  #Mmed = Float64.(qbin(T, M, R, n)[2]) ./100 
+  #Mmed_N = Mmed .+ -minimum(Mmed)
+  #Mmed_N = Mmed_N .* 0.5/maximum(Mmed_N)
+  #Rmed = Float64.(qbin(T, M, R, n)[3])
+  #Rmed_N = Rmed .+ -minimum(Rmed) 
+  #Rmed_N = Rmed_N .* 10/maximum(Rmed_N) # normalize max R to 10
+  global poro_val = maximum(M) ./100
   params = fitDAMM(hcat(Tmed, Mmed), Rmed)
   # params_N = fitDAMM(hcat(Tmed_N, Mmed_N), Rmed_N)
   # poro_val = params[5]
-  poro_val_N = (poro_val - minimum(Mmed)) * 0.5/maximum(Mmed_N)
+  #poro_val_N = (poro_val - minimum(Mmed)) * 0.5/maximum(Mmed_N)
 # DAMMmatrix
   x = collect(range(minimum(Tmed), length=r, stop=maximum(Tmed))) # T axis, °C from 1 to 40
   y = collect(range(minimum(Mmed), length=r, stop=maximum(Mmed))) # M axis, % from 0 to poro_val
@@ -98,11 +102,11 @@ function FNDAMMplot(slider)
   site_n = slider.value
   siteID = @lift(IDe[$site_n])
   outs = @lift(FNDAMMfit($siteID, 50)) 
-  poro_val_o = @lift($outs[1]) # do we even need to return poro_val?
+  # poro_val_o = @lift($outs[1]) # do we even need to return poro_val?
   Tmed = @lift($outs[2]) # needed below for data3D
   Mmed = @lift($outs[3])
   Rmed = @lift($outs[4])
-  params = @lift($outs[5]) # do we need this?
+  # params = @lift($outs[5]) # do we need this?
   x = @lift($outs[6]) # needed below
   y = @lift($outs[7])
   DAMM_Matrix = @lift($outs[8]) # needed below 
@@ -110,11 +114,12 @@ function FNDAMMplot(slider)
   ax3D.ylabel = to_latex("\\theta (m^3 m^{-3})");
   ax3D.zlabel = to_latex("R_{soil} (\\mumol m^{-2} s^{-1})");
   data3D = @lift(Vec3f0.($Tmed, $Mmed, $Rmed))
-  p3D = scatter!(ax3D, data3D, markersize = 2500, color = :black)
+  p3D = scatter!(ax3D, data3D, markersize = 2500, strokewidth = 3, color = Rmed)
   s3D = surface!(ax3D, x, y, DAMM_Matrix,
         colormap = Reverse(:Spectral), transparency = true, alpha = 0.2, shading = false)
   w3D = wireframe!(ax3D, x, y, DAMM_Matrix,
         overdraw = true, transparency = true, color = (:black, 0.1));
+  # Legend(fig[1, 2], [p3D, s3D], ["Observation", "DAMM"]) # not supported yet
   autolimits!(ax3D)
   #xlims!(0, 40)
   #ylims!(0, 0.7)
@@ -142,6 +147,7 @@ app = App() do session::Session
 	slider = JSServe.Slider(3:6)
 	fig = FNDAMMplot(slider)[1]
 	site = FNDAMMplot(slider)[2]
+	# params 
 	sl = DOM.div("FLUXNET site: ", slider, slider.value)
 	return JSServe.record_states(session, DOM.div(sl, site, fig))
 end

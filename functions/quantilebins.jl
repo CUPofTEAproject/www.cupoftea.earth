@@ -2,9 +2,9 @@ using DataFrames, Statistics
 
 function qbin(x, y, z, n)
   xq = quantile(x, 0:1/n:1)
-  xmed = [] # between quantiles x values
-  ymed = [] # between quantiles y values
-  zmed = [] # z median for each xy bins
+  xmed = Float64[] # between quantiles x values
+  ymed = Float64[] # between quantiles y values
+  zmed = Float64[] # z median for each xy bins
   for i = 1:n # loop for each x between-quantile bin
     ybin = y[x .>= xq[i] .&& x .<= xq[i+1]]
     ybinq = quantile(ybin, 0:1/n:1)

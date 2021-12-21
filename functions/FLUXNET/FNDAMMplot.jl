@@ -1,8 +1,5 @@
 function FNDAMMplot(slider)
   fig = Figure()
-  #=
-  slider = Slider(fig[2, 1], range = [1, 3, 4, 5])
-  =#
   ax3D = Axis3(fig[1, 1])
   #ax3D = LScene(fig[1, 1])
   site_n = slider.value
@@ -20,7 +17,7 @@ function FNDAMMplot(slider)
   ax3D.ylabel = to_latex("\\theta (m^3 m^{-3})");
   ax3D.zlabel = to_latex("R_{soil} (\\mumol m^{-2} s^{-1})");
   data3D = @lift(Vec3f0.($Tmed, $Mmed, $Rmed))
-  p3D = scatter!(ax3D, data3D, markersize = 2500, strokewidth = 0, color = Rmed, colormap = Reverse(:Spectral))
+  p3D = scatter!(ax3D, data3D, markersize = 2500, strokewidth = 3, color = Rmed, colormap = Reverse(:Spectral))
   s3D = surface!(ax3D, x, y, DAMM_Matrix, colormap = Reverse(:Spectral), transparency = true, alpha = 0.01, shading = false)
   w3D = wireframe!(ax3D, x, y, DAMM_Matrix, overdraw = true, transparency = true, color = (:black, 0.1));
   xlims!(ax3D, -20, 50)

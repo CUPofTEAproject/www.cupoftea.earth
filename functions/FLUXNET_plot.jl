@@ -2,14 +2,13 @@ using WGLMakie, JSServe, SparseArrays, UnicodeFun, LsqFit
 
 #=  
 ;cd ..
-using GLMakie, SparseArrays, UnicodeFun, LsqFit
+using GLMakie, SparseArrays, UnicodeFun, LsqFit, DAMMmodel, DataFrames, CSV, Dates
 include(joinpath("functions", "FLUXNET", "load.jl"))
 ID = getID()[1]
 include(joinpath("functions", "quantilebins.jl"))
 
 siteID = ID[1]
 include(joinpath("functions", "DAMMfit_2.jl"))
-include(joinpath("functions", "DAMM_scaled_porosity_3.jl"))
 
 =#
 
@@ -63,7 +62,7 @@ function FNDAMMfit(siteID, r)
   n = 5 # 5 bins of T and M quantiles
 
   Tmed, Mmed, Rmed = qbin(T, M, R, n)
-  Mmed = Med ./ 100
+  Mmed = Mmed ./ 100
 
   # Tmed = Float64.(qbin(T, M, R, n)[1]) 
   #Tmed_N = Tmed .+ -minimum(Tmed) # move min temp to 0 

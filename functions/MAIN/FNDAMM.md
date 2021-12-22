@@ -6,16 +6,15 @@ title = "DAMM Fluxnet"
 
 ```julia:ex
 #hideall
-using WGLMakie, JSServe, UnicodeFun, SparseArrays, LsqFit
+using WGLMakie, JSServe, UnicodeFun, SparseArrays, LsqFit, DAMMmodel, DataFrames, CSV, Dates
 io = IOBuffer()
 println(io, "~~~")
 show(io, MIME"text/html"(), Page(exportable=true, offline=true))
 
 include(joinpath("functions", "FLUXNET", "load.jl"))
 ID = getID()[1] # should be called in functions that needs it instead of global
-include(joinpath("functions", "quantilebins.jl")) # could be a new Julia package
-include(joinpath("functions", "DAMMfit_2.jl")) # could be added to DAMMmodel.jl
-include(joinpath("functions", "DAMM_scaled_porosity_3.jl")) # would be better to use package
+include(joinpath("functions", "quantilebins.jl")) # could be added to DAMMmodel.jl
+include(joinpath("functions", "DAMMfit.jl")) # could be added to DAMMmodel.jl 
 include(joinpath("functions", "FLUXNET", "getID_filtered.jl"))
 IDe, n_IDe = getIDe(ID)
 include(joinpath("functions", "FLUXNET", "FNDAMMfit.jl"))
@@ -36,6 +35,7 @@ app = App() do session::Session
 end
 
 # could add a line to copy the .html in /__site/FNDAMM to /menu2/, which I do manually atm
+# dd
 
 show(io, MIME"text/html"(), app)
 println(io, "~~~")

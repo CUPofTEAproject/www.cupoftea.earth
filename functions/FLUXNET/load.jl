@@ -1,5 +1,3 @@
-using DataFrames, CSV, Dates
-
 function getID()
 	# get the path of folder files
 	folders = readdir(joinpath("input", "FLUXNET"), join = true);
@@ -22,4 +20,3 @@ function loadFLUXNET(site)
 	missingstring="-9999"));
 	return data
 end
-

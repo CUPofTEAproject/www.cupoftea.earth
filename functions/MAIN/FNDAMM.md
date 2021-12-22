@@ -6,40 +6,8 @@ title = "DAMM Fluxnet"
 
 ```julia:ex
 #hideall
-using WGLMakie, JSServe, UnicodeFun, SparseArrays, LsqFit, DAMMmodel, DataFrames, CSV, Dates
-io = IOBuffer()
-println(io, "~~~")
-show(io, MIME"text/html"(), Page(exportable=true, offline=true))
-
-include(joinpath("functions", "FLUXNET", "load.jl"))
-ID = getID()[1] # should be called in functions that needs it instead of global
-include(joinpath("functions", "quantilebins.jl")) # could be added to DAMMmodel.jl
-include(joinpath("functions", "DAMMfit.jl")) # could be added to DAMMmodel.jl 
-include(joinpath("functions", "FLUXNET", "getID_filtered.jl"))
-IDe, n_IDe = getIDe(ID)
-include(joinpath("functions", "FLUXNET", "FNDAMMfit.jl"))
-include(joinpath("functions", "FLUXNET", "FNDAMMplot.jl"))
-
-# write new script or add more code in existing scripts:
-# 1. filter FLUXNET data, only keep qc measurement (no gap-fill)
-# 2. get only dataset that contain variables we need (Ts, M, R)
-# 3. normalize (max resp = 10, M from 0 to 100, etc.)
-
-app = App() do session::Session    
-	# slider = JSServe.Slider([1, 3, 4, 5]) # not implemented right now, later
-	slider = JSServe.Slider(1:50)
-	fig = FNDAMMplot(slider)[1]
-	site = FNDAMMplot(slider)[2]
-	sl = DOM.div("FLUXNET site: ", slider, slider.value)
-	return JSServe.record_states(session, DOM.div(sl, site, fig))
-end
-
-# could add a line to copy the .html in /__site/FNDAMM to /menu2/, which I do manually atm
-# dd
-
-show(io, MIME"text/html"(), app)
-println(io, "~~~")
-println(String(take!(io)))
+include(joinpath("functions", "MAIN", "FNDAMM.jl"))
+#could add a line to copy the .html in /__site/FNDAMM to /menu2/, which I do manually atm
 ```
 \textoutput{ex}
 

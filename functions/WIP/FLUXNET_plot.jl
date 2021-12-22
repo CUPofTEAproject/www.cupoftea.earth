@@ -2,13 +2,13 @@ using WGLMakie, JSServe, SparseArrays, UnicodeFun, LsqFit
 
 #=  
 ;cd ..
-using GLMakie, SparseArrays, UnicodeFun, LsqFit, DAMMmodel, DataFrames, CSV, Dates
+using GLMakie, SparseArrays, UnicodeFun, LsqFit, DAMMmodel, DataFrames, CSV, Dates, Statistics
 include(joinpath("functions", "FLUXNET", "load.jl"))
 ID = getID()[1]
 include(joinpath("functions", "quantilebins.jl"))
 
 siteID = ID[1]
-include(joinpath("functions", "DAMMfit_2.jl"))
+include(joinpath("functions", "DAMMfit.jl"))
 
 =#
 
@@ -113,16 +113,18 @@ function FNDAMMplot(slider)
   ax3D.ylabel = to_latex("\\theta (m^3 m^{-3})");
   ax3D.zlabel = to_latex("R_{soil} (\\mumol m^{-2} s^{-1})");
   data3D = @lift(Vec3f0.($Tmed, $Mmed, $Rmed))
-  p3D = scatter!(ax3D, data3D, markersize = 2500, strokewidth = 3, color = Rmed)
+  p3D = scatter!(ax3D, data3D, markersize = 2500, strokewidth = 3,
+		 color = Rmed, colormap = Reverse(:Spectral), colorrange = (0, 10))
   s3D = surface!(ax3D, x, y, DAMM_Matrix,
-        colormap = Reverse(:Spectral), transparency = true, alpha = 0.2, shading = false)
+        colormap = Reverse(:Spectral), transparency = true, alpha = 0.2, shading = false, colorrange = (0, 10))
   w3D = wireframe!(ax3D, x, y, DAMM_Matrix,
         overdraw = true, transparency = true, color = (:black, 0.1));
+  Colorbar(fig[1, 2], limits = (0, 10), colormap = Reverse(:Spectral));
   # Legend(fig[1, 2], [p3D, s3D], ["Observation", "DAMM"]) # not supported yet
-  autolimits!(ax3D)
-  #xlims!(0, 40)
-  #ylims!(0, 0.7)
-  #zlims!(0, 25)
+  # autolimits!(ax3D)
+  xlims!(-10, 45)
+  ylims!(0, 1.0)
+  zlims!(0, 10)
   fig
   return fig, siteID
 end

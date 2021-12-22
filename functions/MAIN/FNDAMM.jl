@@ -1,8 +1,3 @@
-using WGLMakie, JSServe, UnicodeFun, SparseArrays, LsqFit, DAMMmodel, DataFrames, CSV, Dates, Statistics
-io = IOBuffer()
-println(io, "~~~")
-show(io, MIME"text/html"(), Page(exportable=true, offline=true))
-
 include(joinpath("functions", "FLUXNET", "load.jl"))
 ID = getID()[1] # should be called in functions that needs it instead of global
 include(joinpath("functions", "quantilebins.jl")) # could be added to DAMMmodel.jl
@@ -19,7 +14,3 @@ app = App() do session::Session
 	sl = DOM.div("FLUXNET site: ", slider, slider.value)
 	return JSServe.record_states(session, DOM.div(sl, site, fig))
 end
-
-show(io, MIME"text/html"(), app)
-println(io, "~~~")
-println(String(take!(io)))

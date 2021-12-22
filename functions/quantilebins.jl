@@ -1,5 +1,3 @@
-using DataFrames, Statistics
-
 function qbin(x, y, z, n)
   xq = quantile(x, 0:1/n:1)
   xmed = Float64[] # between quantiles x values

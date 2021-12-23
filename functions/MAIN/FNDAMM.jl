@@ -1,9 +1,9 @@
-include(joinpath("functions", "FLUXNET", "load.jl"))
-ID = getID()[1] # should be called in functions that needs it instead of global
-include(joinpath("functions", "quantilebins.jl")) # could be added to DAMMmodel.jl
-include(joinpath("functions", "DAMMfit.jl")) # could be added to DAMMmodel.jl 
+# This script generates the interactive figure in menu2 
+
+include(joinpath("functions", "FLUXNET", "getID.jl"))
+include(joinpath("functions", "FLUXNET", "loadFLUXNET.jl"))
 include(joinpath("functions", "FLUXNET", "getID_filtered.jl"))
-IDe, n_IDe = getIDe(ID)
+IDe, n_IDe = getIDe() # Needs to be global because getIDe() is slow
 include(joinpath("functions", "FLUXNET", "FNDAMMfit.jl"))
 include(joinpath("functions", "FLUXNET", "FNDAMMplot.jl"))
 

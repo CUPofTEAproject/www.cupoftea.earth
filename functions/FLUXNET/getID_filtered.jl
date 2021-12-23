@@ -1,5 +1,8 @@
-function getIDe(ID) # works, just need to add it, redo figure, commit etc.
-  IDe = [];
+# Filter out FLUXNET datasets that are missing what we need for our analysis
+
+function getIDe() 
+  ID, folders, n = getID();
+  IDe = String[];
   for i = 1:length(ID)    
     df = loadFLUXNET(ID[i])
     coln = names(df) # get column name of dataset    
@@ -23,3 +26,13 @@ function getIDe(ID) # works, just need to add it, redo figure, commit etc.
   n_IDe = length(IDe)
   return IDe, n_IDe
 end
+
+#= MWE, run from CUPofTEA home directory
+using DataFrames, CSV, Dates
+include(joinpath("functions", "FLUXNET", "getID.jl"))
+include(joinpath("functions", "FLUXNET", "loadFLUXNET.jl"))
+# this script takes a while to run (10 minutes?). Uncomment to print progress
+IDe, n_IDe = getIDe() # run the function
+IDe[1] # return a site ID, just like ID
+n_IDe # number of FLUXNET datasets kept after the filter
+=#

@@ -9,8 +9,8 @@ function FNDAMMfit(siteID, r)
   n = 5 # 5 bins of T and M quantiles
   Tmed, Mmed, Rmed = qbin(T, M, R, n)
   Mmed = Mmed ./ 100
-  global poro_val = maximum(M) ./ 100
-  params = fitDAMM(hcat(Tmed, Mmed), Rmed)  
+  poro_val = maximum(M) ./ 100
+  params = fitDAMM(hcat(Tmed, Mmed), Rmed, poro_val)  
 # create x y arrays, and z matrix, to plot DAMM surface
   x = collect(range(minimum(Tmed), length=r, stop=maximum(Tmed))) # T axis, °C from min to max
   y = collect(range(minimum(Mmed), length=r, stop=maximum(Mmed))) # M axis, % from min to max

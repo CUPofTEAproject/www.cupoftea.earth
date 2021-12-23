@@ -5,35 +5,9 @@ using WGLMakie, JSServe, SparseArrays, UnicodeFun, LsqFit
 using GLMakie, SparseArrays, UnicodeFun, LsqFit, DAMMmodel, DataFrames, CSV, Dates, Statistics
 include(joinpath("functions", "FLUXNET", "load.jl"))
 ID = getID()[1]
-include(joinpath("functions", "quantilebins.jl"))
-
 siteID = ID[1]
-include(joinpath("functions", "DAMMfit.jl"))
 
 =#
-
-# WIP! put these in function, then delete
-# NOTE: needs raw data, no gap-filling
-# e-mail FLUXNET to ask what filter to use to get raw data
-
-# seems like I need to give initial value to poro_val, or fix this issue
-
-###################### to do ######################################
-# need to filter out sites that don't have TS or SWC or RECO (e.g., site 2 doesn't have TS)
-###################################################################
-#
-# maybe create a vector of the site that do have data
-# e.g., [1, 3, 4, 6, ..., 200] for the 200 sites
-# then use those values for the slider
-# seems to work, see below. Just need to automate creation of this array
-
-##################### to do #####################################
-# split this script into multiple scripts and functions
-#################################################################
-
-#################### to do ########################
-# do this with WGLMakie instead of GLMakie, then put on Franklin
-###################################################
 
 function getIDe(ID) # works, just need to add it, redo figure, commit etc.
   IDe = [];
@@ -73,8 +47,8 @@ function FNDAMMfit(siteID, r)
   #Rmed = Float64.(qbin(T, M, R, n)[3])
   #Rmed_N = Rmed .+ -minimum(Rmed) 
   #Rmed_N = Rmed_N .* 10/maximum(Rmed_N) # normalize max R to 10
-  global poro_val = maximum(M) ./100
-  params = fitDAMM(hcat(Tmed, Mmed), Rmed)
+  poro_val = maximum(M) ./100
+  params = fitDAMM(hcat(Tmed, Mmed), Rmed, poro_val)
   # params_N = fitDAMM(hcat(Tmed_N, Mmed_N), Rmed_N)
   # poro_val = params[5]
   #poro_val_N = (poro_val - minimum(Mmed)) * 0.5/maximum(Mmed_N)

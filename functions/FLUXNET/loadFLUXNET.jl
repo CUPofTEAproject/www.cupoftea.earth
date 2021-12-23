@@ -1,14 +1,3 @@
-function getID()
-	# get the path of folder files
-	folders = readdir(joinpath("input", "FLUXNET"), join = true);
-	deleteat!(folders,1); # first folder is different
-	n = length(folders);
-	# retrieve a short ID for each site
-	ID = []
-	[push!(ID, folders[i][19:24]) for i = 1:n];
-	return ID, folders, n
-end
-
 function loadFLUXNET(site)
 	ID, folders, n = getID();	
 	# get the path of input files
@@ -20,3 +9,12 @@ function loadFLUXNET(site)
 	missingstring="-9999"));
 	return data
 end
+
+#= MWE, run from CUPofTEA home directory
+using Dates, DataFrames, CSV # load package
+include(joinpath("functions", "FLUXNET", "getID.jl")) # load getID.jl
+ID = getID()[1] # first output of getID.jl
+i = 1 # there are 206 FLUXNET datasets
+site = ID[i] # FLUXNET site 1 ID, "AR-SLu"
+loadFLUXNET(site) # load "AR-SLu" dataset 
+=#

@@ -8,7 +8,7 @@ include(joinpath("functions", "FLUXNET", "FNDAMMfit.jl"))
 include(joinpath("functions", "FLUXNET", "FNDAMMplot.jl"))
 
 app = App() do session::Session    
-	slider = JSServe.Slider(1:50)
+	slider = JSServe.Slider(1:n_IDe)
 	fig = FNDAMMplot(slider)[1]
 	site = FNDAMMplot(slider)[2]
 	sl = DOM.div("FLUXNET site: ", slider, slider.value)

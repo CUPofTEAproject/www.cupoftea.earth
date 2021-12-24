@@ -1,10 +1,10 @@
 function FNDAMMplot(slider)
-  fig = Figure()
+  fig = Figure(resolution = (1000, 1000))
   ax3D = Axis3(fig[1, 1])
   # ax3D = LScene(fig[1, 1])
   site_n = slider.value
   siteID = @lift(IDe[$site_n])
-  outs = @lift(FNDAMMfit($siteID, 50)) 
+  outs = @lift(FNDAMMfit($siteID, 10)) 
   # poro_val = @lift($outs[1])
   Tmed = @lift($outs[2])
   Mmed = @lift($outs[3])

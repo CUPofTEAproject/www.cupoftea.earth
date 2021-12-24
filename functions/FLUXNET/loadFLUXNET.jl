@@ -1,3 +1,5 @@
+# load dataframe of a FLUXNET site
+
 function loadFLUXNET(site)
 	ID, folders, n = getID();	
 	# get the path of input files

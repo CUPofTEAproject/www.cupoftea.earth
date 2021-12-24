@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="/libs/katex/katex.min.css">
+     
+   <link rel="stylesheet" href="/libs/highlight/github.min.css">
+   
+  <link rel="stylesheet" href="/css/franklin.css">
+  <link rel="stylesheet" href="/css/basic.css">
+  <link rel="icon" href="/assets/favicon.png">
+   <title>DAMM Fluxnet</title>  
+</head>
+<body>
+  <header>	
+<!-- <div class="blog-name"><a href="/">CUP of TEA</a></div> -->
+<img src="/assets/banner.png" alt="cupoftea logo" height="30">
+<nav>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/menu1/">DAMM</a></li>
+    <li><a href="/menu2/">FLUXNET</a></li>
+    <li><a href="/menu3/">ATMOS</a></li>
+  </ul>
+  <img src="/assets/hamburger.svg" id="menu-icon">
+</nav>
+</header>
+
+
+<!-- Content appended here -->
+<div class="franklin-content">
+<h1 id="damm_model_fitted_to_fluxnet_sites"><a href="#damm_model_fitted_to_fluxnet_sites" class="header-anchor">DAMM model fitted to FLUXNET sites</a></h1>
+
+<p>ArgumentError: Package LsqFit not found in current path:</p>
+<ul>
+<li><p>Run <code>import Pkg; Pkg.add&#40;&quot;LsqFit&quot;&#41;</code> to install the LsqFit package.</p>
+</li>
+</ul>
+
+<p>v0.1.3</p>
+<p>The figure shows all FLUXNET2015 observations &#40;nighttime NEE, \(u_{*}\) filtered, qc &#61; 0&#41; fitted to the <a href="https://github.com/CUPofTEAproject/DAMMmodel.jl/blob/master/src/DAMM.jl">DAMM model</a>, for each dataset/site.</p>
+<p>The following FLUXNET columns are used: TS&#95;F&#95;MDS&#95;1, SWC&#95;F&#95;MDS&#95;1, and NEE&#95;CUT&#95;USTAR50, with the following filter: NIGHT &#61; 0 and NEE&#95;CUT&#95;USTAR50&#95;QC &#61; 0. Raw, half-hourly data, are first binned into 5 quantiles of soil temperature, and then into 5 quantiles of soil moisture for each soil temperature quantile. The median of NEE is then calculated, giving the dots shown in the figure.</p>
+<p>Four of the DAMM parameters are fitted to these binned data: \(\alpha_{sx}\), \(Ea_{sx}\), \(KM_{sx}\) and \(KM_{o2}\). Porosity is set to the maximum soil moisture measured at a given site. \(sx_{tot}\) is set to 0.02 \(gC\) \(cm^{-3}\).</p>
+<p>Values of fitted parameters are shown, and a .csv file containing the parameters for all FLUXNET2015 sites can be downloaded &#40;soon&#41;.</p>
+<p>The figure will be updated each time a new version of FLUXNET2015 becomes available. <a href="https://github.com/CUPofTEAproject/www.cupoftea.earth/issues">Suggestions</a> to improve the figure or data are welcome.</p>
+<p>The same analysis and figures will be created with the COSORE database and CMIP6 outputs &#40;soon&#41;. You can always <a href="https://github.com/CUPofTEAproject/www.cupoftea.earth/issues">suggest other database</a>.</p>
+<p>If you think of a more efficient or clearer way to write the analysis and visualisation code, <a href="https://github.com/CUPofTEAproject/www.cupoftea.earth/tree/master/functions">your help is welcome</a>. The goal is to continuously improve as a community effort.</p>
+<p>A boxplot figure will show the distribution of the parameter values per biome, at ecosystem and soil scale, for measurements and models &#40;soon&#41;.</p>
+<p>This analysis allows to compare the apparent response of respiration to temperature and moisture at different scales, and between measurements and models. It allows to better understand emergent properties, and identify where and when measurements are needed, or models needs improvement. It also allows to tracks the progress being made as measurements and models evolve.</p>
+<p>This effort attempt to continuously reconcile disciplines and scales as a community effort.  </p>
+<div class="page-foot">
+  <div class="copyright">
+    &copy; Alexandre A. Renchon. Last modified: December 24, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+  </div>
+</div>
+</div><!-- CONTENT ENDS HERE -->
+    
+        <script src="/libs/katex/katex.min.js"></script>
+<script src="/libs/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
+
+    
+    
+        <script src="/libs/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>
+
+    
+  </body>
+</html>

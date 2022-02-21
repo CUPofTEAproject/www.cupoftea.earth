@@ -3,7 +3,7 @@
 include(joinpath("functions", "FLUXNET", "getID.jl"))
 include(joinpath("functions", "FLUXNET", "loadFLUXNET.jl"))
 include(joinpath("functions", "FLUXNET", "getID_filtered.jl"))
-IDe, n_IDe = getIDe() # Needs to be global because getIDe() is slow
+const IDe, n_IDe = getIDe() # Needs to be global because getIDe() is slow
 include(joinpath("functions", "FLUXNET", "FNDAMMfit.jl"))
 include(joinpath("functions", "FLUXNET", "FNDAMMplot.jl"))
 

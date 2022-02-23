@@ -1,10 +1,10 @@
-function FNDAMMplot(slider)
+function COSOREDAMMplot(slider)
   fig = Figure(resolution = (1000, 1000))
   ax3D = Axis3(fig[1, 1])
   # ax3D = LScene(fig[1, 1])
   site_n = slider.value
   siteID = @lift(IDe[$site_n])
-  outs = @lift(FNDAMMfit($siteID, 10)) 
+  outs = @lift(COSOREDAMMfit($siteID, 10)) 
   # poro_val = @lift($outs[1])
   Tmed = @lift($outs[2])
   Mmed = @lift($outs[3])
@@ -31,3 +31,15 @@ function FNDAMMplot(slider)
   fig
   return fig, siteID
 end
+
+#= MWE, from CUPofTEA home directory
+using WGLMakie, DataFrames, CSV, Dates, DAMMmodel, SparseArrays
+include(joinpath("functions", "COSORE", "getID.jl"))
+include(joinpath("functions", "COSORE", "loadCOSORE.jl"))
+include(joinpath("functions", "COSORE", "getID_filtered.jl"))
+include(joinpath("functions", "COSORE", "COSOREDAMMfit.jl"))
+IDe, n_IDe ,Ts_shallowest_name, SM_shallowest_name = getIDe() 
+poro_val, Tmed, Mmed, Rmed, params, x, y, DAMM_Matrix = COSOREDAMMfit(IDe[1], 5)
+
+=#
+

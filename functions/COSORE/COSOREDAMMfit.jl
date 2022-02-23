@@ -1,15 +1,16 @@
-function FNDAMMfit(siteID, r)   
+function COSOREDAMMfit(siteID, r)   
 # load data, bin by quantiles, fit DAMM on it
-  df = dropmissing(loadFLUXNET(siteID),
-	    [:TS_F_MDS_1, :SWC_F_MDS_1, :NEE_CUT_USTAR50, :NIGHT, :NEE_CUT_USTAR50_QC])
-  filter = df.NIGHT .== 1 .&& df.NEE_CUT_USTAR50_QC .== 0 # nighttime NEE, u* filtered, observation only
-  T = df.TS_F_MDS_1[filter]
-  M = df.SWC_F_MDS_1[filter]
-  R = df.NEE_CUT_USTAR50[filter]
+  df = dropmissing(loadCOSORE(siteID),
+       [Ts_shallowest_name[siteID], SM_shallowest_name[siteID], "CSR_FLUX_CO2"])
+  T = df[!, Ts_shallowest_name[siteID]] 
+  M = df[!, SM_shallowest_name[siteID]]
+  if median(M) > 1
+    M = M ./ 100
+  end
+  R = df.CSR_FLUX_CO2
   n = 5 # 5 bins of T and M quantiles
   Tmed, Mmed, Rmed = qbins(T, M, R, n)
-  Mmed = Mmed ./ 100
-  poro_val = maximum(M) ./ 100
+  poro_val = maximum(M)
   params = DAMMfit(hcat(Tmed, Mmed), Rmed, poro_val)  
 # create x y arrays, and z matrix, to plot DAMM surface
   x = collect(range(minimum(Tmed), length=r, stop=maximum(Tmed))) # T axis, °C from min to max
@@ -22,3 +23,13 @@ function FNDAMMfit(siteID, r)
   DAMM_Matrix = Matrix(sparse(X, Y, DAMM(xy, params)))
   return poro_val, Tmed, Mmed, Rmed, params, x, y, DAMM_Matrix
 end
+
+#= MWE, from CUPoTEA home directory
+using DataFrames, CSV, Dates, DAMMmodel, SparseArrays
+include(joinpath("functions", "COSORE", "getID.jl"))
+include(joinpath("functions", "COSORE", "loadCOSORE.jl"))
+include(joinpath("functions", "COSORE", "getID_filtered.jl"))
+IDe, n_IDe ,Ts_shallowest_name, SM_shallowest_name = getIDe() 
+poro_val, Tmed, Mmed, Rmed, params, x, y, DAMM_Matrix = COSOREDAMMfit(IDe[1], 5)
+=#
+

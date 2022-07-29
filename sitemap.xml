@@ -3,31 +3,37 @@
 
 <url>
     <loc>https://cupoftea.earth/index.html</loc>
-    <lastmod>2022-02-28</lastmod>
+    <lastmod>2022-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://cupoftea.earth/404/index.html</loc>
-    <lastmod>2022-02-28</lastmod>
+    <lastmod>2022-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://cupoftea.earth/simple_slider/index/</loc>
+    <lastmod>2022-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://cupoftea.earth/menu1/index/</loc>
-    <lastmod>2022-02-28</lastmod>
+    <lastmod>2022-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://cupoftea.earth/menu3/index/</loc>
-    <lastmod>2022-02-28</lastmod>
+    <lastmod>2022-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://cupoftea.earth/menu2/index/</loc>
-    <lastmod>2022-02-28</lastmod>
+    <lastmod>2022-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>

@@ -10,3 +10,7 @@ keycup.pub
 # ignore VIM temp files
 *~
 *swp
+
+# Add VSCode to the ignore files
+
+.vscode

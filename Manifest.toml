@@ -413,9 +413,9 @@ version = "1.0.0"
 
 [[GeoTables]]
 deps = ["ArchGDAL", "GADM", "GeoInterface", "Meshes", "Shapefile", "Tables"]
-git-tree-sha1 = "b3031daa7ca9a808276bcc0eee80a9bdb7791fc7"
+git-tree-sha1 = "2bcd4e6111523ac9a620cc127c400af122c61fb5"
 uuid = "e502b557-6362-48c1-8219-d30d308dcdb0"
-version = "1.0.0"
+version = "1.0.1"
 
 [[GeometryBasics]]
 deps = ["EarCut_jll", "GeoInterface", "IterTools", "LinearAlgebra", "StaticArrays", "StructArrays", "Tables"]
@@ -771,12 +771,6 @@ git-tree-sha1 = "e595b205efd49508358f7dc670a940c790204629"
 uuid = "856f044c-d86e-5d09-b602-aeab76dc8ba7"
 version = "2022.0.0+0"
 
-[[MacroTools]]
-deps = ["Markdown", "Random"]
-git-tree-sha1 = "3d3e902b31198a27340d0bf00d6ac452866021cf"
-uuid = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
-version = "0.5.9"
-
 [[Makie]]
 deps = ["Animations", "Base64", "ColorBrewer", "ColorSchemes", "ColorTypes", "Colors", "Contour", "Distributions", "DocStringExtensions", "FFMPEG", "FileIO", "FixedPointNumbers", "Formatting", "FreeType", "FreeTypeAbstraction", "GeometryBasics", "GridLayoutBase", "ImageIO", "IntervalSets", "Isoband", "KernelDensity", "LaTeXStrings", "LinearAlgebra", "MakieCore", "Markdown", "Match", "MathTeXEngine", "Observables", "OffsetArrays", "Packing", "PlotUtils", "PolygonOps", "Printf", "Random", "RelocatableFolders", "Serialization", "Showoff", "SignedDistanceFields", "SparseArrays", "Statistics", "StatsBase", "StatsFuns", "StructArrays", "UnicodeFun"]
 git-tree-sha1 = "b0323393a7190c9bf5b03af442fc115756df8e59"
@@ -821,15 +815,15 @@ uuid = "c8ffd9c3-330d-5841-b78e-0817d7145fa1"
 
 [[MeshViz]]
 deps = ["CategoricalArrays", "ColorSchemes", "Colors", "Makie", "Meshes", "Tables"]
-git-tree-sha1 = "4793ca0d6422ac2285303f98ba79cbc115a76517"
+git-tree-sha1 = "96ddea37b98481f9be4150d1fce09586520b231a"
 uuid = "9ecf9c4f-6e5a-4b5e-83ae-06f2c7a661d8"
-version = "0.4.5"
+version = "0.5.0"
 
 [[Meshes]]
-deps = ["CategoricalArrays", "CircularArrays", "Distances", "IterTools", "IteratorInterfaceExtensions", "LinearAlgebra", "NearestNeighbors", "Random", "RecipesBase", "ReferenceFrameRotations", "SimpleTraits", "SparseArrays", "SpecialFunctions", "StaticArrays", "StatsBase", "TableTraits", "Tables"]
-git-tree-sha1 = "51b0bd6cc8c61d303c4e59b5214376c098d2c370"
+deps = ["CategoricalArrays", "CircularArrays", "Distances", "IterTools", "IteratorInterfaceExtensions", "LinearAlgebra", "NearestNeighbors", "Random", "RecipesBase", "ReferenceFrameRotations", "SparseArrays", "SpecialFunctions", "StaticArrays", "StatsBase", "TableTraits", "Tables"]
+git-tree-sha1 = "af19aade6e71627e0eee6db84f5b414abaeca33d"
 uuid = "eacbb407-ea5a-433e-ab97-5258b1ca43fa"
-version = "0.22.12"
+version = "0.23.0"
 
 [[Missings]]
 deps = ["DataAPI"]
@@ -1163,12 +1157,6 @@ deps = ["Random", "Statistics", "Test"]
 git-tree-sha1 = "d263a08ec505853a5ff1c1ebde2070419e3f28e9"
 uuid = "73760f76-fbc4-59ce-8f25-708e95d2df96"
 version = "0.4.0"
-
-[[SimpleTraits]]
-deps = ["InteractiveUtils", "MacroTools"]
-git-tree-sha1 = "5d7e3f4e11935503d3ecaf7186eac40602e7d231"
-uuid = "699a6c99-e7fa-54fc-8d76-47d257e15c1d"
-version = "0.9.4"
 
 [[Sixel]]
 deps = ["Dates", "FileIO", "ImageCore", "IndirectArrays", "OffsetArrays", "REPL", "libsixel_jll"]

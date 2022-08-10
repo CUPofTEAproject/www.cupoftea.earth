@@ -67,7 +67,7 @@ function fluxglobe(slider)
     Points3D = @lift(toPoints3D[$index])
     Mag = @lift(mag[$index]) 
 
-    Label(fig[1, 1, Top()], "Fluxnet data availablity : $(num_site) sites")
+    label_site = @lift("Fluxnet data availablity : $($num_site) sites"))
 
     pltobj = meshscatter!(ax, Points3D;
     markersize = Mag/1000,
@@ -77,16 +77,19 @@ function fluxglobe(slider)
     ambient = Vec3f(1.0,1.0,1.0),
     )
 
-    Colorbar(fig[1,2], pltobj, label="Number of Years", height = Relative(1/2))
+    Colorbar(fig[1,2], limits = (0, 22), label="Number of Years", height = Relative(1/2))
+
     fig
+    return fig, label_site
 end
 
 
 app = App() do session::Session
     slider = JSServe.Slider(3:22)
-    fig = fluxglobe(slider)
+    fig = fluxglobe(slider)[1]
+    siten = fluxglobe(slider)[2]
     sl = DOM.div("NumYear: ", slider, slider.value)	
-    return JSServe.record_states(session, DOM.div(sl, fig))
+    return JSServe.record_states(session, DOM.div(sl, siten, fig))
 end
 
 

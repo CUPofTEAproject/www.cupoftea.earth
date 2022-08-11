@@ -107,9 +107,9 @@ event = on(s) do s
   Points3D.val[index.val] = toPoints3D[index.val]
   Points3D.val[(!).(index.val)] = NaNsPoints3D[(!).(index.val)] 
   Mag.val[index.val] = mag[index.val]
-  Mag.val[(!).(index.val)] = mag[(!).(index.val)]
+  Mag.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
   dotsize.val[index.val] = Mag.val[index.val]/1000
-  dotsize.val[(!).(index.val)] = Mag.val[(!).(index.val)]/1000
+  dotsize.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
   delete!(ax, pltobj.val)
   pltobj.val = plt()  
 end

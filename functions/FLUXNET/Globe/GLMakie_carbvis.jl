@@ -62,23 +62,55 @@ toPoints3D = [Point3f([toCartesian(lon[i], lat[i]; r = 0)...]) for i in eachinde
 sl = Slider(fig[2, 1], range = 1:1:20, startvalue = 1)
 s = sl.value
 
-index = @lift(mag.>$s)
-num_site = @lift((sum($index)))
-Points3D = @lift(repeat([Point3f(NaN, NaN, NaN)], $num_site))
-Points3D = @lift(toPoints3D[$index])
-Mag = @lift(mag[$index]) 
-dotsize = @lift($Mag/1000)
-label_site = @lift("Fluxnet data availablity : $($num_site) sites")
+#index = @lift(mag.>$s)
 
-pltobj = meshscatter!(ax, Points3D;
-markersize = dotsize,
-color = Mag,
-#colormap = (:linear_worb_100_25_c53_n256, 0.8), 
-shading = true, 
-ambient = Vec3f(1.0,1.0,1.0)
-)
+#num_site = @lift((sum($index)))
+
+#Points3D = Observable(repeat([Point3f(NaN, NaN, NaN)], 211))
+#Points3D.val[index.val] = toPoints3D[index.val]
+
+#Mag = Observable(repeat([NaN], 211))
+#Mag.val[index.val] = mag[index.val]
+
+#dotsize = Observable(repeat([NaN], 211))
+#dotsize.val[index.val] = Mag.val[index.val]/1000
+
+#label_site = @lift("Fluxnet data availablity : $($num_site) sites")
+
+index = Observable(mag.>1)
+Points3D = Observable(repeat([Point3f(NaN, NaN, NaN)], 211))
+NaNsPoints3D = repeat([Point3f(NaN, NaN, NaN)], 211)
+Mag = Observable(repeat([NaN], 211))
+NaNsMag = repeat([NaN], 211)
+dotsize = Observable(repeat([NaN], 211))
+NaNsdotsize = repeat([NaN], 211)
+
+function plt()
+  pltobj = meshscatter!(ax, Points3D;
+  markersize = dotsize,
+  color = Mag,
+  #colormap = (:linear_worb_100_25_c53_n256, 0.8), 
+  shading = true, 
+  ambient = Vec3f(1.0,1.0,1.0)
+  )
+  return pltobj
+end
 
 Colorbar(fig[1,2], limits = (0, 22), label="Number of Years", height = Relative(1/2))
 
 fig
+
+pltobj = Observable(plt())
+
+event = on(s) do s
+  index.val = mag.>s
+  Points3D.val[index.val] = toPoints3D[index.val]
+  Points3D.val[(!).(index.val)] = NaNsPoints3D[(!).(index.val)] 
+  Mag.val[index.val] = mag[index.val]
+  Mag.val[(!).(index.val)] = mag[(!).(index.val)]
+  dotsize.val[index.val] = Mag.val[index.val]/1000
+  dotsize.val[(!).(index.val)] = Mag.val[(!).(index.val)]/1000
+  delete!(ax, pltobj.val)
+  pltobj.val = plt()  
+end
 

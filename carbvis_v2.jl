@@ -86,7 +86,7 @@ function fluxglobe(slider)
   dotsize = Observable(repeat([NaN], 211))
   NaNsdotsize = repeat([NaN], 211)
 
-  function plt()
+  #function plt()
     pltobj = meshscatter!(ax, Points3D;
     markersize = dotsize,
     color = Mag,
@@ -94,23 +94,28 @@ function fluxglobe(slider)
     shading = true, 
     ambient = Vec3f(1.0,1.0,1.0)
     )
-    return pltobj
-  end
+    #return pltobj
+  #end
 
   Colorbar(fig[1,2], limits = (0, 22), label="Number of Years", height = Relative(1/2))
 
-  pltobj = Observable(plt())
+  #pltobj = Observable(plt())
 
-  event = on(s) do s
-    index.val = mag.>s
+  event = on(s) do this
+    index.val = mag.>s.val
     Points3D.val[index.val] = toPoints3D[index.val]
     Points3D.val[(!).(index.val)] = NaNsPoints3D[(!).(index.val)] 
     Mag.val[index.val] = mag[index.val]
     Mag.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
     dotsize.val[index.val] = Mag.val[index.val]/1000
     dotsize.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
-    delete!(ax, pltobj.val)
-    pltobj.val = plt()  
+
+    Points3D[] = Points3D.val
+    Mag[] = Mag.val
+    dotsize[] = dotsize.val
+
+    #delete!(ax, pltobj.val)
+    #pltobj.val = plt()  
   end
 
   fig

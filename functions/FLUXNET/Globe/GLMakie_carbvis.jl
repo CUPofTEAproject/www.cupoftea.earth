@@ -28,11 +28,11 @@ end
 # Location file https://fluxnet.org/sites/site-list-and-pages/
 # TimePeriod Available https://fluxnet.org/data/data-availability/
 
-site_data = DataFrame(CSV.File("input/site_data.csv"))
+site_data = DataFrame(CSV.File("input_folder/site_data.csv"))
 
 # Manually downloaded the image
 # https://visibleearth.nasa.gov/collection/1484/blue-marble
-earth_img = load("input/eo_base_2020_clean_3600x1800_small.png")
+earth_img = load("input_folder/eo_base_2020_clean_3600x1800_small.png")
 
 mag =  site_data.END_YEAR - site_data.STRT_YEAR 
 lon , lat = site_data.LOCATION_LONG, site_data.LOCATION_LAT

@@ -1,0 +1,212 @@
+SITE_ID,STRT_YEAR,END_YEAR,LOCATION_LAT,LOCATION_LONG,SITE_NAME
+AR-Vir,2009,2012,-28.2395,-56.1886,Virasoro
+AT-Neu,2002,2012,47.1167,11.3175,Neustift
+AU-ASM,2002,2014,-22.283,133.249,Alice Springs
+AU-Ade,2002,2012,-13.0769,131.1178,Adelaide River
+AU-Cpr,2002,2014,-34.0021,140.5891,Calperum
+AU-Cum,2002,2014,-33.6152,150.7236,Cumberland Plain
+AU-DaP,2002,2014,-14.0633,131.3181,Daly River Savanna
+AU-DaS,2002,2014,-14.1593,131.3881,Daly River Cleared
+AU-Dry,2002,2014,-15.2588,132.3706,Dry River
+AU-Emr,2002,2014,-23.8587,148.4746,Emerald
+AU-Fog,2002,2014,-12.5452,131.3072,Fogg Dam
+AU-GWW,2002,2014,-30.1913,120.6541,"Great Western Woodlands, Western Australia, Australia"
+AU-Gin,2002,2014,-31.3764,115.7138,Gingin
+AU-How,2001,2014,-12.4943,131.1523,Howard Springs
+AU-Lox,2001,2014,-34.4704,140.6551,Loxton
+AU-RDF,2001,2014,-14.5636,132.4776,"Red Dirt Melon Farm, Northern Territory"
+AU-Rig,2001,2014,-36.6499,145.5759,Riggs Creek
+AU-Rob,2001,2014,-17.1175,145.6301,"Robson Creek, Queensland, Australia"
+AU-Stp,2001,2014,-17.1507,133.3502,Sturt Plains
+AU-TTE,2001,2014,-22.287,133.64,Ti Tree East
+AU-Tum,2001,2014,-35.6566,148.1517,Tumbarumba
+AU-Wac,2001,2014,-37.4259,145.1878,Wallaby Creek
+AU-Whr,2001,2014,-36.6732,145.0294,Whroo
+AU-Wom,2001,2014,-37.4222,144.0944,Wombat
+AU-Ync,2001,2014,-34.9893,146.2907,Jaxa
+BE-Bra,1996,2014,51.3076,4.5198,Brasschaat
+BE-Lon,1996,2014,50.5516,4.7462,Lonzee
+BE-Vie,1996,2014,50.3049,5.9981,Vielsalm
+BR-Sa1,1996,2014,-2.8567,-54.9589,Santarem-Km67-Primary Forest
+BR-Sa3,1996,2014,-3.018,-54.9714,Santarem-Km83-Logged Forest
+CA-Gro,1996,2014,48.2167,-82.1556,"Ontario - Groundhog River, Boreal Mixedwood Forest"
+CA-Man,1994,2014,55.8796,-98.4808,Manitoba - Northern Old Black Spruce (former BOREAS Northern Study Area)
+CA-NS1,1994,2014,55.8792,-98.4839,UCI-1850 burn site
+CA-NS2,1994,2014,55.9058,-98.5247,UCI-1930 burn site
+CA-NS3,1994,2014,55.9117,-98.3822,UCI-1964 burn site
+CA-NS4,1994,2014,55.9144,-98.3806,UCI-1964 burn site wet
+CA-NS5,1994,2014,55.8631,-98.485,UCI-1981 burn site
+CA-NS6,1994,2014,55.9167,-98.9644,UCI-1989 burn site
+CA-NS7,1994,2014,56.6358,-99.9483,UCI-1998 burn site
+CA-Oas,1994,2014,53.6289,-106.1978,"Saskatchewan - Western Boreal, Mature Aspen"
+CA-Obs,1994,2014,53.9872,-105.1178,"Saskatchewan - Western Boreal, Mature Black Spruce"
+CA-Qfo,1994,2014,49.6925,-74.3421,"Quebec - Eastern Boreal, Mature Black Spruce"
+CA-SF1,1994,2014,54.485,-105.8176,"Saskatchewan - Western Boreal, forest burned in 1977"
+CA-SF2,1994,2014,54.2539,-105.8775,"Saskatchewan - Western Boreal, forest burned in 1989"
+CA-SF3,1994,2014,54.0916,-106.0053,"Saskatchewan - Western Boreal, forest burned in 1998"
+CA-TP1,1994,2014,42.6609,-80.5595,Ontario - Turkey Point 2002 Plantation White Pine
+CA-TP2,1994,2014,42.7744,-80.4588,Ontario - Turkey Point 1989 Plantation White Pine
+CA-TP3,1994,2014,42.7068,-80.3483,Ontario - Turkey Point 1974 Plantation White Pine
+CA-TP4,1994,2014,42.7102,-80.3574,Ontario - Turkey Point 1939 Plantation White Pine
+CA-TPD,1994,2014,42.6353,-80.5577,Ontario - Turkey Point Mature Deciduous
+CG-Tch,1994,2014,-4.2892,11.6564,Tchizalamou
+CH-Cha,1994,2014,47.2102,8.4104,Chamau
+CH-Dav,1994,2014,46.8153,9.8559,Davos
+CH-Fru,1994,2014,47.1158,8.5378,Früebüel
+CH-Lae,1994,2014,47.4783,8.3644,Laegern
+CH-Oe1,1994,2014,47.2858,7.7319,Oensingen grassland
+CH-Oe2,1994,2014,47.2864,7.7337,Oensingen crop
+CN-Cha,1994,2014,42.4025,128.0958,Changbaishan
+CN-Cng,1994,2014,44.5934,123.5092,Changling
+CN-Dan,1994,2014,30.4978,91.0664,Dangxiong
+CN-Din,1994,2014,23.1733,112.5361,Dinghushan
+CN-Du2,1994,2014,42.0467,116.2836,Duolun_grassland (D01)
+CN-Du3,1994,2014,42.0551,116.2809,Duolun Degraded Meadow
+CN-Ha2,1994,2014,37.6086,101.3269,Haibei Shrubland
+CN-HaM,1994,2014,37.37,101.18,Haibei Alpine Tibet site
+CN-Qia,1994,2014,26.7414,115.0581,Qianyanzhou
+CN-Sw2,1994,2014,41.7902,111.8971,Siziwang Grazed (SZWG)
+CZ-BK1,1994,2014,49.5021,18.5369,Bily Kriz forest
+CZ-BK2,1994,2014,49.4944,18.5429,Bily Kriz grassland
+CZ-wet,1994,2014,49.0247,14.7704,Trebon (CZECHWET)
+DE-Akm,1994,2014,53.8662,13.6834,Anklam
+DE-Geb,1994,2014,51.0997,10.9146,Gebesee
+DE-Gri,1994,2014,50.95,13.5126,Grillenburg
+DE-Hai,1994,2014,51.0792,10.4522,Hainich
+DE-Kli,1994,2014,50.8931,13.5224,Klingenberg
+DE-Lkb,1994,2014,49.0996,13.3047,Lackenberg
+DE-Lnf,1994,2014,51.3282,10.3678,Leinefelde
+DE-Obe,1994,2014,50.7867,13.7213,Oberbärenburg
+DE-RuR,1994,2014,50.6219,6.3041,Rollesbroich
+DE-RuS,1994,2014,50.8659,6.4471,Selhausen Juelich
+DE-Seh,1994,2014,50.8706,6.4497,Selhausen
+DE-SfN,1994,2014,47.8064,11.3275,Schechenfilz Nord
+DE-Spw,1994,2014,51.8922,14.0337,Spreewald
+DE-Tha,1994,2014,50.9626,13.5651,Tharandt
+DE-Zrk,1994,2014,53.8759,12.889,Zarnekow
+DK-Eng,1994,2014,55.6905,12.1918,Enghave
+DK-Fou,1994,2014,56.4842,9.5872,Foulum
+DK-Sor,1994,2014,55.4859,11.6446,Soroe
+ES-Amo,1994,2014,36.8336,-2.2523,Amoladeras
+ES-LJu,1994,2014,36.9266,-2.7521,Llano de los Juanes
+ES-LgS,1994,2014,37.0979,-2.9658,Laguna Seca
+ES-Ln2,1994,2014,36.9695,-3.4758,Lanjaron-Salvage logging
+FI-Hyy,1994,2014,61.8474,24.2948,Hyytiala
+FI-Jok,1994,2014,60.8986,23.5134,Jokioinen
+FI-Let,1994,2014,60.6418,23.9595,Lettosuo
+FI-Lom,1994,2014,67.9972,24.2092,Lompolojankka
+FI-Sod,1994,2014,67.3624,26.6386,Sodankyla
+FR-Fon,1994,2014,48.4764,2.7801,Fontainebleau-Barbeau
+FR-Gri,1994,2014,48.8442,1.9519,Grignon
+FR-LBr,1994,2014,44.7171,-0.7693,Le Bray
+FR-Pue,1994,2014,43.7413,3.5957,Puechabon
+GF-Guy,1994,2014,5.2788,-52.9249,Guyaflux (French Guiana)
+GH-Ank,1994,2014,5.2685,-2.6942,Ankasa
+GL-NuF,1994,2014,64.1308,-51.3861,Nuuk Fen
+GL-ZaF,1994,2014,74.4814,-20.5545,Zackenberg Fen
+GL-ZaH,1994,2014,74.4733,-20.5503,Zackenberg Heath
+IT-BCi,1994,2014,40.5237,14.9574,Borgo Cioffi
+IT-CA1,1994,2014,42.3804,12.0266,Castel d'Asso1
+IT-CA2,1994,2014,42.3772,12.026,Castel d'Asso2
+IT-CA3,1994,2014,42.38,12.0222,Castel d'Asso3
+IT-Col,1994,2014,41.8494,13.5881,Collelongo
+IT-Cp2,1994,2014,41.7043,12.3573,Castelporziano2
+IT-Cpz,1994,2014,41.7052,12.3761,Castelporziano
+IT-Isp,1994,2014,45.8126,8.6336,Ispra ABC-IS
+IT-La2,1994,2014,45.9542,11.2853,Lavarone2
+IT-Lav,1994,2014,45.9562,11.2813,Lavarone
+IT-MBo,1994,2014,46.0147,11.0458,Monte Bondone
+IT-Noe,1994,2014,40.6062,8.1517,Arca di Noe - Le Prigionette
+IT-PT1,1994,2014,45.2009,9.061,Parco Ticino forest
+IT-Ren,1994,2014,46.5869,11.4337,Renon
+IT-Ro1,1994,2014,42.4081,11.93,Roccarespampani 1
+IT-Ro2,1994,2014,42.3903,11.9209,Roccarespampani 2
+IT-SR2,1994,2014,43.732,10.2909,San Rossore 2
+IT-SRo,1994,2014,43.7279,10.2844,San Rossore
+IT-Tor,1994,2014,45.8444,7.5781,Torgnon
+JP-MBF,1994,2014,44.3869,142.3186,Moshiri Birch Forest Site
+JP-SMF,1994,2014,35.2617,137.0788,Seto Mixed Forest Site
+MY-PSO,1994,2014,2.973,102.3062,Pasoh Forest Reserve (PSO)
+NL-Hor,1994,2014,52.2403,5.0713,Horstermeer
+NL-Loo,1994,2014,52.1666,5.7436,Loobos
+PA-SPn,1994,2014,9.3181,-79.6346,Sardinilla Plantation
+PA-SPs,1994,2014,9.3138,-79.6314,Sardinilla-Pasture
+RU-Che,1994,2014,68.613,161.3414,Cherski
+RU-Cok,1994,2014,70.8291,147.4943,Chokurdakh
+RU-Fyo,1994,2014,56.4615,32.9221,Fyodorovskoye
+RU-Ha1,1994,2014,54.7252,90.0022,Hakasia steppe
+RU-Sam,1994,2014,72.3738,126.4958,Samoylov
+RU-SkP,1994,2014,62.255,129.168,Yakutsk Spasskaya Pad larch
+RU-Tks,1994,2014,71.5943,128.8878,Tiksi
+RU-Vrk,1994,2014,67.0547,62.9405,Seida/Vorkuta
+SD-Dem,1994,2014,13.2829,30.4783,Demokeya
+SE-St1,1994,2014,68.3541,19.0503,Stordalen grassland
+SJ-Adv,1994,2014,78.186,15.923,Adventdalen
+SJ-Blv,1994,2014,78.9216,11.8311,"Bayelva, Spitsbergen"
+SN-Dhr,1994,2014,15.4028,-15.4322,Dahra
+US-AR1,1994,2014,36.4267,-99.42,ARM USDA UNL OSU Woodward Switchgrass 1
+US-AR2,1994,2014,36.6358,-99.5975,ARM USDA UNL OSU Woodward Switchgrass 2
+US-ARM,1994,2014,36.6058,-97.4888,ARM Southern Great Plains site- Lamont
+US-ARb,1994,2014,35.5497,-98.0402,ARM Southern Great Plains burn site- Lamont
+US-ARc,1994,2014,35.5465,-98.04,ARM Southern Great Plains control site- Lamont
+US-Atq,1994,2014,70.4696,-157.4089,Atqasuk
+US-Blo,1994,2014,38.8953,-120.6328,Blodgett Forest
+US-CRT,1994,2014,41.6285,-83.3471,Curtice Walter-Berger cropland
+US-Cop,1994,2014,38.09,-109.39,Corral Pocket
+US-GBT,1994,2014,41.3658,-106.2397,GLEES Brooklyn Tower
+US-GLE,1994,2014,41.3665,-106.2399,GLEES
+US-Goo,1994,2014,34.2547,-89.8735,Goodwin Creek
+US-Ha1,1992,2014,42.5378,-72.1715,Harvard Forest EMS Tower (HFR1)
+US-IB2,1992,2014,41.8406,-88.241,Fermi National Accelerator Laboratory- Batavia (Prairie site)
+US-Ivo,1992,2014,68.4865,-155.7503,Ivotuk
+US-KS1,1992,2014,28.4583,-80.6709,Kennedy Space Center (slash pine)
+US-KS2,1992,2014,28.6086,-80.6715,Kennedy Space Center (scrub oak)
+US-LWW,1992,2014,34.9604,-97.9789,Little Washita Watershed
+US-Lin,1992,2014,36.3566,-119.0922,Lindcove Orange Orchard
+US-Los,1992,2014,46.0827,-89.9792,Lost Creek
+US-MMS,1992,2014,39.3232,-86.4131,Morgan Monroe State Forest
+US-Me1,1992,2014,44.5794,-121.5,Metolius - Eyerly burn
+US-Me2,1992,2014,44.4523,-121.5574,Metolius mature ponderosa pine
+US-Me3,1992,2014,44.3154,-121.6078,Metolius-second young aged pine
+US-Me4,1992,2014,44.4992,-121.6224,Metolius-old aged ponderosa pine
+US-Me5,1992,2014,44.4372,-121.5668,Metolius-first young aged pine
+US-Me6,1992,2014,44.3233,-121.6078,Metolius Young Pine Burn
+US-Myb,1992,2014,38.0499,-121.765,Mayberry Wetland
+US-NR1,1992,2014,40.0329,-105.5464,Niwot Ridge Forest (LTER NWT1)
+US-Ne1,1992,2014,41.1651,-96.4766,Mead - irrigated continuous maize site
+US-Ne2,1992,2014,41.1649,-96.4701,Mead - irrigated maize-soybean rotation site
+US-Ne3,1992,2014,41.1797,-96.4397,Mead - rainfed maize-soybean rotation site
+US-ORv,1992,2014,40.0201,-83.0183,Olentangy River Wetland Research Park
+US-Oho,1992,2014,41.5545,-83.8438,Oak Openings
+US-PFa,1992,2014,45.9459,-90.2723,Park Falls/WLEF
+US-Prr,1992,2014,65.1237,-147.4876,Poker Flat Research Range Black Spruce Forest
+US-SRC,1992,2014,31.9083,-110.8395,Santa Rita Creosote
+US-SRG,1992,2014,31.7894,-110.8277,Santa Rita Grassland
+US-SRM,1992,2014,31.8214,-110.8661,Santa Rita Mesquite
+US-Sta,1992,2014,41.3966,-106.8024,Saratoga
+US-Syv,1992,2014,46.242,-89.3477,Sylvania Wilderness Area
+US-Ton,1992,2014,38.4309,-120.966,Tonzi Ranch
+US-Tw1,1992,2014,38.1074,-121.6469,Twitchell Wetland West Pond
+US-Tw2,1992,2014,38.1047,-121.6433,Twitchell Corn
+US-Tw3,1992,2014,38.1152,-121.6469,Twitchell Alfalfa
+US-Tw4,1992,2014,38.1027,-121.6413,Twitchell East End Wetland
+US-Twt,1992,2014,38.1087,-121.6531,Twitchell Island
+US-UMB,1992,2014,45.5598,-84.7138,Univ. of Mich. Biological Station
+US-UMd,1992,2014,45.5625,-84.6975,UMBS Disturbance
+US-Var,1992,2014,38.4133,-120.9508,Vaira Ranch- Ione
+US-WCr,1992,2014,45.8059,-90.0799,Willow Creek
+US-WPT,1992,2014,41.4646,-82.9962,Winous Point North Marsh
+US-Whs,1992,2014,31.7438,-110.0522,Walnut Gulch Lucky Hills Shrub
+US-Wi0,1992,2014,46.6188,-91.0814,Young red pine (YRP)
+US-Wi1,1992,2014,46.7305,-91.2329,Intermediate hardwood (IHW)
+US-Wi2,1992,2014,46.6869,-91.1528,Intermediate red pine (IRP)
+US-Wi3,1992,2014,46.6347,-91.0987,Mature hardwood (MHW)
+US-Wi4,1992,2014,46.7393,-91.1663,Mature red pine (MRP)
+US-Wi5,1992,2014,46.6531,-91.0858,Mixed young jack pine (MYJP)
+US-Wi6,1992,2014,46.6249,-91.2982,Pine barrens #1 (PB1)
+US-Wi7,1992,2014,46.6491,-91.0693,Red pine clearcut (RPCC)
+US-Wi8,1992,2014,46.7223,-91.2524,Young hardwood clearcut (YHW)
+US-Wi9,1992,2014,46.7385,-91.0746,Young Jack pine (YJP)
+US-Wkg,1992,2014,31.7365,-109.9419,Walnut Gulch Kendall Grasslands
+ZA-Kru,1992,2014,-25.0197,31.4969,Skukuza
+ZM-Mon,1992,2014,-15.4391,23.2525,Mongu

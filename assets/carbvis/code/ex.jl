@@ -5,8 +5,8 @@ io = IOBuffer()
 println(io, "~~~")
 show(io, MIME"text/html"(), Page(exportable=true, offline=true))
 
-include("carbvis.jl")
-# test2
+include("carbvis_v2.jl")
+# test
 
 
 show(io, MIME"text/html"(), app)

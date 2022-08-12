@@ -47,7 +47,11 @@ mag =  site_data.END_YEAR - site_data.STRT_YEAR
 lon , lat = site_data.LOCATION_LONG, site_data.LOCATION_LAT
 
 
-function fluxglobe(slider)
+
+
+app = App() do session::Session
+  slider = JSServe.Slider(1:1:21)
+  
   fig =  Figure(resolution = (1000,1000), fontsize = 24)
   ax = LScene(fig[1,1], show_axis = false)
 
@@ -61,7 +65,7 @@ function fluxglobe(slider)
 
   toPoints3D = [Point3f([toCartesian(lon[i], lat[i]; r = 0)...]) for i in eachindex(lon)];
 
-  s = slider.value
+  #s = slider.value
 
   #index = @lift(mag.>$s)
 
@@ -101,8 +105,8 @@ function fluxglobe(slider)
 
   #pltobj = Observable(plt())
 
-  event = on(s) do this
-    index.val = mag.>s.val
+  on(slider) do this
+    index.val = mag.>slider.value
     Points3D.val[index.val] = toPoints3D[index.val]
     Points3D.val[(!).(index.val)] = NaNsPoints3D[(!).(index.val)] 
     Mag.val[index.val] = mag[index.val]
@@ -113,20 +117,13 @@ function fluxglobe(slider)
     Points3D[] = Points3D.val
     Mag[] = Mag.val
     dotsize[] = dotsize.val
-
+    
     #delete!(ax, pltobj.val)
     #pltobj.val = plt()  
   end
 
-  fig
-  return fig
-end
-
-app = App() do session::Session
-    slider = JSServe.Slider(1:1:21)
-    fig = fluxglobe(slider)
-    #siten = fluxglobe(slider)[2]
-    sl = DOM.div("NumYear: ", slider, slider.value)	
-    return JSServe.record_states(session, DOM.div(sl, fig))
+  #siten = fluxglobe(slider)[2]
+  sl = DOM.div("NumYear: ", slider, slider.value)	
+  return JSServe.record_states(session, DOM.div(sl, fig))
 end
 

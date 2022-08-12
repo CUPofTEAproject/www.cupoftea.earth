@@ -6,7 +6,7 @@ println(io, "~~~")
 show(io, MIME"text/html"(), Page(exportable=true, offline=true))
 
 include("carbvis_v2.jl")
-# tes44t
+# test
 
 
 show(io, MIME"text/html"(), app)

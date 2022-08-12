@@ -59,7 +59,7 @@ Label(fig[1, 1, Bottom()], "Visualization by @mohitanand")
 
 toPoints3D = [Point3f([toCartesian(lon[i], lat[i]; r = 0)...]) for i in eachindex(lon)];
 
-sl = Slider(fig[2, 1], range = 1:1:20, startvalue = 1)
+sl = Slider(fig[2, 1], range = 1:1:21, startvalue = 1)
 s = sl.value
 
 #index = @lift(mag.>$s)
@@ -98,7 +98,6 @@ NaNsdotsize = repeat([NaN], 211)
 
 Colorbar(fig[1,2], limits = (0, 22), label="Number of Years", height = Relative(1/2))
 
-fig
 
 #pltobj = Observable(plt())
 
@@ -117,5 +116,5 @@ event = on(s) do this
   #delete!(ax, pltobj.val)
   #pltobj.val = plt()  
 end
-
+fig
 

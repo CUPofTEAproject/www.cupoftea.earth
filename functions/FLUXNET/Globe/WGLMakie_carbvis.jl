@@ -61,6 +61,15 @@ app = App() do session::Session
 	dotsize = Observable(repeat([NaN], 211))
 	NaNsdotsize = repeat([NaN], 211)
 
+	Points3D.val[index.val] = toPoints3D[index.val]
+	Points3D.val[(!).(index.val)] = NaNsPoints3D[(!).(index.val)] 
+	Mag.val[index.val] = mag[index.val]
+	Mag.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
+	dotsize.val[index.val] = Mag.val[index.val]/1000
+	dotsize.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
+
+
+
 	pltobj = meshscatter!(ax, Points3D;
 	  markersize = dotsize,
 	  color = Mag,

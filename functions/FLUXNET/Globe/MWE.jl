@@ -56,5 +56,3 @@ app = App() do session::Session
         sl = DOM.div("Slider: ", slider, slider.value)	
         return JSServe.record_states(session, DOM.div(sl, fig))
 end
- 
-

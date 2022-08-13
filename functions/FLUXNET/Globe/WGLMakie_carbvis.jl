@@ -61,12 +61,12 @@ app = App() do session::Session
 	dotsize = Observable(repeat([NaN], 211))
 	NaNsdotsize = repeat([NaN], 211)
 
-#	pltobj = meshscatter!(ax, Points3D;
-#	  markersize = dotsize,
-#	  color = Mag,
-#	  shading = true, 
-#	  ambient = Vec3f(1.0,1.0,1.0)
-#	  )
+	pltobj = meshscatter!(ax, Points3D;
+	  markersize = dotsize,
+	  color = Mag,
+	  shading = true, 
+	  ambient = Vec3f(1.0,1.0,1.0)
+	  )
 
 	# Colorbar(fig[1,2], limits = (0, 22), label="Number of Years", height = Relative(1/2))
 
@@ -79,16 +79,17 @@ app = App() do session::Session
 	  dotsize.val[index.val] = Mag.val[index.val]/1000
 	  dotsize.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
 
-	  Points3D[] = Points3D.val
+	  
 	  Mag[] = Mag.val
 	  dotsize[] = dotsize.val
-	 
-          meshscatter!(ax, Points3D;
-	  markersize = dotsize,
-	  color = Mag,
-	  shading = true, 
-	  ambient = Vec3f(1.0,1.0,1.0)
-	  )
+	  Points3D[] = Points3D.val
+          
+	  #meshscatter!(ax, Points3D;
+	  #markersize = dotsize,
+	  #color = Mag,
+	  #shading = true, 
+	  #ambient = Vec3f(1.0,1.0,1.0)
+	  #)
           
 	  fig
 

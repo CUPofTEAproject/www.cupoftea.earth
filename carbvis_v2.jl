@@ -90,6 +90,13 @@ app = App() do session::Session
   dotsize = Observable(repeat([NaN], 211))
   NaNsdotsize = repeat([NaN], 211)
 
+  Points3D.val[index.val] = toPoints3D[index.val]
+  Points3D.val[(!).(index.val)] = NaNsPoints3D[(!).(index.val)] 
+  Mag.val[index.val] = mag[index.val]
+  Mag.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
+  dotsize.val[index.val] = Mag.val[index.val]/1000
+  dotsize.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
+
   #function plt()
     pltobj = meshscatter!(ax, Points3D;
     markersize = dotsize,
@@ -105,8 +112,8 @@ app = App() do session::Session
 
   #pltobj = Observable(plt())
 
-  on(slider) do this
-    index.val = mag.>slider.value
+  on(slider) do sval
+    index.val = mag.>sval
     Points3D.val[index.val] = toPoints3D[index.val]
     Points3D.val[(!).(index.val)] = NaNsPoints3D[(!).(index.val)] 
     Mag.val[index.val] = mag[index.val]
@@ -114,14 +121,14 @@ app = App() do session::Session
     dotsize.val[index.val] = Mag.val[index.val]/1000
     dotsize.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
 
-    Points3D[] = Points3D.val
     Mag[] = Mag.val
     dotsize[] = dotsize.val
-   
+    Points3D[] = Points3D.val
+
     #delete!(ax, pltobj.val)
     #pltobj.val = plt()  
   end
-
+ 
   #siten = fluxglobe(slider)[2]
   sl = DOM.div("NumYear: ", slider, slider.value)	
   return JSServe.record_states(session, DOM.div(sl, fig))

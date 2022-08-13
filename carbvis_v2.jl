@@ -117,7 +117,7 @@ app = App() do session::Session
     Points3D[] = Points3D.val
     Mag[] = Mag.val
     dotsize[] = dotsize.val
-    
+   
     #delete!(ax, pltobj.val)
     #pltobj.val = plt()  
   end

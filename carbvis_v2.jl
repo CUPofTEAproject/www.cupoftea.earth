@@ -50,7 +50,7 @@ lon , lat = site_data.LOCATION_LONG, site_data.LOCATION_LAT
 
 
 app = App() do session::Session
-  slider = JSServe.Slider(1:1:21)
+  slider = JSServe.Slider(1:1:18)
   
   fig =  Figure(resolution = (1000,1000), fontsize = 24)
   ax = LScene(fig[1,1], show_axis = false)

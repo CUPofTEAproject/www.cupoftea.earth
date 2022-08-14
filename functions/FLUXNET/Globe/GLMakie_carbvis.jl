@@ -50,16 +50,13 @@ surface!(ax, sphere(; r = 1.0)...,
 
 toPoints3D = [Point3f([toCartesian(lon[i], lat[i]; r = 0)...]) for i in eachindex(lon)];
 
-sl = Slider(fig[2, 1], range = 1:1:21, startvalue = 1)
+sl = Slider(fig[2, 1], range = 1:1:18, startvalue = 1)
 s = sl.value
 
 index = Observable(mag.>1)
-Points3D = Observable(repeat([Point3f(NaN, NaN, NaN)], 211))
-NaNsPoints3D = repeat([Point3f(NaN, NaN, NaN)], 211)
-Mag = Observable(repeat([NaN], 211))
-NaNsMag = repeat([NaN], 211)
-dotsize = Observable(repeat([NaN], 211))
-NaNsdotsize = repeat([NaN], 211)
+Points3D = Observable(toPoints3D[index.val])
+Mag = Observable(mag[index.val])
+dotsize = Observable(Mag.val/1000)
 
 pltobj = meshscatter!(ax, Points3D;
   markersize = dotsize,
@@ -72,12 +69,9 @@ pltobj = meshscatter!(ax, Points3D;
 
 event = on(s) do sval
   index.val = mag.>sval
-  Points3D.val[index.val] = toPoints3D[index.val]
-  Points3D.val[(!).(index.val)] = NaNsPoints3D[(!).(index.val)] 
-  Mag.val[index.val] = mag[index.val]
-  Mag.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
-  dotsize.val[index.val] = Mag.val[index.val]/1000
-  dotsize.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
+  Points3D.val = toPoints3D[index.val]
+  Mag.val = mag[index.val]
+  dotsize.val = Mag.val/1000
 
   Points3D[] = Points3D.val
   Mag[] = Mag.val

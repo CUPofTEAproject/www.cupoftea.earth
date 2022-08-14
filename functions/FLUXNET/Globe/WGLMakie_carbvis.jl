@@ -38,7 +38,7 @@ mag =  site_data.END_YEAR - site_data.STRT_YEAR
 lon , lat = site_data.LOCATION_LONG, site_data.LOCATION_LAT
 
 app = App() do session::Session
-	slider = JSServe.Slider(1:1:21)
+	slider = JSServe.Slider(1:1:18)
 
 	fig =  Figure(resolution = (1000,1000), fontsize = 24)
 	ax = LScene(fig[1,1], show_axis = false)
@@ -54,21 +54,10 @@ app = App() do session::Session
 	toPoints3D = [Point3f([toCartesian(lon[i], lat[i]; r = 0)...]) for i in eachindex(lon)];
 
 	index = Observable(mag.>1)
-	Points3D = Observable(repeat([Point3f(NaN, NaN, NaN)], 211))
-	NaNsPoints3D = repeat([Point3f(NaN, NaN, NaN)], 211)
-	Mag = Observable(repeat([NaN], 211))
-	NaNsMag = repeat([NaN], 211)
-	dotsize = Observable(repeat([NaN], 211))
-	NaNsdotsize = repeat([NaN], 211)
 
-	Points3D.val[index.val] = toPoints3D[index.val]
-	Points3D.val[(!).(index.val)] = NaNsPoints3D[(!).(index.val)] 
-	Mag.val[index.val] = mag[index.val]
-	Mag.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
-	dotsize.val[index.val] = Mag.val[index.val]/1000
-	dotsize.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
-
-
+	Points3D = Observable(toPoints3D[index.val])
+	Mag = Observable(mag[index.val])
+	dotsize = Observable(Mag.val/1000)
 
 	pltobj = meshscatter!(ax, Points3D;
 	  markersize = dotsize,
@@ -81,30 +70,15 @@ app = App() do session::Session
 
 	event = on(slider) do sval
 	  index.val = mag.>sval
-	  Points3D.val[index.val] = toPoints3D[index.val]
-	  Points3D.val[(!).(index.val)] = NaNsPoints3D[(!).(index.val)] 
-	  Mag.val[index.val] = mag[index.val]
-	  Mag.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
-	  dotsize.val[index.val] = Mag.val[index.val]/1000
-	  dotsize.val[(!).(index.val)] = NaNsMag[(!).(index.val)]
+	  Points3D.val = toPoints3D[index.val]
+	  Mag.val = mag[index.val]
+	  dotsize.val = Mag.val/1000
 
-	  
-	  Mag[] = Mag.val
+          Mag[] = Mag.val
 	  dotsize[] = dotsize.val
 	  Points3D[] = Points3D.val
-          
-	  #meshscatter!(ax, Points3D;
-	  #markersize = dotsize,
-	  #color = Mag,
-	  #shading = true, 
-	  #ambient = Vec3f(1.0,1.0,1.0)
-	  #)
-          
-	  fig
-
-
-	end
-	fig
+  	end
+	
         sl = DOM.div("NumYear: ", slider, slider.value)	
         return JSServe.record_states(session, DOM.div(sl, fig))
 end

@@ -59,11 +59,11 @@ app = App() do session::Session
 	Mag = Observable(mag[index])
 	dotsize = Observable(Mag.val/1000)
 
-	pltobj = meshscatter!(ax, Points3D;
+	pltobj = meshscatter!(ax, Points3D,
 	  markersize = dotsize,
-	  color = Mag,
-	  shading = true, 
-	  ambient = Vec3f(1.0,1.0,1.0)
+	  color = Mag#,
+	  #shading = true, 
+	  #ambient = Vec3f(1.0,1.0,1.0)
 	  )
 
 	# Colorbar(fig[1,2], limits = (0, 22), label="Number of Years", height = Relative(1/2))
@@ -74,9 +74,9 @@ app = App() do session::Session
 	  Mag.val = mag[index]
 	  dotsize.val = Mag.val/1000
 
-          Mag[] = Mag.val
-	  dotsize[] = dotsize.val
 	  Points3D[] = Points3D.val
+          Mag[] = Mag.val
+	  dotsize[] = dotsize.val	  	  
   	end
 	
         sl = DOM.div("NumYear: ", slider, slider.value)	

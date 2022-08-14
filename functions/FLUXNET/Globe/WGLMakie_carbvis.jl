@@ -53,10 +53,10 @@ app = App() do session::Session
 
 	toPoints3D = [Point3f([toCartesian(lon[i], lat[i]; r = 0)...]) for i in eachindex(lon)];
 
-	index = Observable(mag.>1)
+	index = mag.>1
 
-	Points3D = Observable(toPoints3D[index.val])
-	Mag = Observable(mag[index.val])
+	Points3D = Observable(toPoints3D[index])
+	Mag = Observable(mag[index])
 	dotsize = Observable(Mag.val/1000)
 
 	pltobj = meshscatter!(ax, Points3D;
@@ -69,9 +69,9 @@ app = App() do session::Session
 	# Colorbar(fig[1,2], limits = (0, 22), label="Number of Years", height = Relative(1/2))
 
 	event = on(slider) do sval
-	  index.val = mag.>sval
-	  Points3D.val = toPoints3D[index.val]
-	  Mag.val = mag[index.val]
+	  index = mag.>sval
+	  Points3D.val = toPoints3D[index]
+	  Mag.val = mag[index]
 	  dotsize.val = Mag.val/1000
 
           Mag[] = Mag.val

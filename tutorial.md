@@ -8,6 +8,18 @@ If you don't have Git, you need to install it. The installation will depend on y
 
 If you don't have a [GitHub] (https://github.com/) account yet, create an account. \
 
+### Windows
+
+to do \
+
+### Linux
+
+to do \
+
+### Mac
+
+to do \
+
 ## Fork & Clone CUP of TEA
 
 Go to [the CUPofTEA repository] (https://github.com/CUPofTEAproject/www.cupoftea.earth) and click on the Fork button in the top right corner. This will create a copy of the CUPofTEA codes in your personal GitHub account. \

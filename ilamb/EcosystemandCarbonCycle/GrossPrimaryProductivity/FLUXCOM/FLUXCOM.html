@@ -1,0 +1,869 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.16.5/math.min.js"></script>
+    <script>
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+            }
+            return(false);
+        }
+    </script>
+    <script type='text/javascript'>
+        function pageLoad() {
+           pageLoadMeanState();
+           pageLoadRelationships();
+        }
+    </script>
+    <script type='text/javascript'>
+
+        function updateImagesAndHeadersMeanState(){
+            var rsel  = document.getElementById("MeanStateRegion");
+            var msel  = document.getElementById("MeanStateModel");
+            var rid   = rsel.selectedIndex;
+            var mid   = msel.selectedIndex;
+            var RNAME = rsel.options[rid].value;
+            var MNAME = msel.options[mid].value;
+            var CNAME = "GrossPrimaryProductivity / FLUXCOM / 1980-2014";
+            var head  = "CNAME / RNAME / MNAME";
+            head      = head.replace("CNAME",CNAME).replace("RNAME",RNAME).replace("MNAME",MNAME);
+            $("#MeanStateHead").text(head);
+            
+          document.getElementById('timeint').src =  MNAME + '_' + RNAME + '_timeint.png'
+          document.getElementById('benchmark_timeint').src =  'Benchmark_' + RNAME + '_timeint.png'
+          document.getElementById('phase').src =  MNAME + '_' + RNAME + '_phase.png'
+          document.getElementById('benchmark_phase').src =  'Benchmark_' + RNAME + '_phase.png'
+          document.getElementById('shift').src =  MNAME + '_' + RNAME + '_shift.png'
+          document.getElementById('shiftscore').src =  MNAME + '_' + RNAME + '_shiftscore.png'
+          document.getElementById('bias').src =  MNAME + '_' + RNAME + '_bias.png'
+          document.getElementById('biasscore').src =  MNAME + '_' + RNAME + '_biasscore.png'
+          document.getElementById('rmse').src =  MNAME + '_' + RNAME + '_rmse.png'
+          document.getElementById('rmsescore').src =  MNAME + '_' + RNAME + '_rmsescore.png'
+          document.getElementById('spatial_variance').src =  RNAME + '_spatial_variance.png'
+          document.getElementById('legend_spatial_variance').src =  'legend_spatial_variance.png'
+          document.getElementById('cycle').src =  MNAME + '_' + RNAME + '_cycle.png'
+          document.getElementById('dtcycle').src =  MNAME + '_' + RNAME + '_dtcycle.png'
+          document.getElementById('spaceint').src =  MNAME + '_' + RNAME + '_spaceint.png'
+          document.getElementById('compcycle').src =  RNAME + '_compcycle.png'
+          document.getElementById('legend_compcycle').src =  'legend_compcycle.png'
+        }
+
+        function highlightRowMeanState(cell) {
+            var select = document.getElementById("MeanStateRegion");
+            for (var i = 0; i < select.length; i++){
+                var table = document.getElementById("MeanState_table_" + select.options[i].value);
+                var rows  = table.getElementsByTagName("tr");
+                for (var r = 2; r < rows.length; r++) {
+                    for (var c = 0; c < rows[r].cells.length-6; c++) {
+                        rows[r].cells[c].style.backgroundColor = "#ffffff";
+                    }
+                }
+                var r = cell.closest("tr").rowIndex;
+                document.getElementById("MeanStateModel").selectedIndex = r-1;
+                for (var c = 0; c < rows[r].cells.length-6; c++) {
+                    rows[r].cells[c].style.backgroundColor = "#c1c1c1";
+                }
+            }
+            updateImagesAndHeadersMeanState();
+        }
+
+        function paintScoreCellsMeanState(RNAME) {
+
+	    var PuOr = ['#b35806','#e08214','#fdb863','#fee0b6','#f7f7f7','#d8daeb','#b2abd2','#8073ac','#542788'];
+	    var GnRd = ['#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d9f0d3','#a6dba0','#5aae61','#1b7837'];
+	    var colors = GnRd;
+            var nc = colors.length;
+            var table  = document.getElementById("MeanState_table_" + RNAME);
+            var rows   = table.getElementsByTagName("tr");
+            for (var c = rows[0].cells.length-5; c < rows[0].cells.length; c++) {
+                var scores = [];
+                for (var r = 2; r < rows.length; r++) {
+                    val = rows[r].cells[c].innerHTML;
+                    if (val=="") {
+                      scores[r-2] = 0;
+                    }else{
+                      scores[r-2] = parseFloat(val);
+                    }
+                }
+                var mean = math.mean(scores);
+                var std  = math.max(0.02,math.std(scores));
+                for (var r = 2; r < rows.length; r++) {
+                    scores[r-2] = Math.min(+2,Math.max(-2,(scores[r-2]-mean)/std));
+                }
+                for (var r = 2; r < rows.length; r++) {
+		    var e  = scores[r-2];
+                    var ae = Math.abs(e);
+                    var clr;
+                    if(ae >= 0.25){
+                      clr = math.round(2*e+4);
+                    }else{
+		      clr = math.round(4*e+4);
+                    }
+                    clr = math.min(math.max(0,clr),8);
+                    rows[r].cells[c].style.backgroundColor = colors[clr];
+                }
+            }
+        }
+
+        function pageLoadMeanState() {
+            var select = document.getElementById("MeanStateRegion");
+            var region = getQueryVariable("region");
+            var model  = getQueryVariable("model");
+            if (region) {
+                for (var i = 0; i < select.length; i++){
+                    if (select.options[i].value == region) select.selectedIndex = i;
+                }
+            }
+            var table = document.getElementById("MeanState_table_" + select.options[select.selectedIndex].value);
+            var rows  = table.getElementsByTagName("tr");
+            if (model) {
+                for (var r = 0; r < rows.length; r++) {
+                    if(rows[r].cells[0].innerHTML==model) highlightRowMeanState(rows[r].cells[0]);
+                }
+            }else{
+                highlightRowMeanState(rows[2]);
+            }
+            for (var i = 0; i < select.length; i++){
+                paintScoreCellsMeanState(select.options[i].value);
+            }
+            changeRegionMeanState();
+        }
+
+        function changeRegionMeanState() {
+            var select = document.getElementById("MeanStateRegion");
+            for (var i = 0; i < select.length; i++){
+                RNAME = select.options[i].value;
+                if (i == select.selectedIndex) {
+                    document.getElementById("MeanState_table_" + RNAME).style.display = "table";
+                }else{
+                    document.getElementById("MeanState_table_" + RNAME).style.display = "none";
+                }
+            }
+            updateImagesAndHeadersMeanState();
+        }
+
+        function updateImagesAndHeadersRelationships(){
+            var rsel  = document.getElementById("RelationshipsRegion");
+            var msel  = document.getElementById("RelationshipsModel");
+            var rid   = rsel.selectedIndex;
+            var mid   = msel.selectedIndex;
+            var RNAME = rsel.options[rid].value;
+            var MNAME = msel.options[mid].value;
+            var CNAME = "GrossPrimaryProductivity / FLUXCOM / 1980-2014";
+            var head  = "CNAME / RNAME / MNAME";
+            head      = head.replace("CNAME",CNAME).replace("RNAME",RNAME).replace("MNAME",MNAME);
+            $("#RelationshipsHead").text(head);
+            
+          document.getElementById('benchmark_rel_Evapotranspiration').src =  'Benchmark_' + RNAME + '_rel_Evapotranspiration.png'
+          document.getElementById('rel_Evapotranspiration').src =  MNAME + '_' + RNAME + '_rel_Evapotranspiration.png'
+          document.getElementById('rel_func_Evapotranspiration').src =  MNAME + '_' + RNAME + '_rel_func_Evapotranspiration.png'
+          document.getElementById('benchmark_rel_Precipitation').src =  'Benchmark_' + RNAME + '_rel_Precipitation.png'
+          document.getElementById('rel_Precipitation').src =  MNAME + '_' + RNAME + '_rel_Precipitation.png'
+          document.getElementById('rel_func_Precipitation').src =  MNAME + '_' + RNAME + '_rel_func_Precipitation.png'
+          document.getElementById('benchmark_rel_SurfaceDownwardSWRadiation').src =  'Benchmark_' + RNAME + '_rel_SurfaceDownwardSWRadiation.png'
+          document.getElementById('rel_SurfaceDownwardSWRadiation').src =  MNAME + '_' + RNAME + '_rel_SurfaceDownwardSWRadiation.png'
+          document.getElementById('rel_func_SurfaceDownwardSWRadiation').src =  MNAME + '_' + RNAME + '_rel_func_SurfaceDownwardSWRadiation.png'
+          document.getElementById('benchmark_rel_SurfaceNetSWRadiation').src =  'Benchmark_' + RNAME + '_rel_SurfaceNetSWRadiation.png'
+          document.getElementById('rel_SurfaceNetSWRadiation').src =  MNAME + '_' + RNAME + '_rel_SurfaceNetSWRadiation.png'
+          document.getElementById('rel_func_SurfaceNetSWRadiation').src =  MNAME + '_' + RNAME + '_rel_func_SurfaceNetSWRadiation.png'
+          document.getElementById('benchmark_rel_SurfaceAirTemperature').src =  'Benchmark_' + RNAME + '_rel_SurfaceAirTemperature.png'
+          document.getElementById('rel_SurfaceAirTemperature').src =  MNAME + '_' + RNAME + '_rel_SurfaceAirTemperature.png'
+          document.getElementById('rel_func_SurfaceAirTemperature').src =  MNAME + '_' + RNAME + '_rel_func_SurfaceAirTemperature.png'
+        }
+
+        function highlightRowRelationships(cell) {
+            var select = document.getElementById("RelationshipsRegion");
+            for (var i = 0; i < select.length; i++){
+                var table = document.getElementById("Relationships_table_" + select.options[i].value);
+                var rows  = table.getElementsByTagName("tr");
+                for (var r = 1; r < rows.length; r++) {
+                    for (var c = 0; c < rows[r].cells.length-7; c++) {
+                        rows[r].cells[c].style.backgroundColor = "#ffffff";
+                    }
+                }
+                var r = cell.closest("tr").rowIndex;
+                document.getElementById("RelationshipsModel").selectedIndex = r-1;
+                for (var c = 0; c < rows[r].cells.length-7; c++) {
+                    rows[r].cells[c].style.backgroundColor = "#c1c1c1";
+                }
+            }
+            updateImagesAndHeadersRelationships();
+        }
+
+        function paintScoreCellsRelationships(RNAME) {
+
+	    var PuOr = ['#b35806','#e08214','#fdb863','#fee0b6','#f7f7f7','#d8daeb','#b2abd2','#8073ac','#542788'];
+	    var GnRd = ['#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d9f0d3','#a6dba0','#5aae61','#1b7837'];
+	    var colors = GnRd;
+            var nc = colors.length;
+            var table  = document.getElementById("Relationships_table_" + RNAME);
+            var rows   = table.getElementsByTagName("tr");
+            for (var c = rows[0].cells.length-6; c < rows[0].cells.length; c++) {
+                var scores = [];
+                for (var r = 1; r < rows.length; r++) {
+                    val = rows[r].cells[c].innerHTML;
+                    if (val=="") {
+                      scores[r-1] = 0;
+                    }else{
+                      scores[r-1] = parseFloat(val);
+                    }
+                }
+                var mean = math.mean(scores);
+                var std  = math.max(0.02,math.std(scores));
+                for (var r = 1; r < rows.length; r++) {
+                    scores[r-1] = Math.min(+2,Math.max(-2,(scores[r-1]-mean)/std));
+                }
+                for (var r = 1; r < rows.length; r++) {
+		    var e  = scores[r-1];
+                    var ae = Math.abs(e);
+                    var clr;
+                    if(ae >= 0.25){
+                      clr = math.round(2*e+4);
+                    }else{
+		      clr = math.round(4*e+4);
+                    }
+                    clr = math.min(math.max(0,clr),8);
+                    rows[r].cells[c].style.backgroundColor = colors[clr];
+                }
+            }
+        }
+
+        function pageLoadRelationships() {
+            var select = document.getElementById("RelationshipsRegion");
+            var region = getQueryVariable("region");
+            var model  = getQueryVariable("model");
+            if (region) {
+                for (var i = 0; i < select.length; i++){
+                    if (select.options[i].value == region) select.selectedIndex = i;
+                }
+            }
+            var table = document.getElementById("Relationships_table_" + select.options[select.selectedIndex].value);
+            var rows  = table.getElementsByTagName("tr");
+            if (model) {
+                for (var r = 0; r < rows.length; r++) {
+                    if(rows[r].cells[0].innerHTML==model) highlightRowRelationships(rows[r].cells[0]);
+                }
+            }else{
+                highlightRowRelationships(rows[1]);
+            }
+            for (var i = 0; i < select.length; i++){
+                paintScoreCellsRelationships(select.options[i].value);
+            }
+            changeRegionRelationships();
+        }
+
+        function changeRegionRelationships() {
+            var select = document.getElementById("RelationshipsRegion");
+            for (var i = 0; i < select.length; i++){
+                RNAME = select.options[i].value;
+                if (i == select.selectedIndex) {
+                    document.getElementById("Relationships_table_" + RNAME).style.display = "table";
+                }else{
+                    document.getElementById("Relationships_table_" + RNAME).style.display = "none";
+                }
+            }
+            updateImagesAndHeadersRelationships();
+        }
+      function AllSelect() {
+        var header = "CNAME / RNAME / MNAME";
+        var CNAME  = "GrossPrimaryProductivity / FLUXCOM / 1980-2014";
+        header     = header.replace("CNAME",CNAME);
+        var rid    = document.getElementById("AllModelsRegion").selectedIndex;
+        var RNAME  = document.getElementById("AllModelsRegion").options[rid].value;
+        var pid    = document.getElementById("AllModelsPlot").selectedIndex;
+        var PNAME  = document.getElementById("AllModelsPlot").options[pid].value;
+        header     = header.replace("RNAME",RNAME);
+        $("#AllModelsHead").text(header);
+        if(PNAME == "shift" || PNAME == "shiftscore" || PNAME == "bias" || PNAME == "biasscore" || PNAME == "rmse" || PNAME == "rmsescore" || PNAME == "cycle" || PNAME == "dtcycle" || PNAME == "spaceint" || PNAME == "rel_func_Evapotranspiration" || PNAME == "rel_func_Precipitation" || PNAME == "rel_func_SurfaceDownwardSWRadiation" || PNAME == "rel_func_SurfaceNetSWRadiation" || PNAME == "rel_func_SurfaceAirTemperature"){
+          document.getElementById("Benchmark_div").style.display = 'none';
+        }else{
+          document.getElementById("Benchmark_div").style.display = 'inline';
+        }
+        if(PNAME == "cycle" || PNAME == "dtcycle" || PNAME == "spaceint" || PNAME == "rel_Evapotranspiration" || PNAME == "rel_func_Evapotranspiration" || PNAME == "rel_Precipitation" || PNAME == "rel_func_Precipitation" || PNAME == "rel_SurfaceDownwardSWRadiation" || PNAME == "rel_func_SurfaceDownwardSWRadiation" || PNAME == "rel_SurfaceNetSWRadiation" || PNAME == "rel_func_SurfaceNetSWRadiation" || PNAME == "rel_SurfaceAirTemperature" || PNAME == "rel_func_SurfaceAirTemperature"){
+          document.getElementById("Benchmark_legend").style.display = 'none';
+          document.getElementById("4460_2026-01-09_460ab2b_legend").style.display = 'none';
+          document.getElementById("4499_2026-01-20_77041fa_legend").style.display = 'none';
+          document.getElementById("ENSEMBLE-CMIP6_legend").style.display = 'none';
+        }else{
+          document.getElementById("Benchmark_legend").style.display = 'inline';
+          document.getElementById("4460_2026-01-09_460ab2b_legend").style.display = 'inline';
+          document.getElementById("4499_2026-01-20_77041fa_legend").style.display = 'inline';
+          document.getElementById("ENSEMBLE-CMIP6_legend").style.display = 'inline';
+        }
+        document.getElementById('Benchmark').src = 'Benchmark_' + RNAME + '_' + PNAME + '.png';
+        document.getElementById('Benchmark_legend').src = 'legend_' + PNAME + '.png';
+        document.getElementById('4460_2026-01-09_460ab2b').src = '4460_2026-01-09_460ab2b_' + RNAME + '_' + PNAME + '.png';
+        document.getElementById('4460_2026-01-09_460ab2b_legend').src = 'legend_' + PNAME + '.png';
+        document.getElementById('4499_2026-01-20_77041fa').src = '4499_2026-01-20_77041fa_' + RNAME + '_' + PNAME + '.png';
+        document.getElementById('4499_2026-01-20_77041fa_legend').src = 'legend_' + PNAME + '.png';
+        document.getElementById('ENSEMBLE-CMIP6').src = 'ENSEMBLE-CMIP6_' + RNAME + '_' + PNAME + '.png';
+        document.getElementById('ENSEMBLE-CMIP6_legend').src = 'legend_' + PNAME + '.png';
+      }
+
+      $(document).on('pageshow', '[data-role="page"]', function(){
+        AllSelect()
+      });
+    </script>
+    <style type="text/css">
+      .container{
+        display:inline;
+      }
+      .break{
+        clear:left;
+      }
+      .child{
+        margin-bottom:10px;
+        display:inline-block;
+        padding:5px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      table.table-header-rotated {
+          border-collapse: collapse;
+      }
+      td {
+          text-align: center;
+          padding: 10px 5px;
+          border: 1px solid #ccc;
+      }
+      th {
+          padding: 5px 10px;
+      }
+      th.rotate {
+          height: 280px;
+          white-space: nowrap;
+      }
+      th.rotate > div {
+          transform: translate(10px, 135px) rotate(-45deg);
+          width: 0px;
+      }
+      th.rotate > div > span {
+      }
+      th.row-header {
+          padding: 0px 10px;
+          text-align: right;
+      }
+      td.divider {
+          width: 0px;
+          border: 0px solid #ccc;
+          padding: 0px 0px
+      }
+    </style>
+  </head>
+  <body onload="pageLoad()">
+    <div data-role="page" id="MeanState">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="MeanStateHead">Mean State</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState' class=ui-btn-active ui-state-persist>Mean State</a></li>
+            <li><a href='#Relationships'>Relationships</a></li>
+            <li><a href='#AllModels'>All Models</a></li>
+            <li><a href='#DataInformation'>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+      <select id="MeanStateRegion" onchange="changeRegionMeanState()">
+        <option value='global' selected="selected">Global - Land</option>
+      </select>
+      <div style="display:none">
+      <select id="MeanStateModel">
+        <option value='Benchmark'>Benchmark</option>
+        <option value='4460_2026-01-09_460ab2b' selected="selected">4460_2026-01-09_460ab2b</option>
+        <option value='4499_2026-01-20_77041fa'>4499_2026-01-20_77041fa</option>
+        <option value='ENSEMBLE-CMIP6'>ENSEMBLE-CMIP6</option>
+      </select>
+      </div>
+        <center>
+        <table class="table-header-rotated" id="MeanState_table_global">
+           <thead>
+             <tr>
+               <th></th>
+               <th class="rotate"><div><span>Download Data</span></div></th>
+               <th class="rotate"><div><span>Period Mean (original grids) [Pg yr-1]</span></div></th>
+               <th class="rotate"><div><span>Model Period Mean (intersection) [Pg yr-1]</span></div></th>
+               <th class="rotate"><div><span>Benchmark Period Mean (intersection) [Pg yr-1]</span></div></th>
+               <th class="rotate"><div><span>Model Period Mean (complement) [Pg yr-1]</span></div></th>
+               <th class="rotate"><div><span>Benchmark Period Mean (complement) [Pg yr-1]</span></div></th>
+               <th></th>
+               <th class="rotate"><div><span>Bias [g m-2 d-1]</span></div></th>
+               <th class="rotate"><div><span>RMSE [g m-2 d-1]</span></div></th>
+               <th class="rotate"><div><span>Phase Shift [months]</span></div></th>
+               <th></th>
+               <th class="rotate"><div><span>Bias Score [1]</span></div></th>
+               <th class="rotate"><div><span>RMSE Score [1]</span></div></th>
+               <th class="rotate"><div><span>Seasonal Cycle Score [1]</span></div></th>
+               <th class="rotate"><div><span>Spatial Distribution Score [1]</span></div></th>
+               <th class="rotate"><div><span>Overall Score [1]</span></div></th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr>
+               <td class="row-header">Benchmark</td>
+               <td><a href="FLUXCOM_Benchmark.nc" download>[-]</a></td>
+               <td>114.</td>
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+               <td class="divider"></td>
+               <td></td>
+               <td></td>
+               <td></td>
+               <td class="divider"></td>
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+             </tr>
+             <tr>
+               <td onclick="highlightRowMeanState(this)" class="row-header">4460_2026-01-09_460ab2b</td>
+               <td onclick="highlightRowMeanState(this)"><a href="FLUXCOM_4460_2026-01-09_460ab2b.nc" download>[-]</a></td>
+               <td onclick="highlightRowMeanState(this)">153.</td>
+               <td onclick="highlightRowMeanState(this)">150.</td>
+               <td onclick="highlightRowMeanState(this)">109.</td>
+               <td onclick="highlightRowMeanState(this)">3.52</td>
+               <td onclick="highlightRowMeanState(this)">4.71</td>
+               <td onclick="highlightRowMeanState(this)" class="divider"></td>
+               <td onclick="highlightRowMeanState(this)">0.974</td>
+               <td onclick="highlightRowMeanState(this)">1.61</td>
+               <td onclick="highlightRowMeanState(this)">1.14</td>
+               <td onclick="highlightRowMeanState(this)" class="divider"></td>
+               <td onclick="highlightRowMeanState(this)">0.454</td>
+               <td onclick="highlightRowMeanState(this)">0.501</td>
+               <td onclick="highlightRowMeanState(this)">0.776</td>
+               <td onclick="highlightRowMeanState(this)">0.937</td>
+               <td onclick="highlightRowMeanState(this)">0.634</td>
+             </tr>
+             <tr>
+               <td onclick="highlightRowMeanState(this)" class="row-header">4499_2026-01-20_77041fa</td>
+               <td onclick="highlightRowMeanState(this)"><a href="FLUXCOM_4499_2026-01-20_77041fa.nc" download>[-]</a></td>
+               <td onclick="highlightRowMeanState(this)">148.</td>
+               <td onclick="highlightRowMeanState(this)">145.</td>
+               <td onclick="highlightRowMeanState(this)">109.</td>
+               <td onclick="highlightRowMeanState(this)">3.41</td>
+               <td onclick="highlightRowMeanState(this)">4.71</td>
+               <td onclick="highlightRowMeanState(this)" class="divider"></td>
+               <td onclick="highlightRowMeanState(this)">0.852</td>
+               <td onclick="highlightRowMeanState(this)">1.54</td>
+               <td onclick="highlightRowMeanState(this)">1.17</td>
+               <td onclick="highlightRowMeanState(this)" class="divider"></td>
+               <td onclick="highlightRowMeanState(this)">0.462</td>
+               <td onclick="highlightRowMeanState(this)">0.503</td>
+               <td onclick="highlightRowMeanState(this)">0.776</td>
+               <td onclick="highlightRowMeanState(this)">0.948</td>
+               <td onclick="highlightRowMeanState(this)">0.638</td>
+             </tr>
+             <tr>
+               <td onclick="highlightRowMeanState(this)" class="row-header">ENSEMBLE-CMIP6</td>
+               <td onclick="highlightRowMeanState(this)"><a href="FLUXCOM_ENSEMBLE-CMIP6.nc" download>[-]</a></td>
+               <td onclick="highlightRowMeanState(this)">144.</td>
+               <td onclick="highlightRowMeanState(this)">120.</td>
+               <td onclick="highlightRowMeanState(this)">114.</td>
+               <td onclick="highlightRowMeanState(this)">22.1</td>
+               <td onclick="highlightRowMeanState(this)"></td>
+               <td onclick="highlightRowMeanState(this)" class="divider"></td>
+               <td onclick="highlightRowMeanState(this)">0.138</td>
+               <td onclick="highlightRowMeanState(this)">1.15</td>
+               <td onclick="highlightRowMeanState(this)">0.979</td>
+               <td onclick="highlightRowMeanState(this)" class="divider"></td>
+               <td onclick="highlightRowMeanState(this)">0.577</td>
+               <td onclick="highlightRowMeanState(this)">0.522</td>
+               <td onclick="highlightRowMeanState(this)">0.810</td>
+               <td onclick="highlightRowMeanState(this)">0.961</td>
+               <td onclick="highlightRowMeanState(this)">0.678</td>
+             </tr>
+          </tbody>
+        </table>
+        </center>
+        <div data-role="collapsible" data-collapsed="false"><h1>Temporally integrated period mean</h1>
+        <div class="container" id="benchmark_timeint_div">
+          <div class="child">
+          <center>BENCHMARK&nbsp;MEAN</center>
+          <img src="" id="benchmark_timeint" alt="Data not available" ></img>
+          <center><img src="legend_timeint.png" id="leg"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="timeint_div">
+          <div class="child">
+          <center>MODEL&nbsp;MEAN</center>
+          <img src="" id="timeint" alt="Data not available" ></img>
+          <center><img src="legend_timeint.png" id="leg"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="bias_div">
+          <div class="child">
+          <center>BIAS</center>
+          <img src="" id="bias" alt="Data not available" ></img>
+          <center><img src="legend_bias.png" id="leg"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="biasscore_div">
+          <div class="child">
+          <center>BIAS&nbsp;SCORE</center>
+          <img src="" id="biasscore" alt="Data not available" ></img>
+          <center><img src="legend_biasscore.png" id="leg"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="rmse_div">
+          <div class="child">
+          <center>RMSE</center>
+          <img src="" id="rmse" alt="Data not available" ></img>
+          <center><img src="legend_rmse.png" id="leg"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="rmsescore_div">
+          <div class="child">
+          <center>RMSE&nbsp;SCORE</center>
+          <img src="" id="rmsescore" alt="Data not available" ></img>
+          <center><img src="legend_rmsescore.png" id="leg"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="benchmark_phase_div">
+          <div class="child">
+          <center>BENCHMARK&nbsp;MAX&nbsp;MONTH</center>
+          <img src="" id="benchmark_phase" alt="Data not available" ></img>
+          <center><img src="legend_phase.png" id="leg"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="phase_div">
+          <div class="child">
+          <center>MODEL&nbsp;MAX&nbsp;MONTH</center>
+          <img src="" id="phase" alt="Data not available" ></img>
+          <center><img src="legend_phase.png" id="leg"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="shift_div">
+          <div class="child">
+          <center>DIFFERENCE&nbsp;IN&nbsp;MAX&nbsp;MONTH</center>
+          <img src="" id="shift" alt="Data not available" ></img>
+          <center><img src="legend_shift.png" id="leg"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="shiftscore_div">
+          <div class="child">
+          <center>SEASONAL&nbsp;CYCLE&nbsp;SCORE</center>
+          <img src="" id="shiftscore" alt="Data not available" ></img>
+          <center><img src="legend_shiftscore.png" id="leg"  alt="Data not available" ></img></center>
+          </div>
+        </div><br>
+        <div class="container" id="spatial_variance_div">
+          <div class="child">
+          <center>SPATIAL&nbsp;TAYLOR&nbsp;DIAGRAM</center>
+          <img src="" id="spatial_variance" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="legend_spatial_variance_div">
+          <div class="child">
+          <center>MODEL&nbsp;COLORS</center>
+          <img src="" id="legend_spatial_variance" alt="Data not available" ></img>
+          </div>
+        </div>
+        </div>
+        <div data-role="collapsible" data-collapsed="false"><h1>Spatially integrated regional mean</h1>
+        <div class="container" id="legend_compcycle_div">
+          <div class="child">
+          <center>MODEL&nbsp;COLORS</center>
+          <img src="" id="legend_compcycle" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="spaceint_div">
+          <div class="child">
+          <center>REGIONAL&nbsp;MEAN</center>
+          <img src="" id="spaceint" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="cycle_div">
+          <div class="child">
+          <center>ANNUAL&nbsp;CYCLE</center>
+          <img src="" id="cycle" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="dtcycle_div">
+          <div class="child">
+          <center>MONTHLY&nbsp;ANOMALY</center>
+          <img src="" id="dtcycle" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="compcycle_div">
+          <div class="child">
+          <center>ANNUAL&nbsp;CYCLE</center>
+          <img src="" id="compcycle" alt="Data not available" ></img>
+          </div>
+        </div>
+        </div>
+    </div>
+    <div data-role="page" id="Relationships">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="RelationshipsHead">Relationships</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState'>Mean State</a></li>
+            <li><a href='#Relationships' class=ui-btn-active ui-state-persist>Relationships</a></li>
+            <li><a href='#AllModels'>All Models</a></li>
+            <li><a href='#DataInformation'>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+      <select id="RelationshipsRegion" onchange="changeRegionRelationships()">
+        <option value='global' selected="selected">Global - Land</option>
+      </select>
+      <div style="display:none">
+      <select id="RelationshipsModel">
+        <option value='4460_2026-01-09_460ab2b'>4460_2026-01-09_460ab2b</option>
+        <option value='4499_2026-01-20_77041fa' selected="selected">4499_2026-01-20_77041fa</option>
+        <option value='ENSEMBLE-CMIP6'>ENSEMBLE-CMIP6</option>
+      </select>
+      </div>
+        <center>
+        <table class="table-header-rotated" id="Relationships_table_global">
+           <thead>
+             <tr>
+               <th></th>
+               <th class="rotate"><div><span>Download Data</span></div></th>
+               <th class="rotate"><div><span>Evapotranspiration|GLEAMv3.3a Hellinger Distance [1]</span></div></th>
+               <th class="rotate"><div><span>Precipitation|GPCPv2.3 Hellinger Distance [1]</span></div></th>
+               <th class="rotate"><div><span>SurfaceDownwardSWRadiation|CERESed4.2 Hellinger Distance [1]</span></div></th>
+               <th class="rotate"><div><span>SurfaceNetSWRadiation|CERESed4.2 Hellinger Distance [1]</span></div></th>
+               <th class="rotate"><div><span>SurfaceAirTemperature|CRU4.02 Hellinger Distance [1]</span></div></th>
+               <th></th>
+               <th class="rotate"><div><span>Evapotranspiration|GLEAMv3.3a Score [1]</span></div></th>
+               <th class="rotate"><div><span>Precipitation|GPCPv2.3 Score [1]</span></div></th>
+               <th class="rotate"><div><span>SurfaceDownwardSWRadiation|CERESed4.2 Score [1]</span></div></th>
+               <th class="rotate"><div><span>SurfaceNetSWRadiation|CERESed4.2 Score [1]</span></div></th>
+               <th class="rotate"><div><span>SurfaceAirTemperature|CRU4.02 Score [1]</span></div></th>
+               <th class="rotate"><div><span>Overall Score [1]</span></div></th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr>
+               <td onclick="highlightRowRelationships(this)" class="row-header">4460_2026-01-09_460ab2b</td>
+               <td onclick="highlightRowRelationships(this)"><a href="FLUXCOM_4460_2026-01-09_460ab2b.nc" download>[-]</a></td>
+               <td onclick="highlightRowRelationships(this)">0.484</td>
+               <td onclick="highlightRowRelationships(this)">0.531</td>
+               <td onclick="highlightRowRelationships(this)">0.531</td>
+               <td onclick="highlightRowRelationships(this)">0.492</td>
+               <td onclick="highlightRowRelationships(this)">0.698</td>
+               <td onclick="highlightRowRelationships(this)" class="divider"></td>
+               <td onclick="highlightRowRelationships(this)">0.853</td>
+               <td onclick="highlightRowRelationships(this)">0.815</td>
+               <td onclick="highlightRowRelationships(this)">0.673</td>
+               <td onclick="highlightRowRelationships(this)">0.741</td>
+               <td onclick="highlightRowRelationships(this)">0.742</td>
+               <td onclick="highlightRowRelationships(this)">0.765</td>
+             </tr>
+             <tr>
+               <td onclick="highlightRowRelationships(this)" class="row-header">4499_2026-01-20_77041fa</td>
+               <td onclick="highlightRowRelationships(this)"><a href="FLUXCOM_4499_2026-01-20_77041fa.nc" download>[-]</a></td>
+               <td onclick="highlightRowRelationships(this)">0.501</td>
+               <td onclick="highlightRowRelationships(this)">0.535</td>
+               <td onclick="highlightRowRelationships(this)">0.532</td>
+               <td onclick="highlightRowRelationships(this)">0.493</td>
+               <td onclick="highlightRowRelationships(this)">0.701</td>
+               <td onclick="highlightRowRelationships(this)" class="divider"></td>
+               <td onclick="highlightRowRelationships(this)">0.889</td>
+               <td onclick="highlightRowRelationships(this)">0.826</td>
+               <td onclick="highlightRowRelationships(this)">0.694</td>
+               <td onclick="highlightRowRelationships(this)">0.768</td>
+               <td onclick="highlightRowRelationships(this)">0.756</td>
+               <td onclick="highlightRowRelationships(this)">0.787</td>
+             </tr>
+             <tr>
+               <td onclick="highlightRowRelationships(this)" class="row-header">ENSEMBLE-CMIP6</td>
+               <td onclick="highlightRowRelationships(this)"><a href="FLUXCOM_ENSEMBLE-CMIP6.nc" download>[-]</a></td>
+               <td onclick="highlightRowRelationships(this)">0.565</td>
+               <td onclick="highlightRowRelationships(this)">0.648</td>
+               <td onclick="highlightRowRelationships(this)">0.569</td>
+               <td onclick="highlightRowRelationships(this)">0.530</td>
+               <td onclick="highlightRowRelationships(this)">0.742</td>
+               <td onclick="highlightRowRelationships(this)" class="divider"></td>
+               <td onclick="highlightRowRelationships(this)">0.813</td>
+               <td onclick="highlightRowRelationships(this)">0.897</td>
+               <td onclick="highlightRowRelationships(this)">0.717</td>
+               <td onclick="highlightRowRelationships(this)">0.728</td>
+               <td onclick="highlightRowRelationships(this)">0.827</td>
+               <td onclick="highlightRowRelationships(this)">0.796</td>
+             </tr>
+          </tbody>
+        </table>
+        </center>
+        <div data-role="collapsible" data-collapsed="false"><h1>Evapotranspiration/GLEAMv3.3a</h1>
+        <div class="container" id="benchmark_rel_Evapotranspiration_div">
+          <div class="child">
+          <img src="" id="benchmark_rel_Evapotranspiration" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="rel_Evapotranspiration_div">
+          <div class="child">
+          <img src="" id="rel_Evapotranspiration" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="rel_func_Evapotranspiration_div">
+          <div class="child">
+          <img src="" id="rel_func_Evapotranspiration" alt="Data not available" ></img>
+          </div>
+        </div>
+        </div>
+        <div data-role="collapsible" data-collapsed="false"><h1>Precipitation/GPCPv2.3</h1>
+        <div class="container" id="benchmark_rel_Precipitation_div">
+          <div class="child">
+          <img src="" id="benchmark_rel_Precipitation" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="rel_Precipitation_div">
+          <div class="child">
+          <img src="" id="rel_Precipitation" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="rel_func_Precipitation_div">
+          <div class="child">
+          <img src="" id="rel_func_Precipitation" alt="Data not available" ></img>
+          </div>
+        </div>
+        </div>
+        <div data-role="collapsible" data-collapsed="false"><h1>SurfaceDownwardSWRadiation/CERESed4.2</h1>
+        <div class="container" id="benchmark_rel_SurfaceDownwardSWRadiation_div">
+          <div class="child">
+          <img src="" id="benchmark_rel_SurfaceDownwardSWRadiation" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="rel_SurfaceDownwardSWRadiation_div">
+          <div class="child">
+          <img src="" id="rel_SurfaceDownwardSWRadiation" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="rel_func_SurfaceDownwardSWRadiation_div">
+          <div class="child">
+          <img src="" id="rel_func_SurfaceDownwardSWRadiation" alt="Data not available" ></img>
+          </div>
+        </div>
+        </div>
+        <div data-role="collapsible" data-collapsed="false"><h1>SurfaceNetSWRadiation/CERESed4.2</h1>
+        <div class="container" id="benchmark_rel_SurfaceNetSWRadiation_div">
+          <div class="child">
+          <img src="" id="benchmark_rel_SurfaceNetSWRadiation" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="rel_SurfaceNetSWRadiation_div">
+          <div class="child">
+          <img src="" id="rel_SurfaceNetSWRadiation" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="rel_func_SurfaceNetSWRadiation_div">
+          <div class="child">
+          <img src="" id="rel_func_SurfaceNetSWRadiation" alt="Data not available" ></img>
+          </div>
+        </div>
+        </div>
+        <div data-role="collapsible" data-collapsed="false"><h1>SurfaceAirTemperature/CRU4.02</h1>
+        <div class="container" id="benchmark_rel_SurfaceAirTemperature_div">
+          <div class="child">
+          <img src="" id="benchmark_rel_SurfaceAirTemperature" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="rel_SurfaceAirTemperature_div">
+          <div class="child">
+          <img src="" id="rel_SurfaceAirTemperature" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="rel_func_SurfaceAirTemperature_div">
+          <div class="child">
+          <img src="" id="rel_func_SurfaceAirTemperature" alt="Data not available" ></img>
+          </div>
+        </div>
+        </div>
+    </div>
+    <div data-role="page" id="AllModels">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="AllModelsHead">All Models</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState'>Mean State</a></li>
+            <li><a href='#Relationships'>Relationships</a></li>
+            <li><a href='#AllModels' class=ui-btn-active ui-state-persist>All Models</a></li>
+            <li><a href='#DataInformation'>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+      <select id="AllModelsRegion" onchange="AllSelect()">
+        <option value='global' selected="selected">Global - Land</option>
+      </select>
+      <select id="AllModelsPlot" onchange="AllSelect()">
+        <option value='timeint' selected="selected">Temporally integrated period mean</option>
+        <option value='phase'>Temporally integrated period mean max month</option>
+        <option value='shift'>Temporally integrated mean phase shift</option>
+        <option value='shiftscore'>Temporally integrated mean phase shift score</option>
+        <option value='bias'>Temporally integrated period mean bias</option>
+        <option value='biasscore'>Temporally integrated period mean bias score</option>
+        <option value='rmse'>Temporally integrated period mean rmse</option>
+        <option value='rmsescore'>Temporally integrated period mean rmse score</option>
+        <option value='cycle'>Spatially integrated regional mean cycle</option>
+        <option value='dtcycle'>Spatially integrated regional mean detrended cycle</option>
+        <option value='spaceint'>Spatially integrated regional mean</option>
+        <option value='rel_Evapotranspiration'>Relationship with Evapotranspiration</option>
+        <option value='rel_func_Evapotranspiration'>Relationship with func_Evapotranspiration</option>
+        <option value='rel_Precipitation'>Relationship with Precipitation</option>
+        <option value='rel_func_Precipitation'>Relationship with func_Precipitation</option>
+        <option value='rel_SurfaceDownwardSWRadiation'>Relationship with SurfaceDownwardSWRadiation</option>
+        <option value='rel_func_SurfaceDownwardSWRadiation'>Relationship with func_SurfaceDownwardSWRadiation</option>
+        <option value='rel_SurfaceNetSWRadiation'>Relationship with SurfaceNetSWRadiation</option>
+        <option value='rel_func_SurfaceNetSWRadiation'>Relationship with func_SurfaceNetSWRadiation</option>
+        <option value='rel_SurfaceAirTemperature'>Relationship with SurfaceAirTemperature</option>
+        <option value='rel_func_SurfaceAirTemperature'>Relationship with func_SurfaceAirTemperature</option>
+      </select>
+        <div class="container" id="Benchmark_div">
+          <div class="child">
+          <center>Benchmark</center>
+          <img src="" id="Benchmark" alt="Data not available" ></img>
+          <center><img src="legend_Benchmark.png" id="Benchmark_legend"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="4460_2026-01-09_460ab2b_div">
+          <div class="child">
+          <center>4460_2026-01-09_460ab2b</center>
+          <img src="" id="4460_2026-01-09_460ab2b" alt="Data not available" ></img>
+          <center><img src="legend_4460_2026-01-09_460ab2b.png" id="4460_2026-01-09_460ab2b_legend"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="4499_2026-01-20_77041fa_div">
+          <div class="child">
+          <center>4499_2026-01-20_77041fa</center>
+          <img src="" id="4499_2026-01-20_77041fa" alt="Data not available" ></img>
+          <center><img src="legend_4499_2026-01-20_77041fa.png" id="4499_2026-01-20_77041fa_legend"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+        <div class="container" id="ENSEMBLE-CMIP6_div">
+          <div class="child">
+          <center>ENSEMBLE-CMIP6</center>
+          <img src="" id="ENSEMBLE-CMIP6" alt="Data not available" ></img>
+          <center><img src="legend_ENSEMBLE-CMIP6.png" id="ENSEMBLE-CMIP6_legend"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+    </div>
+    <div data-role="page" id="DataInformation">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="DataInformationHead">Data Information</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState'>Mean State</a></li>
+            <li><a href='#Relationships'>Relationships</a></li>
+            <li><a href='#AllModels'>All Models</a></li>
+            <li><a href='#DataInformation' class=ui-btn-active ui-state-persist>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+      
+<p><dl><dt><b>&nbsp;&nbsp;Title:</dt></b><dd>FLUXCOM (RS+METEO) Global Land Carbon Fluxes using CRUNCEP climate data</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Version:</dt></b><dd>1</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Institutions:</dt></b><dd>Department Biogeochemical Integration, Max Planck Institute for Biogeochemistry, Germany</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Source:</dt></b><dd>Data generated by Artificial Neural Networks and forced with CRUNCEPv6 meteorological data and MODIS (RS+METEO)
+ftp://ftp.bgc-jena.mpg.de/pub/outgoing/FluxCom/CarbonFluxes_v1_2017/RS+METEO/CRUNCEPv6/raw/monthly/
+ftp://ftp.bgc-jena.mpg.de/pub/outgoing/FluxCom/EnergyFluxes/RS_METEO/member/CRUNCEP_v8/monthly/</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;History:</dt></b><dd>2024-01-18: downloaded ['GPP.ANN.CRUNCEPv6.monthly.1980.nc', 'GPP.ANN.CRUNCEPv6.monthly.1981.nc', 'GPP.ANN.CRUNCEPv6.monthly.1982.nc', 'GPP.ANN.CRUNCEPv6.monthly.1983.nc', 'GPP.ANN.CRUNCEPv6.monthly.1984.nc', 'GPP.ANN.CRUNCEPv6.monthly.1985.nc', 'GPP.ANN.CRUNCEPv6.monthly.1986.nc', 'GPP.ANN.CRUNCEPv6.monthly.1987.nc', 'GPP.ANN.CRUNCEPv6.monthly.1988.nc', 'GPP.ANN.CRUNCEPv6.monthly.1989.nc', 'GPP.ANN.CRUNCEPv6.monthly.1990.nc', 'GPP.ANN.CRUNCEPv6.monthly.1991.nc', 'GPP.ANN.CRUNCEPv6.monthly.1992.nc', 'GPP.ANN.CRUNCEPv6.monthly.1993.nc', 'GPP.ANN.CRUNCEPv6.monthly.1994.nc', 'GPP.ANN.CRUNCEPv6.monthly.1995.nc', 'GPP.ANN.CRUNCEPv6.monthly.1996.nc', 'GPP.ANN.CRUNCEPv6.monthly.1997.nc', 'GPP.ANN.CRUNCEPv6.monthly.1998.nc', 'GPP.ANN.CRUNCEPv6.monthly.1999.nc', 'GPP.ANN.CRUNCEPv6.monthly.2000.nc', 'GPP.ANN.CRUNCEPv6.monthly.2001.nc', 'GPP.ANN.CRUNCEPv6.monthly.2002.nc', 'GPP.ANN.CRUNCEPv6.monthly.2003.nc', 'GPP.ANN.CRUNCEPv6.monthly.2004.nc', 'GPP.ANN.CRUNCEPv6.monthly.2005.nc', 'GPP.ANN.CRUNCEPv6.monthly.2006.nc', 'GPP.ANN.CRUNCEPv6.monthly.2007.nc', 'GPP.ANN.CRUNCEPv6.monthly.2008.nc', 'GPP.ANN.CRUNCEPv6.monthly.2009.nc', 'GPP.ANN.CRUNCEPv6.monthly.2010.nc', 'GPP.ANN.CRUNCEPv6.monthly.2011.nc', 'GPP.ANN.CRUNCEPv6.monthly.2012.nc', 'GPP.ANN.CRUNCEPv6.monthly.2013.nc']</dd><dd>2024-04-09: converted to netCDF, additionally we apply a mask where |var|<1e-15 for all time.</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;References:</dt></b><dd>Jung, M., S. Koirala, U. Weber, K. Ichii, F. Gans, Gustau-Camps-Valls, D. Papale, C. Schwalm, G. Tramontana, and M. Reichstein (2019), The FLUXCOM ensemble of global land-atmosphere energy fluxes, <i>Scientific Data</i>, 74, <a href='https://doi.org/10.1038/s41597-019-0076-8'>doi:10.1038/s41597-019-0076-8</a></dd><br><dd>Tramontana, G., M. Jung, C.R. Schwalm, K. Ichii, G. Camps-Valls, B. Raduly, M. Reichstein, M.A. Arain, A. Cescatti, G. Kiely, L. Merbold, P. Serrano-Ortiz, S. Sickert, S. Wolf, and D. Papale (2016), Predicting carbon dioxide and energy fluxes across global FLUXNET sites with regression algorithms, <i>Biogeosciences</i>, <i>13</i>, 4291-4313, <a href='https://doi.org/10.5194/bg-13-4291-2016'>doi:10.5194/bg-13-4291-2016</a></dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Coordinates:</dt></b><dd>lat_bnds lon_bnds</dd></dl></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,690 @@
+[INFO][0][<module>] Linux clima.gps.caltech.edu 4.18.0-553.72.1.el8_10.x86_64 #1 SMP Sat Aug 23 20:13:38 EDT 2025 x86_64 x86_64
+[INFO][0][<module>] /net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB (2.7.2)
+[INFO][0][<module>] /net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/numpy (2.3.4)
+[INFO][0][<module>] /net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/matplotlib (3.10.7)
+[INFO][0][<module>] /net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/netCDF4 (1.7.3)
+[INFO][0][<module>] /net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/cf_units (3.3.0)
+[INFO][0][<module>] /net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/sympy (1.14.0)
+[INFO][0][<module>] /net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/mpi4py (4.1.1)
+[INFO][0][<module>] 2026-01-20 01:35:40.790157
+[INFO][0][AnalysisMeanStateSpace][gpp] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][gpp] RMSE scored using Collier2018
+[INFO][0][confront][GrossPrimaryProductivity/FLUXCOM][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][gpp] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][gpp] RMSE scored using Collier2018
+[INFO][0][confront][GrossPrimaryProductivity/WECANN][4499_2026-01-20_77041fa] Success
+[DEBUG][0][extractTimeSeries][4460_2026-01-09_460ab2b] Could not find [nee] in the model results
+[DEBUG][0][WorkConfront][NetEcosystemExchange/FLUXCOM][4460_2026-01-09_460ab2b]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 433, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 371, in stageData
+    mod = m.extractTimeSeries(
+        self.variable,
+    ...<5 lines>...
+        lons=None if obs.spatial else obs.lon,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[DEBUG][0][extractTimeSeries][4499_2026-01-20_77041fa] Could not find [nee] in the model results
+[DEBUG][0][WorkConfront][NetEcosystemExchange/FLUXCOM][4499_2026-01-20_77041fa]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 433, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 371, in stageData
+    mod = m.extractTimeSeries(
+        self.variable,
+    ...<5 lines>...
+        lons=None if obs.spatial else obs.lon,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[DEBUG][0][extractTimeSeries][ENSEMBLE-CMIP6] Could not find [nee] in the model results
+[DEBUG][0][WorkConfront][NetEcosystemExchange/FLUXCOM][ENSEMBLE-CMIP6]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 433, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 371, in stageData
+    mod = m.extractTimeSeries(
+        self.variable,
+    ...<5 lines>...
+        lons=None if obs.spatial else obs.lon,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[DEBUG][0][extractTimeSeries][4460_2026-01-09_460ab2b] Could not find [reco] in the model results
+[DEBUG][0][WorkConfront][EcosystemRespiration/FLUXCOM][4460_2026-01-09_460ab2b]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 433, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 371, in stageData
+    mod = m.extractTimeSeries(
+        self.variable,
+    ...<5 lines>...
+        lons=None if obs.spatial else obs.lon,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[DEBUG][0][extractTimeSeries][4499_2026-01-20_77041fa] Could not find [reco] in the model results
+[DEBUG][0][WorkConfront][EcosystemRespiration/FLUXCOM][4499_2026-01-20_77041fa]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 433, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 371, in stageData
+    mod = m.extractTimeSeries(
+        self.variable,
+    ...<5 lines>...
+        lons=None if obs.spatial else obs.lon,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[DEBUG][0][extractTimeSeries][ENSEMBLE-CMIP6] Could not find [reco] in the model results
+[DEBUG][0][WorkConfront][EcosystemRespiration/FLUXCOM][ENSEMBLE-CMIP6]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 433, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 371, in stageData
+    mod = m.extractTimeSeries(
+        self.variable,
+    ...<5 lines>...
+        lons=None if obs.spatial else obs.lon,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[INFO][0][AnalysisMeanStateSpace][lai] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][lai] RMSE scored using Collier2018
+[INFO][0][confront][LeafAreaIndex/MODIS][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][et] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][et] RMSE scored using Collier2018
+[INFO][0][confront][Evapotranspiration/GLEAMv3.3a][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][et] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][et] RMSE scored using Collier2018
+[INFO][0][confront][Evapotranspiration/MODIS][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][et] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][et] RMSE scored using Collier2018
+[INFO][0][confront][Evapotranspiration/MOD16A2][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][et] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][et] RMSE scored using Collier2018
+[INFO][0][confront][Evapotranspiration/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][EvapFrac] Bias scored using Collier2018
+[INFO][0][confront][EvaporativeFraction/FLUXCOM][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][EvapFrac] Bias scored using Collier2018
+[INFO][0][confront][EvaporativeFraction/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][EvapFrac] Bias scored using Collier2018
+[INFO][0][confront][EvaporativeFraction/WECANN][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][EvapFrac] Bias scored using Collier2018
+[INFO][0][confront][EvaporativeFraction/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][hfls] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][hfls] RMSE scored using Collier2018
+[INFO][0][confront][LatentHeat/FLUXCOM][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][hfls] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][hfls] RMSE scored using Collier2018
+[INFO][0][confront][LatentHeat/DOLCE][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][hfls] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][hfls] RMSE scored using Collier2018
+[INFO][0][confront][LatentHeat/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][hfls] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][hfls] RMSE scored using Collier2018
+[INFO][0][confront][LatentHeat/WECANN][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][hfls] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][hfls] RMSE scored using Collier2018
+[INFO][0][confront][LatentHeat/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][runoff] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][runoff] RMSE scored using Collier2018
+[INFO][0][confront][Runoff/LORA][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][runoff] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][runoff] RMSE scored using Collier2018
+[INFO][0][confront][Runoff/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][runoff] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][runoff] RMSE scored using Collier2018
+[INFO][0][confront][Runoff/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][hfss] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][hfss] RMSE scored using Collier2018
+[INFO][0][confront][SensibleHeat/FLUXCOM][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][hfss] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][hfss] RMSE scored using Collier2018
+[INFO][0][confront][SensibleHeat/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][hfss] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][hfss] RMSE scored using Collier2018
+[INFO][0][confront][SensibleHeat/WECANN][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][hfss] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][hfss] RMSE scored using Collier2018
+[INFO][0][confront][SensibleHeat/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][MakeComparable][SnowWaterEquivalent/CanSISE][4499_2026-01-20_77041fa] Spatial data was clipped from the comparison:  before: [130 180 360] after: [130  90 360]
+[INFO][0][AnalysisMeanStateSpace][swe] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][swe] RMSE scored using Collier2018
+[INFO][0][confront][SnowWaterEquivalent/CanSISE][4499_2026-01-20_77041fa] Success
+[DEBUG][0][extractTimeSeries][ENSEMBLE-CMIP6] Could not find [swe,snw] in the model results
+[DEBUG][0][WorkConfront][SnowWaterEquivalent/CanSISE][ENSEMBLE-CMIP6]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 433, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfSWE.py", line 9, in stageData
+    obs, mod = super(ConfSWE, self).stageData(m)
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 371, in stageData
+    mod = m.extractTimeSeries(
+        self.variable,
+    ...<5 lines>...
+        lons=None if obs.spatial else obs.lon,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[DEBUG][0][extractTimeSeries][4460_2026-01-09_460ab2b] Could not find [tsl,TSOI] in the model results
+[DEBUG][0][WorkConfront][Permafrost/Brown2002][4460_2026-01-09_460ab2b]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 231, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 193, in stageData
+    tsl = m.extractTimeSeries(
+        "tsl", alt_vars = ["TSOI"], initial_time=(y0 - 1850) * 365, final_time=(yf - 1850) * 365
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[DEBUG][0][extractTimeSeries][4499_2026-01-20_77041fa] Could not find [tsl,TSOI] in the model results
+[DEBUG][0][WorkConfront][Permafrost/Brown2002][4499_2026-01-20_77041fa]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 231, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 193, in stageData
+    tsl = m.extractTimeSeries(
+        "tsl", alt_vars = ["TSOI"], initial_time=(y0 - 1850) * 365, final_time=(yf - 1850) * 365
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[DEBUG][0][extractTimeSeries][4460_2026-01-09_460ab2b] Could not find [tsl,TSOI] in the model results
+[DEBUG][0][WorkConfront][Permafrost/Obu2018][4460_2026-01-09_460ab2b]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 231, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 193, in stageData
+    tsl = m.extractTimeSeries(
+        "tsl", alt_vars = ["TSOI"], initial_time=(y0 - 1850) * 365, final_time=(yf - 1850) * 365
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[DEBUG][0][extractTimeSeries][4499_2026-01-20_77041fa] Could not find [tsl,TSOI] in the model results
+[DEBUG][0][WorkConfront][Permafrost/Obu2018][4499_2026-01-20_77041fa]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 231, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 193, in stageData
+    tsl = m.extractTimeSeries(
+        "tsl", alt_vars = ["TSOI"], initial_time=(y0 - 1850) * 365, final_time=(yf - 1850) * 365
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[INFO][0][AnalysisMeanStateSpace][mrsos] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][mrsos] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceSoilMoisture/WangMao][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][snow_cover_fraction] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][snow_cover_fraction] RMSE scored using Collier2018
+[INFO][0][confront][SnowCoverFraction/MODIS][4499_2026-01-20_77041fa] Success
+[DEBUG][0][extractTimeSeries][ENSEMBLE-CMIP6] Could not find [snow_cover_fraction,scf] in the model results
+[DEBUG][0][WorkConfront][SnowCoverFraction/MODIS][ENSEMBLE-CMIP6]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 563, in WorkConfront
+    c.confront(m)
+    ~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 433, in confront
+    obs, mod = self.stageData(m)
+               ~~~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Confrontation.py", line 371, in stageData
+    mod = m.extractTimeSeries(
+        self.variable,
+    ...<5 lines>...
+        lons=None if obs.spatial else obs.lon,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ModelResult.py", line 433, in extractTimeSeries
+    raise il.VarNotInModel()
+ILAMB.ilamblib.VarNotInModel: VarNotInModel
+
+[INFO][0][AnalysisMeanStateSpace][albedo] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][albedo] RMSE scored using Collier2018
+[INFO][0][confront][Albedo/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][albedo] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][albedo] RMSE scored using Collier2018
+[INFO][0][confront][Albedo/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rsus] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rsus] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceUpwardSWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rsus] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rsus] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceUpwardSWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSites][rsus] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSites][rsus] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceUpwardSWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rsus] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rsus] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceUpwardSWRadiation/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rsns] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rsns] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceNetSWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rsns] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rsns] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceNetSWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSites][rsns] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSites][rsns] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceNetSWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rlus] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rlus] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceUpwardLWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rlus] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rlus] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceUpwardLWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSites][rlus] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSites][rlus] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceUpwardLWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rlus] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rlus] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceUpwardLWRadiation/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rlns] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rlns] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceNetLWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rlns] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rlns] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceNetLWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSites][rlns] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSites][rlns] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceNetLWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rns] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rns] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceNetRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rns] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rns] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceNetRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSites][rns] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSites][rns] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceNetRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rns] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rns] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceNetRadiation/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][hfdsl] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][hfdsl] RMSE scored using Collier2018
+[INFO][0][confront][GroundHeatFlux/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][tas] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][tas] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceAirTemperature/CRU4.02][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][tas] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][tas] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceAirTemperature/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][pr] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][pr] RMSE scored using Collier2018
+[INFO][0][confront][Precipitation/CMAPv1904][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][pr] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][pr] RMSE scored using Collier2018
+[INFO][0][confront][Precipitation/GPCCv2018][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][pr] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][pr] RMSE scored using Collier2018
+[INFO][0][confront][Precipitation/GPCPv2.3][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][pr] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][pr] RMSE scored using Collier2018
+[INFO][0][confront][Precipitation/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][pr] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][pr] RMSE scored using Collier2018
+[INFO][0][confront][Precipitation/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rsds] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rsds] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceDownwardSWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rsds] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rsds] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceDownwardSWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSites][rsds] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSites][rsds] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceDownwardSWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rsds] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rsds] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceDownwardSWRadiation/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rlds] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rlds] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceDownwardLWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rlds] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rlds] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceDownwardLWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSites][rlds] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSites][rlds] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceDownwardLWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][AnalysisMeanStateSpace][rlds] Bias scored using Collier2018
+[INFO][0][AnalysisMeanStateSpace][rlds] RMSE scored using Collier2018
+[INFO][0][confront][SurfaceDownwardLWRadiation/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][GrossPrimaryProductivity/FLUXCOM][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][GrossPrimaryProductivity/FLUXCOM][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][GrossPrimaryProductivity/FLUXCOM][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][GrossPrimaryProductivity/WECANN][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][GrossPrimaryProductivity/WECANN][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][GrossPrimaryProductivity/WECANN][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][LeafAreaIndex/MODIS][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][LeafAreaIndex/MODIS][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][LeafAreaIndex/MODIS][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Evapotranspiration/GLEAMv3.3a][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Evapotranspiration/GLEAMv3.3a][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Evapotranspiration/GLEAMv3.3a][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Evapotranspiration/MODIS][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Evapotranspiration/MODIS][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Evapotranspiration/MODIS][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Evapotranspiration/MOD16A2][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Evapotranspiration/MOD16A2][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Evapotranspiration/MOD16A2][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Evapotranspiration/ERA5][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Evapotranspiration/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Evapotranspiration/ERA5][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][EvaporativeFraction/FLUXCOM][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][EvaporativeFraction/FLUXCOM][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][EvaporativeFraction/FLUXCOM][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][EvaporativeFraction/CLASS][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][EvaporativeFraction/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][EvaporativeFraction/CLASS][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][EvaporativeFraction/WECANN][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][EvaporativeFraction/WECANN][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][EvaporativeFraction/WECANN][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][EvaporativeFraction/ERA5][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][EvaporativeFraction/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][EvaporativeFraction/ERA5][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][LatentHeat/FLUXCOM][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][LatentHeat/FLUXCOM][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][LatentHeat/FLUXCOM][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][LatentHeat/DOLCE][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][LatentHeat/DOLCE][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][LatentHeat/DOLCE][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][LatentHeat/CLASS][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][LatentHeat/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][LatentHeat/CLASS][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][LatentHeat/WECANN][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][LatentHeat/WECANN][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][LatentHeat/WECANN][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][LatentHeat/ERA5][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][LatentHeat/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][LatentHeat/ERA5][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Runoff/Dai][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Runoff/Dai][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Runoff/Dai][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Runoff/LORA][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Runoff/LORA][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Runoff/LORA][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Runoff/CLASS][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Runoff/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Runoff/CLASS][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Runoff/ERA5][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Runoff/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Runoff/ERA5][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SensibleHeat/FLUXCOM][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SensibleHeat/FLUXCOM][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SensibleHeat/FLUXCOM][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SensibleHeat/CLASS][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SensibleHeat/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SensibleHeat/CLASS][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SensibleHeat/WECANN][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SensibleHeat/WECANN][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SensibleHeat/WECANN][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SensibleHeat/ERA5][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SensibleHeat/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SensibleHeat/ERA5][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][TerrestrialWaterStorageAnomaly/GRACE][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][TerrestrialWaterStorageAnomaly/GRACE][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][TerrestrialWaterStorageAnomaly/GRACE][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SnowWaterEquivalent/CanSISE][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SnowWaterEquivalent/CanSISE][4499_2026-01-20_77041fa] Success
+[DEBUG][0][WorkPost][Permafrost/Brown2002][4460_2026-01-09_460ab2b]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 618, in WorkPost
+    c.modelPlots(m)
+    ~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 380, in modelPlots
+    mod = Variable(
+        filename=fname, variable_name="permafrost_extent", groupname="MeanState"
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Variable.py", line 140, in __init__
+    out = il.FromNetCDF4(
+        filename,
+    ...<5 lines>...
+        convert_calendar=convert_calendar,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ilamblib.py", line 723, in FromNetCDF4
+    dset = Dataset(filename, mode="r")
+  File "src/netCDF4/_netCDF4.pyx", line 2517, in netCDF4._netCDF4.Dataset.__init__
+  File "src/netCDF4/_netCDF4.pyx", line 2154, in netCDF4._netCDF4._ensure_nc_success
+FileNotFoundError: [Errno 2] No such file or directory: '/net/sampo/data1/ilamb/buildkite/_build/HydrologyCycle/Permafrost/Brown2002//Brown2002_4460_2026-01-09_460ab2b.nc'
+
+[DEBUG][0][WorkPost][Permafrost/Brown2002][4499_2026-01-20_77041fa]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 618, in WorkPost
+    c.modelPlots(m)
+    ~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 380, in modelPlots
+    mod = Variable(
+        filename=fname, variable_name="permafrost_extent", groupname="MeanState"
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Variable.py", line 140, in __init__
+    out = il.FromNetCDF4(
+        filename,
+    ...<5 lines>...
+        convert_calendar=convert_calendar,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ilamblib.py", line 723, in FromNetCDF4
+    dset = Dataset(filename, mode="r")
+  File "src/netCDF4/_netCDF4.pyx", line 2517, in netCDF4._netCDF4.Dataset.__init__
+  File "src/netCDF4/_netCDF4.pyx", line 2154, in netCDF4._netCDF4._ensure_nc_success
+FileNotFoundError: [Errno 2] No such file or directory: '/net/sampo/data1/ilamb/buildkite/_build/HydrologyCycle/Permafrost/Brown2002//Brown2002_4499_2026-01-20_77041fa.nc'
+
+[DEBUG][0][WorkPost][Permafrost/Obu2018][4460_2026-01-09_460ab2b]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 618, in WorkPost
+    c.modelPlots(m)
+    ~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 380, in modelPlots
+    mod = Variable(
+        filename=fname, variable_name="permafrost_extent", groupname="MeanState"
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Variable.py", line 140, in __init__
+    out = il.FromNetCDF4(
+        filename,
+    ...<5 lines>...
+        convert_calendar=convert_calendar,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ilamblib.py", line 723, in FromNetCDF4
+    dset = Dataset(filename, mode="r")
+  File "src/netCDF4/_netCDF4.pyx", line 2517, in netCDF4._netCDF4.Dataset.__init__
+  File "src/netCDF4/_netCDF4.pyx", line 2154, in netCDF4._netCDF4._ensure_nc_success
+FileNotFoundError: [Errno 2] No such file or directory: '/net/sampo/data1/ilamb/buildkite/_build/HydrologyCycle/Permafrost/Obu2018//Obu2018_4460_2026-01-09_460ab2b.nc'
+
+[DEBUG][0][WorkPost][Permafrost/Obu2018][4499_2026-01-20_77041fa]
+Traceback (most recent call last):
+  File "/net/sampo/data1/ilamb/ilamb_env/bin/ilamb-run", line 618, in WorkPost
+    c.modelPlots(m)
+    ~~~~~~~~~~~~^^^
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ConfPermafrost.py", line 380, in modelPlots
+    mod = Variable(
+        filename=fname, variable_name="permafrost_extent", groupname="MeanState"
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/Variable.py", line 140, in __init__
+    out = il.FromNetCDF4(
+        filename,
+    ...<5 lines>...
+        convert_calendar=convert_calendar,
+    )
+  File "/net/sampo/data1/ilamb/ilamb_env/lib/python3.14/site-packages/ILAMB/ilamblib.py", line 723, in FromNetCDF4
+    dset = Dataset(filename, mode="r")
+  File "src/netCDF4/_netCDF4.pyx", line 2517, in netCDF4._netCDF4.Dataset.__init__
+  File "src/netCDF4/_netCDF4.pyx", line 2154, in netCDF4._netCDF4._ensure_nc_success
+FileNotFoundError: [Errno 2] No such file or directory: '/net/sampo/data1/ilamb/buildkite/_build/HydrologyCycle/Permafrost/Obu2018//Obu2018_4499_2026-01-20_77041fa.nc'
+
+[INFO][0][modelPlots][SurfaceSoilMoisture/WangMao][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceSoilMoisture/WangMao][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceSoilMoisture/WangMao][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SnowCoverFraction/MODIS][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SnowCoverFraction/MODIS][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Albedo/CERESed4.2][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Albedo/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Albedo/CERESed4.2][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Albedo/GEWEX.SRB][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Albedo/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Albedo/GEWEX.SRB][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/CERESed4.2][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/CERESed4.2][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/GEWEX.SRB][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/GEWEX.SRB][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/WRMC.BSRN][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/WRMC.BSRN][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/ERA5][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceUpwardSWRadiation/ERA5][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceNetSWRadiation/CERESed4.2][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceNetSWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceNetSWRadiation/CERESed4.2][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceNetSWRadiation/GEWEX.SRB][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceNetSWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceNetSWRadiation/GEWEX.SRB][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceNetSWRadiation/WRMC.BSRN][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceNetSWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceNetSWRadiation/WRMC.BSRN][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/CERESed4.2][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/CERESed4.2][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/GEWEX.SRB][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/GEWEX.SRB][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/WRMC.BSRN][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/WRMC.BSRN][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/ERA5][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceUpwardLWRadiation/ERA5][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceNetLWRadiation/CERESed4.2][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceNetLWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceNetLWRadiation/CERESed4.2][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceNetLWRadiation/GEWEX.SRB][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceNetLWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceNetLWRadiation/GEWEX.SRB][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceNetLWRadiation/WRMC.BSRN][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceNetLWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceNetLWRadiation/WRMC.BSRN][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/CERESed4.2][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/CERESed4.2][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/GEWEX.SRB][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/GEWEX.SRB][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/WRMC.BSRN][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/WRMC.BSRN][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/CLASS][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceNetRadiation/CLASS][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][GroundHeatFlux/CLASS][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][GroundHeatFlux/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][GroundHeatFlux/CLASS][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceAirTemperature/CRU4.02][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceAirTemperature/CRU4.02][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceAirTemperature/CRU4.02][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceAirTemperature/ERA5][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceAirTemperature/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceAirTemperature/ERA5][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Precipitation/CMAPv1904][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Precipitation/CMAPv1904][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Precipitation/CMAPv1904][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Precipitation/GPCCv2018][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Precipitation/GPCCv2018][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Precipitation/GPCCv2018][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Precipitation/GPCPv2.3][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Precipitation/GPCPv2.3][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Precipitation/GPCPv2.3][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Precipitation/CLASS][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Precipitation/CLASS][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Precipitation/CLASS][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][Precipitation/ERA5][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][Precipitation/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][Precipitation/ERA5][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/CERESed4.2][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/CERESed4.2][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/GEWEX.SRB][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/GEWEX.SRB][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/WRMC.BSRN][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/WRMC.BSRN][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/ERA5][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceDownwardSWRadiation/ERA5][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/CERESed4.2][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/CERESed4.2][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/CERESed4.2][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/GEWEX.SRB][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/GEWEX.SRB][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/GEWEX.SRB][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/WRMC.BSRN][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/WRMC.BSRN][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/WRMC.BSRN][ENSEMBLE-CMIP6] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/ERA5][4460_2026-01-09_460ab2b] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/ERA5][4499_2026-01-20_77041fa] Success
+[INFO][0][modelPlots][SurfaceDownwardLWRadiation/ERA5][ENSEMBLE-CMIP6] Success
+[INFO][0][<module>][total time] 1870.7 s

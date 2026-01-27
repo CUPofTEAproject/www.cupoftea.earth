@@ -1,0 +1,864 @@
+
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <script type="text/javascript">
+
+
+ $(document).ready(function(){
+	  function getH2Children($row) {
+	      var children = [];
+	      while($row.next().hasClass('child_dataset')) {
+		  children.push($row.next());
+		  $row = $row.next();
+	      }
+	      return children;
+	  }
+	  function getH1Children($row) {
+	      var children = [];
+	      var turning_on = $row.next().is(":hidden");
+	      while($row.next().hasClass('child_dataset') ||
+		    $row.next().hasClass('child_variable')) {
+		  if(turning_on){
+		      if( ($row.next().is(":hidden")) &&
+			  ($row.next().hasClass('child_variable'))) children.push($row.next());
+		  }else{
+		      if(!($row.next().is(":hidden"))) children.push($row.next());
+		  }
+		  $row = $row.next();
+	      }
+	      return children;
+	  }
+	  $('.parent').on('click', function() {
+	      var children = getH1Children($(this));
+	      $.each(children, function() {
+		  $(this).toggle();
+	      })
+	  });
+	  $('.child_variable').on('click', function() {
+	      var children = getH2Children($(this));
+	      $.each(children, function() {
+		  $(this).toggle();
+	      })
+	  });
+	  $('.child_dataset').toggle();
+      });
+
+      function pageLoad() {
+
+	  $("table").delegate('td','mouseover mouseleave', function(e) {
+	      var table = document.getElementById("scoresTable");
+	      if (e.type == 'mouseover') {
+		  $(this).parent().addClass("hover");
+		  table.rows[0].cells[$(this).index()].style.fontWeight = "bolder";
+	      }
+	      else {
+		  $(this).parent().removeClass("hover");
+		  table.rows[0].cells[$(this).index()].style.fontWeight = "normal";
+	      }
+	  });
+
+	  colorTable();
+      }
+
+      function printRow(table,row,array,cmap) {
+	  if(typeof array == 'undefined'){
+	      for(var i = 1, col; col = table.rows[row].cells[i]; i++) {
+		  col.style.backgroundColor = "#808080";
+	      }
+	      return;
+	  }
+	  var nc = cmap.length;
+	  for(var col=0;col<array.length;col++){
+	      var clr = "#808080";
+	      if(array[col] > -900){
+                  var ae = Math.abs(array[col]);
+                  var ind;
+                  if(ae>=0.25){
+                     ind = Math.round(2*array[col]+4);
+                  }else{
+                     ind = Math.round(4*array[col]+4);
+                  }
+		  ind = Math.min(Math.max(ind,0),nc-1);
+		  clr = cmap[ind];
+	      }
+	      table.rows[row].cells[col+1].style.backgroundColor = clr;
+	  }
+      }
+
+      function colorTable() {
+
+        $.getJSON("scalars.json", function(data) {
+          var scalars = data;
+	  var scalar_option = document.getElementById("ScalarOption");
+          var region_option = document.getElementById("RegionOption");
+	  var scalar_name   = scalar_option.options[scalar_option.selectedIndex].value;
+	  scalar_name  += " " + region_option.options[region_option.selectedIndex].value;
+
+	  var PuOr = ['#b35806','#e08214','#fdb863','#fee0b6','#f7f7f7','#d8daeb','#b2abd2','#8073ac','#542788'];
+	  var GnRd = ['#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d9f0d3','#a6dba0','#5aae61','#1b7837'];
+	  var cmap = GnRd;
+	  if(document.getElementById("colorblind").checked) cmap = PuOr;
+
+	  var row = 1;
+	  var tab = "";
+	  var table = document.getElementById("scoresTable");
+	  for(let h1 in scalars){
+	      printRow(table,row,scalars[h1][scalar_name],cmap);
+	      row += 1;
+	      H1 = scalars[h1]["children"]
+	      for(let h2 in H1){
+		  printRow(table,row,H1[h2][scalar_name],cmap);
+		  row += 1;
+		  H2 = H1[h2]["children"]
+		  for(let v in H2){
+	              var s_name = scalar_name;
+                      if(h1 == "Relationships") {
+                        s_name = v.replace("/","|") + " Score " + region_option.options[region_option.selectedIndex].value;
+                      }
+		      printRow(table,row,H2[v][s_name],cmap);
+		      row += 1;
+		  }
+	      }
+	  }
+
+	  table = document.getElementById("scoresLegend");
+	  row = 0;
+	  for(var col=0;col<cmap.length;col++){
+	      table.rows[row].cells[col].style.backgroundColor = cmap[col];
+	  }
+	});
+      }
+    </script>
+    <style type="text/css">
+      .parent{
+      }
+      .child_variable{
+      }
+      .child_dataset{
+      }
+      table.table-header-rotated {
+          border-collapse: collapse;
+      }
+      th.rotate {
+          height: 158px;
+          white-space: nowrap;
+	  font-weight: normal;
+      }
+      th.rotate > div {
+          transform: translate(10px, 74px) rotate(-45deg);
+          width: 0px;
+      }
+      th.rotate > div > span {
+      }
+      td {
+	  height: 25px;
+	  width: 25px;
+	  border: 1px solid;
+      }
+      td.row-label {
+	  width: 325px;
+      }
+      a {
+	  display:block;
+	  text-decoration: none;
+      }
+      .hover {
+	  font-weight: bold;
+          border: 2px solid;
+      }
+    </style>
+
+  </head>
+  <body onload="pageLoad()">
+
+    <div data-role="page" id="MeanState">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1>ILAMB Benchmarking</h1>
+      </div>
+
+      <select id="ScalarOption" onchange="colorTable()">
+        <option value="Spatial Distribution Score">Spatial Distribution Score</option>
+        <option value="Seasonal Cycle Score">Seasonal Cycle Score</option>
+        <option value="Bias Score">Bias Score</option>
+        <option value="RMSE Score">RMSE Score</option>
+        <option value="Overall Score" selected="selected">Overall Score</option>
+        <option value="Interannual Variability Score">Interannual Variability Score</option>
+        <option value="Missed Continuous Score">Missed Continuous Score</option>
+        <option value="Missed Discontinuous Score">Missed Discontinuous Score</option>
+        <option value="Excess Score">Excess Score</option>
+        <option value="Evapotranspiration|GLEAMv3.3a Score">Evapotranspiration|GLEAMv3.3a Score</option>
+        <option value="Precipitation|GPCPv2.3 Score">Precipitation|GPCPv2.3 Score</option>
+        <option value="SurfaceDownwardSWRadiation|CERESed4.2 Score">SurfaceDownwardSWRadiation|CERESed4.2 Score</option>
+        <option value="SurfaceNetSWRadiation|CERESed4.2 Score">SurfaceNetSWRadiation|CERESed4.2 Score</option>
+        <option value="SurfaceAirTemperature|CRU4.02 Score">SurfaceAirTemperature|CRU4.02 Score</option>
+        <option value="Precipitation|ERA5 Score">Precipitation|ERA5 Score</option>
+      </select>
+      <select id="RegionOption" onchange="colorTable()">
+          <option value='global' selected="selected">Global - Land</option>
+      </select>
+
+      <form>
+	<fieldset data-role="controlgroup" data-type="horizontal" data-mini="True">
+	  <input type="checkbox" name="colorblind" id="colorblind" checked onchange="colorTable()">
+	  <label for="colorblind" >Colorblind colors</label>
+	</fieldset>
+      </form>
+
+      <center>
+	<table class="table-header-rotated" id="scoresTable">
+	  <thead>
+            <tr>
+              <th></th>
+              <th class="rotate"><div>4460_2026-01-09_460ab2b</div></th>
+              <th class="rotate"><div>4499_2026-01-20_77041fa</div></th>
+              <th class="rotate"><div>ENSEMBLE-CMIP6</div></th>
+            </tr>
+	  </thead>
+	  <tbody>
+	    <tr class="parent" bgcolor="#ECFFE6">
+              <td class="row-label">Ecosystem and Carbon Cycle</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_variable" bgcolor="#ECFFE6">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Gross Primary Productivity</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#ECFFE6">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FLUXCOM</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#ECFFE6">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/GrossPrimaryProductivity/WECANN/WECANN.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WECANN</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/WECANN/WECANN.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/WECANN/WECANN.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/WECANN/WECANN.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#ECFFE6">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Net Ecosystem Exchange</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#ECFFE6">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/NetEcosystemExchange/FLUXCOM/FLUXCOM.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FLUXCOM</a></td>
+              <td><a href="EcosystemandCarbonCycle/NetEcosystemExchange/FLUXCOM/FLUXCOM.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/NetEcosystemExchange/FLUXCOM/FLUXCOM.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/NetEcosystemExchange/FLUXCOM/FLUXCOM.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#ECFFE6">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Ecosystem Respiration</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#ECFFE6">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FLUXCOM</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#ECFFE6">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Leaf Area Index</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#ECFFE6">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/LeafAreaIndex/MODIS/MODIS.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIS</a></td>
+              <td><a href="EcosystemandCarbonCycle/LeafAreaIndex/MODIS/MODIS.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/LeafAreaIndex/MODIS/MODIS.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/LeafAreaIndex/MODIS/MODIS.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="parent" bgcolor="#E6F9FF">
+              <td class="row-label">Hydrology Cycle</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_variable" bgcolor="#E6F9FF">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Evapotranspiration</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GLEAMv3.3a</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/MODIS/MODIS.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIS</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MODIS/MODIS.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MODIS/MODIS.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MODIS/MODIS.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOD16A2</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/ERA5/ERA5.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERA5</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#E6F9FF">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Evaporative Fraction</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/EvaporativeFraction/FLUXCOM/FLUXCOM.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FLUXCOM</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/FLUXCOM/FLUXCOM.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/FLUXCOM/FLUXCOM.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/FLUXCOM/FLUXCOM.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/EvaporativeFraction/CLASS/CLASS.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASS</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/CLASS/CLASS.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/CLASS/CLASS.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/CLASS/CLASS.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/EvaporativeFraction/WECANN/WECANN.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WECANN</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/WECANN/WECANN.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/WECANN/WECANN.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/WECANN/WECANN.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/EvaporativeFraction/ERA5/ERA5.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERA5</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/ERA5/ERA5.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/ERA5/ERA5.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/EvaporativeFraction/ERA5/ERA5.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#E6F9FF">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Latent Heat</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/LatentHeat/FLUXCOM/FLUXCOM.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FLUXCOM</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/FLUXCOM/FLUXCOM.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/FLUXCOM/FLUXCOM.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/FLUXCOM/FLUXCOM.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/LatentHeat/DOLCE/DOLCE.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DOLCE</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/DOLCE/DOLCE.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/DOLCE/DOLCE.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/DOLCE/DOLCE.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/LatentHeat/CLASS/CLASS.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASS</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/CLASS/CLASS.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/CLASS/CLASS.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/CLASS/CLASS.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/LatentHeat/WECANN/WECANN.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WECANN</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/WECANN/WECANN.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/WECANN/WECANN.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/WECANN/WECANN.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/LatentHeat/ERA5/ERA5.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERA5</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/ERA5/ERA5.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/ERA5/ERA5.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/LatentHeat/ERA5/ERA5.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#E6F9FF">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Runoff</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/Runoff/Dai/Dai.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dai</a></td>
+              <td><a href="HydrologyCycle/Runoff/Dai/Dai.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Runoff/Dai/Dai.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Runoff/Dai/Dai.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/Runoff/LORA/LORA.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LORA</a></td>
+              <td><a href="HydrologyCycle/Runoff/LORA/LORA.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Runoff/LORA/LORA.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Runoff/LORA/LORA.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/Runoff/CLASS/CLASS.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASS</a></td>
+              <td><a href="HydrologyCycle/Runoff/CLASS/CLASS.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Runoff/CLASS/CLASS.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Runoff/CLASS/CLASS.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/Runoff/ERA5/ERA5.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERA5</a></td>
+              <td><a href="HydrologyCycle/Runoff/ERA5/ERA5.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Runoff/ERA5/ERA5.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Runoff/ERA5/ERA5.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#E6F9FF">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Sensible Heat</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/SensibleHeat/FLUXCOM/FLUXCOM.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FLUXCOM</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/FLUXCOM/FLUXCOM.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/FLUXCOM/FLUXCOM.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/FLUXCOM/FLUXCOM.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/SensibleHeat/CLASS/CLASS.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASS</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/CLASS/CLASS.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/CLASS/CLASS.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/CLASS/CLASS.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/SensibleHeat/WECANN/WECANN.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WECANN</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/WECANN/WECANN.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/WECANN/WECANN.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/WECANN/WECANN.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/SensibleHeat/ERA5/ERA5.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERA5</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/ERA5/ERA5.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/ERA5/ERA5.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SensibleHeat/ERA5/ERA5.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#E6F9FF">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Terrestrial Water Storage Anomaly</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/TerrestrialWaterStorageAnomaly/GRACE/GRACE.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GRACE</a></td>
+              <td><a href="HydrologyCycle/TerrestrialWaterStorageAnomaly/GRACE/GRACE.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/TerrestrialWaterStorageAnomaly/GRACE/GRACE.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/TerrestrialWaterStorageAnomaly/GRACE/GRACE.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#E6F9FF">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Snow Water Equivalent</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/SnowWaterEquivalent/CanSISE/CanSISE.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CanSISE</a></td>
+              <td><a href="HydrologyCycle/SnowWaterEquivalent/CanSISE/CanSISE.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SnowWaterEquivalent/CanSISE/CanSISE.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SnowWaterEquivalent/CanSISE/CanSISE.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#E6F9FF">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Permafrost</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/Permafrost/Brown2002/Brown2002.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brown2002</a></td>
+              <td><a href="HydrologyCycle/Permafrost/Brown2002/Brown2002.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Permafrost/Brown2002/Brown2002.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Permafrost/Brown2002/Brown2002.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/Permafrost/Obu2018/Obu2018.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Obu2018</a></td>
+              <td><a href="HydrologyCycle/Permafrost/Obu2018/Obu2018.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Permafrost/Obu2018/Obu2018.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Permafrost/Obu2018/Obu2018.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#E6F9FF">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Surface Soil Moisture</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/SurfaceSoilMoisture/WangMao/WangMao.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WangMao</a></td>
+              <td><a href="HydrologyCycle/SurfaceSoilMoisture/WangMao/WangMao.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SurfaceSoilMoisture/WangMao/WangMao.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SurfaceSoilMoisture/WangMao/WangMao.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#E6F9FF">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Snow Cover Fraction</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#E6F9FF">
+              <td class="row-label"><a href="./HydrologyCycle/SnowCoverFraction/MODIS/MODIS.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIS</a></td>
+              <td><a href="HydrologyCycle/SnowCoverFraction/MODIS/MODIS.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SnowCoverFraction/MODIS/MODIS.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/SnowCoverFraction/MODIS/MODIS.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="parent" bgcolor="#FFECE6">
+              <td class="row-label">Radiation and Energy Cycle</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_variable" bgcolor="#FFECE6">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Albedo</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/Albedo/CERESed4.2/CERESed4.2.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CERESed4.2</a></td>
+              <td><a href="RadiationandEnergyCycle/Albedo/CERESed4.2/CERESed4.2.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/Albedo/CERESed4.2/CERESed4.2.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/Albedo/CERESed4.2/CERESed4.2.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/Albedo/GEWEX.SRB/GEWEX.SRB.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GEWEX.SRB</a></td>
+              <td><a href="RadiationandEnergyCycle/Albedo/GEWEX.SRB/GEWEX.SRB.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/Albedo/GEWEX.SRB/GEWEX.SRB.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/Albedo/GEWEX.SRB/GEWEX.SRB.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#FFECE6">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Surface Upward SW Radiation</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceUpwardSWRadiation/CERESed4.2/CERESed4.2.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CERESed4.2</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/CERESed4.2/CERESed4.2.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/CERESed4.2/CERESed4.2.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/CERESed4.2/CERESed4.2.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceUpwardSWRadiation/GEWEX.SRB/GEWEX.SRB.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GEWEX.SRB</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceUpwardSWRadiation/WRMC.BSRN/WRMC.BSRN.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRMC.BSRN</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceUpwardSWRadiation/ERA5/ERA5.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERA5</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/ERA5/ERA5.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/ERA5/ERA5.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardSWRadiation/ERA5/ERA5.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#FFECE6">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Surface Net SW Radiation</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceNetSWRadiation/CERESed4.2/CERESed4.2.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CERESed4.2</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetSWRadiation/CERESed4.2/CERESed4.2.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetSWRadiation/CERESed4.2/CERESed4.2.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetSWRadiation/CERESed4.2/CERESed4.2.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceNetSWRadiation/GEWEX.SRB/GEWEX.SRB.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GEWEX.SRB</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetSWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetSWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetSWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceNetSWRadiation/WRMC.BSRN/WRMC.BSRN.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRMC.BSRN</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetSWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetSWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetSWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#FFECE6">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Surface Upward LW Radiation</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceUpwardLWRadiation/CERESed4.2/CERESed4.2.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CERESed4.2</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/CERESed4.2/CERESed4.2.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/CERESed4.2/CERESed4.2.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/CERESed4.2/CERESed4.2.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceUpwardLWRadiation/GEWEX.SRB/GEWEX.SRB.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GEWEX.SRB</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceUpwardLWRadiation/WRMC.BSRN/WRMC.BSRN.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRMC.BSRN</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceUpwardLWRadiation/ERA5/ERA5.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERA5</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/ERA5/ERA5.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/ERA5/ERA5.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceUpwardLWRadiation/ERA5/ERA5.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#FFECE6">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Surface Net LW Radiation</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceNetLWRadiation/CERESed4.2/CERESed4.2.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CERESed4.2</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetLWRadiation/CERESed4.2/CERESed4.2.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetLWRadiation/CERESed4.2/CERESed4.2.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetLWRadiation/CERESed4.2/CERESed4.2.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceNetLWRadiation/GEWEX.SRB/GEWEX.SRB.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GEWEX.SRB</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetLWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetLWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetLWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceNetLWRadiation/WRMC.BSRN/WRMC.BSRN.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRMC.BSRN</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetLWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetLWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetLWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#FFECE6">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Surface Net Radiation</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceNetRadiation/CERESed4.2/CERESed4.2.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CERESed4.2</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/CERESed4.2/CERESed4.2.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/CERESed4.2/CERESed4.2.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/CERESed4.2/CERESed4.2.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceNetRadiation/GEWEX.SRB/GEWEX.SRB.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GEWEX.SRB</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/GEWEX.SRB/GEWEX.SRB.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceNetRadiation/WRMC.BSRN/WRMC.BSRN.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRMC.BSRN</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/WRMC.BSRN/WRMC.BSRN.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/SurfaceNetRadiation/CLASS/CLASS.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASS</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/CLASS/CLASS.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/CLASS/CLASS.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/SurfaceNetRadiation/CLASS/CLASS.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#FFECE6">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Ground Heat Flux</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#FFECE6">
+              <td class="row-label"><a href="./RadiationandEnergyCycle/GroundHeatFlux/CLASS/CLASS.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASS</a></td>
+              <td><a href="RadiationandEnergyCycle/GroundHeatFlux/CLASS/CLASS.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/GroundHeatFlux/CLASS/CLASS.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="RadiationandEnergyCycle/GroundHeatFlux/CLASS/CLASS.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="parent" bgcolor="#EDEDED">
+              <td class="row-label">Forcings</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_variable" bgcolor="#EDEDED">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Surface Air Temperature</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/SurfaceAirTemperature/CRU4.02/CRU4.02.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CRU4.02</a></td>
+              <td><a href="Forcings/SurfaceAirTemperature/CRU4.02/CRU4.02.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceAirTemperature/CRU4.02/CRU4.02.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceAirTemperature/CRU4.02/CRU4.02.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/SurfaceAirTemperature/ERA5/ERA5.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERA5</a></td>
+              <td><a href="Forcings/SurfaceAirTemperature/ERA5/ERA5.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceAirTemperature/ERA5/ERA5.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceAirTemperature/ERA5/ERA5.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#EDEDED">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Precipitation</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/Precipitation/CMAPv1904/CMAPv1904.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CMAPv1904</a></td>
+              <td><a href="Forcings/Precipitation/CMAPv1904/CMAPv1904.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/Precipitation/CMAPv1904/CMAPv1904.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/Precipitation/CMAPv1904/CMAPv1904.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/Precipitation/GPCCv2018/GPCCv2018.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GPCCv2018</a></td>
+              <td><a href="Forcings/Precipitation/GPCCv2018/GPCCv2018.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/Precipitation/GPCCv2018/GPCCv2018.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/Precipitation/GPCCv2018/GPCCv2018.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/Precipitation/GPCPv2.3/GPCPv2.3.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GPCPv2.3</a></td>
+              <td><a href="Forcings/Precipitation/GPCPv2.3/GPCPv2.3.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/Precipitation/GPCPv2.3/GPCPv2.3.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/Precipitation/GPCPv2.3/GPCPv2.3.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/Precipitation/CLASS/CLASS.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLASS</a></td>
+              <td><a href="Forcings/Precipitation/CLASS/CLASS.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/Precipitation/CLASS/CLASS.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/Precipitation/CLASS/CLASS.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/Precipitation/ERA5/ERA5.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERA5</a></td>
+              <td><a href="Forcings/Precipitation/ERA5/ERA5.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/Precipitation/ERA5/ERA5.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/Precipitation/ERA5/ERA5.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#EDEDED">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Surface Downward SW Radiation</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/SurfaceDownwardSWRadiation/CERESed4.2/CERESed4.2.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CERESed4.2</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/CERESed4.2/CERESed4.2.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/CERESed4.2/CERESed4.2.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/CERESed4.2/CERESed4.2.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/SurfaceDownwardSWRadiation/GEWEX.SRB/GEWEX.SRB.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GEWEX.SRB</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/SurfaceDownwardSWRadiation/WRMC.BSRN/WRMC.BSRN.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRMC.BSRN</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/SurfaceDownwardSWRadiation/ERA5/ERA5.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERA5</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/ERA5/ERA5.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/ERA5/ERA5.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardSWRadiation/ERA5/ERA5.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#EDEDED">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Surface Downward LW Radiation</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/SurfaceDownwardLWRadiation/CERESed4.2/CERESed4.2.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CERESed4.2</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/CERESed4.2/CERESed4.2.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/CERESed4.2/CERESed4.2.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/CERESed4.2/CERESed4.2.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/SurfaceDownwardLWRadiation/GEWEX.SRB/GEWEX.SRB.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GEWEX.SRB</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/GEWEX.SRB/GEWEX.SRB.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/SurfaceDownwardLWRadiation/WRMC.BSRN/WRMC.BSRN.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRMC.BSRN</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/WRMC.BSRN/WRMC.BSRN.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#EDEDED">
+              <td class="row-label"><a href="./Forcings/SurfaceDownwardLWRadiation/ERA5/ERA5.html" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ERA5</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/ERA5/ERA5.html?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/ERA5/ERA5.html?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="Forcings/SurfaceDownwardLWRadiation/ERA5/ERA5.html?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="parent" bgcolor="#fff2e5">
+              <td class="row-label">Relationships</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_variable" bgcolor="#fff2e5">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;GrossPrimaryProductivity/FLUXCOM</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Evapotranspiration/GLEAMv3.3a</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Precipitation/GPCPv2.3</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SurfaceDownwardSWRadiation/CERESed4.2</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SurfaceNetSWRadiation/CERESed4.2</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SurfaceAirTemperature/CRU4.02</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/GrossPrimaryProductivity/FLUXCOM/FLUXCOM.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#fff2e5">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;EcosystemRespiration/FLUXCOM</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Evapotranspiration/GLEAMv3.3a</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Precipitation/GPCPv2.3</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SurfaceDownwardSWRadiation/CERESed4.2</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SurfaceNetSWRadiation/CERESed4.2</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SurfaceAirTemperature/CRU4.02</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="EcosystemandCarbonCycle/EcosystemRespiration/FLUXCOM/FLUXCOM.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#fff2e5">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Evapotranspiration/GLEAMv3.3a</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Precipitation/GPCPv2.3</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SurfaceAirTemperature/CRU4.02</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/GLEAMv3.3a/GLEAMv3.3a.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#fff2e5">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Evapotranspiration/MODIS</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/MODIS/MODIS.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Precipitation/GPCPv2.3</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MODIS/MODIS.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MODIS/MODIS.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MODIS/MODIS.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/MODIS/MODIS.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SurfaceAirTemperature/CRU4.02</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MODIS/MODIS.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MODIS/MODIS.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MODIS/MODIS.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#fff2e5">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Evapotranspiration/MOD16A2</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Precipitation/GPCPv2.3</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SurfaceAirTemperature/CRU4.02</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/MOD16A2/MOD16A2.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_variable" bgcolor="#fff2e5">
+              <td class="row-label">&nbsp;&nbsp;&nbsp;&nbsp;Evapotranspiration/ERA5</td>
+              <td></td>
+              <td></td>
+              <td></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Precipitation/GPCPv2.3</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SurfaceAirTemperature/CRU4.02</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	    <tr class="child_dataset" bgcolor="#fff2e5">
+              <td class="row-label"><a href="./HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Precipitation/ERA5</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships?model=4460_2026-01-09_460ab2b" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships?model=4499_2026-01-20_77041fa" target="_blank">&nbsp;</a></td>
+              <td><a href="HydrologyCycle/Evapotranspiration/ERA5/ERA5.html#Relationships?model=ENSEMBLE-CMIP6" target="_blank">&nbsp;</a></td>
+	  </tbody>
+	</table>
+
+
+	<p>Relative Scale
+	<table class="table-header-rotated" id="scoresLegend">
+	  <tbody>
+            <tr>
+              <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+	    </tr>
+	  </tbody>
+	</table>
+	Worse Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Better Value
+	<table class="table-header-rotated" id="missingLegend">
+	  <tbody>
+            <tr>
+              <td bgcolor="#808080"></td>
+	    </tr>
+	  </tbody>
+	</table>Missing Data or Error
+      </center>
+
+      <div data-role="footer">
+        <center>ILAMB 2.7.2</center>
+      </div>
+    </body>
+</html>

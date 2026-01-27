@@ -1,0 +1,1 @@
+{"udcJsonLoc": "scalar_database.json", "udcDimSets": {"x_dim": "model", "y_dim": "metric", "fxdim": {"region": "global", "statistic": "Overall Score"}}, "udcScreenHeight": 0, "udcCellValue": 1, "udcNormType": "standarized", "udcNormAxis": "row", "logofile": "None"}

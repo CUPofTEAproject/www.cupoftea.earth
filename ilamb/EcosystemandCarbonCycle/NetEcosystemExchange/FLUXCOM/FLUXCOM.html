@@ -1,0 +1,145 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.16.5/math.min.js"></script>
+    <script>
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+            }
+            return(false);
+        }
+    </script>
+    <script type='text/javascript'>
+        function pageLoad() {
+        }
+    </script>
+    <script type='text/javascript'>
+      function AllSelect() {
+        var header = "CNAME / RNAME / MNAME";
+        var CNAME  = "NetEcosystemExchange / FLUXCOM / 1980-2014";
+        header     = header.replace("CNAME",CNAME);
+        var rid    = document.getElementById("AllModelsRegion").selectedIndex;
+        var RNAME  = document.getElementById("AllModelsRegion").options[rid].value;
+        var pid    = document.getElementById("AllModelsPlot").selectedIndex;
+        var PNAME  = document.getElementById("AllModelsPlot").options[pid].value;
+        header     = header.replace("RNAME",RNAME);
+        $("#AllModelsHead").text(header);
+        if(0){
+          document.getElementById("Benchmark_div").style.display = 'none';
+        }else{
+          document.getElementById("Benchmark_div").style.display = 'inline';
+        }
+        if(0){
+        }else{
+        }
+      }
+
+      $(document).on('pageshow', '[data-role="page"]', function(){
+        AllSelect()
+      });
+    </script>
+    <style type="text/css">
+      .container{
+        display:inline;
+      }
+      .break{
+        clear:left;
+      }
+      .child{
+        margin-bottom:10px;
+        display:inline-block;
+        padding:5px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      table.table-header-rotated {
+          border-collapse: collapse;
+      }
+      td {
+          text-align: center;
+          padding: 10px 5px;
+          border: 1px solid #ccc;
+      }
+      th {
+          padding: 5px 10px;
+      }
+      th.rotate {
+          height: 280px;
+          white-space: nowrap;
+      }
+      th.rotate > div {
+          transform: translate(10px, 135px) rotate(-45deg);
+          width: 0px;
+      }
+      th.rotate > div > span {
+      }
+      th.row-header {
+          padding: 0px 10px;
+          text-align: right;
+      }
+      td.divider {
+          width: 0px;
+          border: 0px solid #ccc;
+          padding: 0px 0px
+      }
+    </style>
+  </head>
+  <body onload="pageLoad()">
+    <div data-role="page" id="MeanState">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="MeanStateHead">Mean State</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState' class=ui-btn-active ui-state-persist>Mean State</a></li>
+            <li><a href='#AllModels'>All Models</a></li>
+            <li><a href='#DataInformation'>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+        <div data-role="collapsible" data-collapsed="false"><h1>Spatially integrated regional mean</h1>
+        <div class="container" id="legend_compcycle_div">
+          <div class="child">
+          <center>MODEL&nbsp;COLORS</center>
+          <img src="" id="legend_compcycle" alt="Data not available" ></img>
+          </div>
+        </div>
+        </div>
+    </div>
+    <div data-role="page" id="AllModels">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="AllModelsHead">All Models</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState'>Mean State</a></li>
+            <li><a href='#AllModels' class=ui-btn-active ui-state-persist>All Models</a></li>
+            <li><a href='#DataInformation'>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+      <select id="AllModelsRegion" onchange="AllSelect()">
+        <option value='global' selected="selected">Global - Land</option>
+      </select>
+    </div>
+    <div data-role="page" id="DataInformation">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="DataInformationHead">Data Information</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState'>Mean State</a></li>
+            <li><a href='#AllModels'>All Models</a></li>
+            <li><a href='#DataInformation' class=ui-btn-active ui-state-persist>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+      
+<p><dl><dt><b>&nbsp;&nbsp;Title:</dt></b><dd>FLUXCOM (RS+METEO) Global Land Carbon Fluxes using CRUNCEP climate data</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Version:</dt></b><dd>1</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Institutions:</dt></b><dd>Department Biogeochemical Integration, Max Planck Institute for Biogeochemistry, Germany</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Source:</dt></b><dd>Data generated by Artificial Neural Networks and forced with CRUNCEPv6 meteorological data and MODIS (RS+METEO)</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;History:</dt></b><dd>2020-08-25: downloaded source from ftp://ftp.bgc-jena.mpg.de/pub/outgoing/FluxCom/CarbonFluxes_v1_2017/RS+METEO/CRUNCEPv6/raw/monthly/</dd><dd>2020-08-25: converted to netCDF, additionally we apply a mask where |var|<1e-15 for all time.</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;References:</dt></b><dd>Jung, M., M. Reichstein, C.R. Schwalm, C. Huntingford, S. Sitch, A. Ahlstrom, A. Arneth, G. Camps-Valls, P. Ciais, P. Friedlingstein, F. Gans, K. Ichii, A.K. Jain, E. Kato, D. Papale, B. Poulter, B. Raduly, C. Rodenbeck, G. Tramontana, N. Viovy, Y.P. Wang, U. Weber, S. Zaehle and N. Zeng (2017), Compensatory water effects link yearly global land CO2 sink changes to temperature, <i>Nature</i>, <i>541</i>, 516-520, <a href='https://doi.org/10.1038/nature20780'>doi:10.1038/nature20780</a></dd><br><dd>Tramontana, G., M. Jung, C.R. Schwalm, K. Ichii, G. Camps-Valls, B. Raduly, M. Reichstein, M.A. Arain, A. Cescatti, G. Kiely, L. Merbold, P. Serrano-Ortiz, S. Sickert, S. Wolf, and D. Papale (2016), Predicting carbon dioxide and energy fluxes across global FLUXNET sites with regression algorithms, <i>Biogeosciences</i>, <i>13</i>, 4291-4313, <a href='https://doi.org/10.5194/bg-13-4291-2016'>doi:10.5194/bg-13-4291-2016</a></dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Comments:</dt></b><dd>time_period: 1980-01 through 2013-12</dd><dd>temporal_resolution: monthly</dd><dd>spatial_resolution: 0.5 degree</dd><dd>units: g m-2 day-1</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Convention:</dt></b><dd>CF-1.8</dd></dl></p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,330 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.16.5/math.min.js"></script>
+    <script>
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+            }
+            return(false);
+        }
+    </script>
+    <script type='text/javascript'>
+        function pageLoad() {
+           pageLoadMeanState();
+        }
+    </script>
+    <script type='text/javascript'>
+
+        function updateImagesAndHeadersMeanState(){
+            var rsel  = document.getElementById("MeanStateRegion");
+            var msel  = document.getElementById("MeanStateModel");
+            var rid   = rsel.selectedIndex;
+            var mid   = msel.selectedIndex;
+            var RNAME = rsel.options[rid].value;
+            var MNAME = msel.options[mid].value;
+            var CNAME = "Permafrost / Obu2018 / 2000-2016";
+            var head  = "CNAME / RNAME / MNAME";
+            head      = head.replace("CNAME",CNAME).replace("RNAME",RNAME).replace("MNAME",MNAME);
+            $("#MeanStateHead").text(head);
+            
+          document.getElementById('benchmark_timeint').src =  'Benchmark_global_timeint.png'
+          document.getElementById('timeint').src =  MNAME + '_global_timeint.png'
+          document.getElementById('bias').src =  MNAME + '_global_bias.png'
+        }
+
+        function highlightRowMeanState(cell) {
+            var select = document.getElementById("MeanStateRegion");
+            for (var i = 0; i < select.length; i++){
+                var table = document.getElementById("MeanState_table_" + select.options[i].value);
+                var rows  = table.getElementsByTagName("tr");
+                for (var r = 1; r < rows.length; r++) {
+                    for (var c = 0; c < rows[r].cells.length-5; c++) {
+                        rows[r].cells[c].style.backgroundColor = "#ffffff";
+                    }
+                }
+                var r = cell.closest("tr").rowIndex;
+                document.getElementById("MeanStateModel").selectedIndex = r-1;
+                for (var c = 0; c < rows[r].cells.length-5; c++) {
+                    rows[r].cells[c].style.backgroundColor = "#c1c1c1";
+                }
+            }
+            updateImagesAndHeadersMeanState();
+        }
+
+        function paintScoreCellsMeanState(RNAME) {
+
+	    var PuOr = ['#b35806','#e08214','#fdb863','#fee0b6','#f7f7f7','#d8daeb','#b2abd2','#8073ac','#542788'];
+	    var GnRd = ['#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d9f0d3','#a6dba0','#5aae61','#1b7837'];
+	    var colors = GnRd;
+            var nc = colors.length;
+            var table  = document.getElementById("MeanState_table_" + RNAME);
+            var rows   = table.getElementsByTagName("tr");
+            for (var c = rows[0].cells.length-4; c < rows[0].cells.length; c++) {
+                var scores = [];
+                for (var r = 1; r < rows.length; r++) {
+                    val = rows[r].cells[c].innerHTML;
+                    if (val=="") {
+                      scores[r-1] = 0;
+                    }else{
+                      scores[r-1] = parseFloat(val);
+                    }
+                }
+                var mean = math.mean(scores);
+                var std  = math.max(0.02,math.std(scores));
+                for (var r = 1; r < rows.length; r++) {
+                    scores[r-1] = Math.min(+2,Math.max(-2,(scores[r-1]-mean)/std));
+                }
+                for (var r = 1; r < rows.length; r++) {
+		    var e  = scores[r-1];
+                    var ae = Math.abs(e);
+                    var clr;
+                    if(ae >= 0.25){
+                      clr = math.round(2*e+4);
+                    }else{
+		      clr = math.round(4*e+4);
+                    }
+                    clr = math.min(math.max(0,clr),8);
+                    rows[r].cells[c].style.backgroundColor = colors[clr];
+                }
+            }
+        }
+
+        function pageLoadMeanState() {
+            var select = document.getElementById("MeanStateRegion");
+            var region = getQueryVariable("region");
+            var model  = getQueryVariable("model");
+            if (region) {
+                for (var i = 0; i < select.length; i++){
+                    if (select.options[i].value == region) select.selectedIndex = i;
+                }
+            }
+            var table = document.getElementById("MeanState_table_" + select.options[select.selectedIndex].value);
+            var rows  = table.getElementsByTagName("tr");
+            if (model) {
+                for (var r = 0; r < rows.length; r++) {
+                    if(rows[r].cells[0].innerHTML==model) highlightRowMeanState(rows[r].cells[0]);
+                }
+            }else{
+                highlightRowMeanState(rows[1]);
+            }
+            for (var i = 0; i < select.length; i++){
+                paintScoreCellsMeanState(select.options[i].value);
+            }
+            changeRegionMeanState();
+        }
+
+        function changeRegionMeanState() {
+            var select = document.getElementById("MeanStateRegion");
+            for (var i = 0; i < select.length; i++){
+                RNAME = select.options[i].value;
+                if (i == select.selectedIndex) {
+                    document.getElementById("MeanState_table_" + RNAME).style.display = "table";
+                }else{
+                    document.getElementById("MeanState_table_" + RNAME).style.display = "none";
+                }
+            }
+            updateImagesAndHeadersMeanState();
+        }
+      function AllSelect() {
+        var header = "CNAME / RNAME / MNAME";
+        var CNAME  = "Permafrost / Obu2018 / 2000-2016";
+        header     = header.replace("CNAME",CNAME);
+        var rid    = document.getElementById("AllModelsRegion").selectedIndex;
+        var RNAME  = document.getElementById("AllModelsRegion").options[rid].value;
+        var pid    = document.getElementById("AllModelsPlot").selectedIndex;
+        var PNAME  = document.getElementById("AllModelsPlot").options[pid].value;
+        header     = header.replace("RNAME",RNAME);
+        $("#AllModelsHead").text(header);
+        if(PNAME == "bias"){
+          document.getElementById("Benchmark_div").style.display = 'none';
+        }else{
+          document.getElementById("Benchmark_div").style.display = 'inline';
+        }
+        if(PNAME == "timeint" || PNAME == "bias"){
+          document.getElementById("ENSEMBLE-CMIP6_legend").style.display = 'none';
+        }else{
+          document.getElementById("ENSEMBLE-CMIP6_legend").style.display = 'inline';
+        }
+        document.getElementById('ENSEMBLE-CMIP6').src = 'ENSEMBLE-CMIP6_' + RNAME + '_' + PNAME + '.png';
+        document.getElementById('ENSEMBLE-CMIP6_legend').src = 'legend_' + PNAME + '.png';
+      }
+
+      $(document).on('pageshow', '[data-role="page"]', function(){
+        AllSelect()
+      });
+    </script>
+    <style type="text/css">
+      .container{
+        display:inline;
+      }
+      .break{
+        clear:left;
+      }
+      .child{
+        margin-bottom:10px;
+        display:inline-block;
+        padding:5px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      table.table-header-rotated {
+          border-collapse: collapse;
+      }
+      td {
+          text-align: center;
+          padding: 10px 5px;
+          border: 1px solid #ccc;
+      }
+      th {
+          padding: 5px 10px;
+      }
+      th.rotate {
+          height: 280px;
+          white-space: nowrap;
+      }
+      th.rotate > div {
+          transform: translate(10px, 135px) rotate(-45deg);
+          width: 0px;
+      }
+      th.rotate > div > span {
+      }
+      th.row-header {
+          padding: 0px 10px;
+          text-align: right;
+      }
+      td.divider {
+          width: 0px;
+          border: 0px solid #ccc;
+          padding: 0px 0px
+      }
+    </style>
+  </head>
+  <body onload="pageLoad()">
+    <div data-role="page" id="MeanState">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="MeanStateHead">Mean State</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState' class=ui-btn-active ui-state-persist>Mean State</a></li>
+            <li><a href='#AllModels'>All Models</a></li>
+            <li><a href='#DataInformation'>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+      <select id="MeanStateRegion" onchange="changeRegionMeanState()">
+        <option value='global' selected="selected">Global - Land</option>
+      </select>
+      <div style="display:none">
+      <select id="MeanStateModel">
+        <option value='ENSEMBLE-CMIP6'>ENSEMBLE-CMIP6</option>
+      </select>
+      </div>
+        <center>
+        <table class="table-header-rotated" id="MeanState_table_global">
+           <thead>
+             <tr>
+               <th></th>
+               <th class="rotate"><div><span>Download Data</span></div></th>
+               <th class="rotate"><div><span>Total Area [1e6 km2]</span></div></th>
+               <th class="rotate"><div><span>Overlap Continuous Area [1e6 km2]</span></div></th>
+               <th class="rotate"><div><span>Overlap Discontinuous Area [1e6 km2]</span></div></th>
+               <th class="rotate"><div><span>Missed Continuous Area [1e6 km2]</span></div></th>
+               <th class="rotate"><div><span>Missed Discontinuous Area [1e6 km2]</span></div></th>
+               <th class="rotate"><div><span>Excess Area [1e6 km2]</span></div></th>
+               <th></th>
+               <th class="rotate"><div><span>Missed Continuous Score [1]</span></div></th>
+               <th class="rotate"><div><span>Missed Discontinuous Score [1]</span></div></th>
+               <th class="rotate"><div><span>Excess Score [1]</span></div></th>
+               <th class="rotate"><div><span>Overall Score [1]</span></div></th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr>
+               <td onclick="highlightRowMeanState(this)" class="row-header">ENSEMBLE-CMIP6</td>
+               <td onclick="highlightRowMeanState(this)"><a href="Obu2018_ENSEMBLE-CMIP6.nc" download>[-]</a></td>
+               <td onclick="highlightRowMeanState(this)">0.701</td>
+               <td onclick="highlightRowMeanState(this)">0.533</td>
+               <td onclick="highlightRowMeanState(this)">0.00679</td>
+               <td onclick="highlightRowMeanState(this)">11.0</td>
+               <td onclick="highlightRowMeanState(this)">3.70</td>
+               <td onclick="highlightRowMeanState(this)">0.329</td>
+               <td onclick="highlightRowMeanState(this)" class="divider"></td>
+               <td onclick="highlightRowMeanState(this)">0.0464</td>
+               <td onclick="highlightRowMeanState(this)">0.00183</td>
+               <td onclick="highlightRowMeanState(this)">0.760</td>
+               <td onclick="highlightRowMeanState(this)">0.396</td>
+             </tr>
+          </tbody>
+        </table>
+        </center>
+        <div data-role="collapsible" data-collapsed="false"><h1>Temporally integrated period mean</h1>
+        <div class="container" id="benchmark_timeint_div">
+          <div class="child">
+          <center>BENCHMARK&nbsp;EXTENT</center>
+          <img src="" id="benchmark_timeint" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="timeint_div">
+          <div class="child">
+          <center>MODEL&nbsp;EXTENT</center>
+          <img src="" id="timeint" alt="Data not available" ></img>
+          </div>
+        </div>
+        <div class="container" id="bias_div">
+          <div class="child">
+          <center>BIAS</center>
+          <img src="" id="bias" alt="Data not available" ></img>
+          </div>
+        </div>
+        </div>
+    </div>
+    <div data-role="page" id="AllModels">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="AllModelsHead">All Models</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState'>Mean State</a></li>
+            <li><a href='#AllModels' class=ui-btn-active ui-state-persist>All Models</a></li>
+            <li><a href='#DataInformation'>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+      <select id="AllModelsRegion" onchange="AllSelect()">
+        <option value='global' selected="selected">Global - Land</option>
+      </select>
+      <select id="AllModelsPlot" onchange="AllSelect()">
+        <option value='timeint' selected="selected">Temporally integrated period mean</option>
+        <option value='bias'>Temporally integrated period mean bias</option>
+      </select><div id="Benchmark_div"></div>
+        <div class="container" id="ENSEMBLE-CMIP6_div">
+          <div class="child">
+          <center>ENSEMBLE-CMIP6</center>
+          <img src="" id="ENSEMBLE-CMIP6" alt="Data not available" ></img>
+          <center><img src="legend_ENSEMBLE-CMIP6.png" id="ENSEMBLE-CMIP6_legend"  alt="Data not available" ></img></center>
+          </div>
+        </div>
+    </div>
+    <div data-role="page" id="DataInformation">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="DataInformationHead">Data Information</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState'>Mean State</a></li>
+            <li><a href='#AllModels'>All Models</a></li>
+            <li><a href='#DataInformation' class=ui-btn-active ui-state-persist>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+      
+<p><dl><dt><b>&nbsp;&nbsp;Title:</dt></b><dd>Ground Temperature Map, 2000-2016, Northern Hemisphere Permafrost</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Version:</dt></b><dd>2019.04</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Institutions:</dt></b><dd>Alfred Wegener Institute, Helmholtz Centre for Polar and Marine Research</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Source:</dt></b><dd><a href='https://store.pangaea.de/Publications/ObuJ-etal_2018/UiO_PEX_5.0_20181127_2000_2016_25km.nc'>https://store.pangaea.de/Publications/ObuJ-etal_2018/UiO_PEX_5.0_20181127_2000_2016_25km.nc</a></dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;History:</dt></b><dd>Downloaded on 2023-07-31 and generated netCDF file on 2023-08-15 with <a href='https://github.com/rubisco-sfa/ILAMB-Data/blob/master/permafrost/Obu2018/convert.py. We have imposed a glaciated area mask in particular to remove much of Greenland where some models report soil temperatures.'>https://github.com/rubisco-sfa/ILAMB-Data/blob/master/permafrost/Obu2018/convert.py. We have imposed a glaciated area mask in particular to remove much of Greenland where some models report soil temperatures.</a></dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;References:</dt></b><dd> (2018), <i>Alfred Wegener Institute, Helmholtz Centre for Polar and Marine Research, Bremerhaven</i>, 10.1594/PANGAEA.888600</dd><br><dd>Jaroslav Obu and Sebastian Westermann and Annett Bartsch and Nikolai Berdnikov and Hanne H. Christiansen and Avirmed Dashtseren and Reynald Delaloye and Bo Elberling and Bernd Etzelmüller and Alexander Kholodov and Artem Khomutov and Andreas Kääb and Marina O. Leibman and Antoni G. Lewkowicz and Santosh K. Panda and Vladimir Romanovsky and Robert G. Way and Andreas Westergaard-Nielsen and Tonghua Wu and Jambaljav Yamkhin and Defu Zou (2019), <i>Earth-Science Reviews</i>, 10.1016/j.earscirev.2019.04.023</dd></dl></p>
+    </div>
+  </body>
+</html>

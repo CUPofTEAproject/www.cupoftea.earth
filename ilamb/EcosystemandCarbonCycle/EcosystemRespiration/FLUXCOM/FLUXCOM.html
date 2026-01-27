@@ -1,0 +1,163 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.16.5/math.min.js"></script>
+    <script>
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+            }
+            return(false);
+        }
+    </script>
+    <script type='text/javascript'>
+        function pageLoad() {
+        }
+    </script>
+    <script type='text/javascript'>
+      function AllSelect() {
+        var header = "CNAME / RNAME / MNAME";
+        var CNAME  = "EcosystemRespiration / FLUXCOM / 1980-2014";
+        header     = header.replace("CNAME",CNAME);
+        var rid    = document.getElementById("AllModelsRegion").selectedIndex;
+        var RNAME  = document.getElementById("AllModelsRegion").options[rid].value;
+        var pid    = document.getElementById("AllModelsPlot").selectedIndex;
+        var PNAME  = document.getElementById("AllModelsPlot").options[pid].value;
+        header     = header.replace("RNAME",RNAME);
+        $("#AllModelsHead").text(header);
+        if(0){
+          document.getElementById("Benchmark_div").style.display = 'none';
+        }else{
+          document.getElementById("Benchmark_div").style.display = 'inline';
+        }
+        if(0){
+        }else{
+        }
+      }
+
+      $(document).on('pageshow', '[data-role="page"]', function(){
+        AllSelect()
+      });
+    </script>
+    <style type="text/css">
+      .container{
+        display:inline;
+      }
+      .break{
+        clear:left;
+      }
+      .child{
+        margin-bottom:10px;
+        display:inline-block;
+        padding:5px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      table.table-header-rotated {
+          border-collapse: collapse;
+      }
+      td {
+          text-align: center;
+          padding: 10px 5px;
+          border: 1px solid #ccc;
+      }
+      th {
+          padding: 5px 10px;
+      }
+      th.rotate {
+          height: 280px;
+          white-space: nowrap;
+      }
+      th.rotate > div {
+          transform: translate(10px, 135px) rotate(-45deg);
+          width: 0px;
+      }
+      th.rotate > div > span {
+      }
+      th.row-header {
+          padding: 0px 10px;
+          text-align: right;
+      }
+      td.divider {
+          width: 0px;
+          border: 0px solid #ccc;
+          padding: 0px 0px
+      }
+    </style>
+  </head>
+  <body onload="pageLoad()">
+    <div data-role="page" id="MeanState">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="MeanStateHead">Mean State</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState' class=ui-btn-active ui-state-persist>Mean State</a></li>
+            <li><a href='#Relationships'>Relationships</a></li>
+            <li><a href='#AllModels'>All Models</a></li>
+            <li><a href='#DataInformation'>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+        <div data-role="collapsible" data-collapsed="false"><h1>Spatially integrated regional mean</h1>
+        <div class="container" id="legend_compcycle_div">
+          <div class="child">
+          <center>MODEL&nbsp;COLORS</center>
+          <img src="" id="legend_compcycle" alt="Data not available" ></img>
+          </div>
+        </div>
+        </div>
+    </div>
+    <div data-role="page" id="Relationships">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="RelationshipsHead">Relationships</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState'>Mean State</a></li>
+            <li><a href='#Relationships' class=ui-btn-active ui-state-persist>Relationships</a></li>
+            <li><a href='#AllModels'>All Models</a></li>
+            <li><a href='#DataInformation'>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div data-role="page" id="AllModels">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="AllModelsHead">All Models</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState'>Mean State</a></li>
+            <li><a href='#Relationships'>Relationships</a></li>
+            <li><a href='#AllModels' class=ui-btn-active ui-state-persist>All Models</a></li>
+            <li><a href='#DataInformation'>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+      <select id="AllModelsRegion" onchange="AllSelect()">
+        <option value='global' selected="selected">Global - Land</option>
+      </select>
+    </div>
+    <div data-role="page" id="DataInformation">
+      <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1 id="DataInformationHead">Data Information</h1>
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#MeanState'>Mean State</a></li>
+            <li><a href='#Relationships'>Relationships</a></li>
+            <li><a href='#AllModels'>All Models</a></li>
+            <li><a href='#DataInformation' class=ui-btn-active ui-state-persist>Data Information</a></li>
+          </ul>
+        </div>
+      </div>
+      
+<p><dl><dt><b>&nbsp;&nbsp;Title:</dt></b><dd>FLUXCOM (RS+METEO) Global Land Carbon Fluxes using CRUNCEP climate data</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Version:</dt></b><dd>1</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Institutions:</dt></b><dd>Department Biogeochemical Integration, Max Planck Institute for Biogeochemistry, Germany</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Source:</dt></b><dd>Data generated by Artificial Neural Networks and forced with CRUNCEPv6 meteorological data and MODIS (RS+METEO)
+ftp://ftp.bgc-jena.mpg.de/pub/outgoing/FluxCom/CarbonFluxes_v1_2017/RS+METEO/CRUNCEPv6/raw/monthly/
+ftp://ftp.bgc-jena.mpg.de/pub/outgoing/FluxCom/EnergyFluxes/RS_METEO/member/CRUNCEP_v8/monthly/</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;History:</dt></b><dd>2024-01-18: downloaded ['TER.ANN.CRUNCEPv6.monthly.1980.nc', 'TER.ANN.CRUNCEPv6.monthly.1981.nc', 'TER.ANN.CRUNCEPv6.monthly.1982.nc', 'TER.ANN.CRUNCEPv6.monthly.1983.nc', 'TER.ANN.CRUNCEPv6.monthly.1984.nc', 'TER.ANN.CRUNCEPv6.monthly.1985.nc', 'TER.ANN.CRUNCEPv6.monthly.1986.nc', 'TER.ANN.CRUNCEPv6.monthly.1987.nc', 'TER.ANN.CRUNCEPv6.monthly.1988.nc', 'TER.ANN.CRUNCEPv6.monthly.1989.nc', 'TER.ANN.CRUNCEPv6.monthly.1990.nc', 'TER.ANN.CRUNCEPv6.monthly.1991.nc', 'TER.ANN.CRUNCEPv6.monthly.1992.nc', 'TER.ANN.CRUNCEPv6.monthly.1993.nc', 'TER.ANN.CRUNCEPv6.monthly.1994.nc', 'TER.ANN.CRUNCEPv6.monthly.1995.nc', 'TER.ANN.CRUNCEPv6.monthly.1996.nc', 'TER.ANN.CRUNCEPv6.monthly.1997.nc', 'TER.ANN.CRUNCEPv6.monthly.1998.nc', 'TER.ANN.CRUNCEPv6.monthly.1999.nc', 'TER.ANN.CRUNCEPv6.monthly.2000.nc', 'TER.ANN.CRUNCEPv6.monthly.2001.nc', 'TER.ANN.CRUNCEPv6.monthly.2002.nc', 'TER.ANN.CRUNCEPv6.monthly.2003.nc', 'TER.ANN.CRUNCEPv6.monthly.2004.nc', 'TER.ANN.CRUNCEPv6.monthly.2005.nc', 'TER.ANN.CRUNCEPv6.monthly.2006.nc', 'TER.ANN.CRUNCEPv6.monthly.2007.nc', 'TER.ANN.CRUNCEPv6.monthly.2008.nc', 'TER.ANN.CRUNCEPv6.monthly.2009.nc', 'TER.ANN.CRUNCEPv6.monthly.2010.nc', 'TER.ANN.CRUNCEPv6.monthly.2011.nc', 'TER.ANN.CRUNCEPv6.monthly.2012.nc', 'TER.ANN.CRUNCEPv6.monthly.2013.nc']</dd><dd>2024-04-09: converted to netCDF, additionally we apply a mask where |var|<1e-15 for all time.</dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;References:</dt></b><dd>Jung, M., S. Koirala, U. Weber, K. Ichii, F. Gans, Gustau-Camps-Valls, D. Papale, C. Schwalm, G. Tramontana, and M. Reichstein (2019), The FLUXCOM ensemble of global land-atmosphere energy fluxes, <i>Scientific Data</i>, 74, <a href='https://doi.org/10.1038/s41597-019-0076-8'>doi:10.1038/s41597-019-0076-8</a></dd><br><dd>Tramontana, G., M. Jung, C.R. Schwalm, K. Ichii, G. Camps-Valls, B. Raduly, M. Reichstein, M.A. Arain, A. Cescatti, G. Kiely, L. Merbold, P. Serrano-Ortiz, S. Sickert, S. Wolf, and D. Papale (2016), Predicting carbon dioxide and energy fluxes across global FLUXNET sites with regression algorithms, <i>Biogeosciences</i>, <i>13</i>, 4291-4313, <a href='https://doi.org/10.5194/bg-13-4291-2016'>doi:10.5194/bg-13-4291-2016</a></dd></dl></p><p><dl><dt><b>&nbsp;&nbsp;Coordinates:</dt></b><dd>lat_bnds lon_bnds</dd></dl></p>
+    </div>
+  </body>
+</html>
